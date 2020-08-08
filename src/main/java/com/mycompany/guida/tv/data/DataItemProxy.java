@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.guidatv.data;
+package com.mycompany.guida.tv.data;
 
 /**
  *
- * @author Federico Di Menna
+ *
  */
 public interface DataItemProxy {
     

@@ -3,14 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.guidatv.data;
+package com.mycompany.guida.tv.data;
 
 import java.sql.Connection;
 
-/**
- *
- * @author Federico Di Menna
- */
 public class DAO {
     
     protected DataLayer dataLayer;

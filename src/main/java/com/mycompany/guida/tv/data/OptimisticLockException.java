@@ -1,8 +1,8 @@
-package com.mycompany.guidatv.data;
+package com.mycompany.guida.tv.data;
 
 /**
  *
- * @author Federico Di Menna
+ *
  * 
  */
 public class OptimisticLockException extends DataException {

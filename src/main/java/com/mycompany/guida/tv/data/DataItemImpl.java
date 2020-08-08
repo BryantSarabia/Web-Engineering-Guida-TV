@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.guidatv.data;
+package com.mycompany.guida.tv.data;
 
 /**
  *
- * @author Federico Di Menna
+ *
  * @param <KT> key type
  */
 public class DataItemImpl<KT extends Comparable<KT>> implements DataItem<KT>{

@@ -3,15 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.guidatv.data;
+package com.mycompany.guida.tv.data;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author Federico Di Menna
- */
 public class DataCache {
     
     public Map<Class, Map<Object, Object>> cache;
