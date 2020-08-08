@@ -19,7 +19,8 @@ CREATE TABLE `ruoli`(
 `nome` VARCHAR(40) NOT NULL,
 `descrizione` TEXT,
 `version` BIGINT(20) UNSIGNED DEFAULT '0',
-PRIMARY KEY(`id`)
+PRIMARY KEY(`id`),
+UNIQUE KEY `nome_unique` (`nome`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `utenti`;
@@ -29,6 +30,7 @@ CREATE TABLE `utenti`(
 `cognome` VARCHAR(50) NOT NULL,
 `email` VARCHAR(100) NOT NULL,
 `password` VARCHAR(256) NOT NULL,
+`send_email` TINYINT DEFAULT '0',
 `email_verified_at` DATE DEFAULT NULL,
 `token` VARCHAR(32) DEFAULT NULL,
 `exp_date` DATE DEFAULT NULL,
