@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-   
     <context-param>
         <param-name>images.directory</param-name>
         <!-- Tomcat must have write permissions on this folder -->
@@ -16,7 +15,7 @@
     </context-param>
     <context-param>
         <param-name>view.debug</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     <context-param>
         <param-name>view.template_directory</param-name>
@@ -37,8 +36,7 @@
     <context-param>
         <param-name>view.error_template</param-name>
         <param-value>error.ftl.html</param-value>
-    </context-param> 
-
+    </context-param>
     <servlet>
         <servlet-name>Prova</servlet-name>
         <servlet-class>com.mycompany.guida.tv.Prova</servlet-class>

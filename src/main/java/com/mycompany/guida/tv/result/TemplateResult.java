@@ -180,6 +180,7 @@ public class TemplateResult {
                 //...e il template specifico per questa pagina viene indicato all'outline tramite una variabile content_tpl
                 //...and pass the requested template name to the outline using the content_tpl variable
                 localdatamodel.put("content_tpl", tplname);
+                System.out.println(tplname);
                 //si suppone che l'outline includa questo secondo template
                 //we suppose that the outline template includes this second template somewhere
             }

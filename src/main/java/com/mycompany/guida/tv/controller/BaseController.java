@@ -36,7 +36,7 @@ public abstract class  BaseController extends HttpServlet {
             datalayer.init();
             request.setAttribute("datalayer", datalayer);
             
-            //System.out.println("Inizializzo DataLayer: " + datalayer);
+            System.out.println("Inizializzo DataLayer: " + datalayer);
             processRequest(request, response);
         } catch (Exception ex) {
             ex.printStackTrace(); //for debugging only
