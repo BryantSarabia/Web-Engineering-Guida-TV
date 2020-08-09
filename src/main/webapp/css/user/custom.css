@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 9 ago 2020, 19:54:31
+    Author     : HP
+*/
+
+.hero{
+    padding: 10em 0;
+    padding-bottom: 5em;
+}
+
+#cerca {
+    width: 15%;
+    height: 54px;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    background: #f03250;
+    color: #ffffff;
+	text-transform: uppercase;
+	display: inline-block;
+}
