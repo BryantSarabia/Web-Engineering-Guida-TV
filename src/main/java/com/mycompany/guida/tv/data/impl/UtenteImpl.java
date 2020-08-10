@@ -20,6 +20,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private long version=0;
 
     public UtenteImpl(int id, String nome, String cognome, String email, String password, String token, String exp_date, List<Ruolo> ruoli, List<Canale> interesa, long version) {
+        super();
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -33,6 +34,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     public UtenteImpl(String nome, String cognome, String email, String password, String token, String exp_date, List<Ruolo> ruoli, List<Canale> interesa, long version) {
+        super();
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
