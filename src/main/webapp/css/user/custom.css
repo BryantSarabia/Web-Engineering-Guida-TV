@@ -24,3 +24,7 @@ and open the template in the editor.
 	text-transform: uppercase;
 	display: inline-block;
 }
+
+.link_ref:hover{
+    color: #f03250 !important;
+}
