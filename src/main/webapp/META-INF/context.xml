@@ -5,7 +5,7 @@
         auth="Container"
         username="root"
         password=""
-        url="jdbc:mysql://localhost:3008/guida-tv?serverTimezone=UTC"
+        url="jdbc:mysql://localhost/guida-tv?serverTimezone=UTC"
         name="jdbc/guidatv"
         type="javax.sql.DataSource"
         maxActive="10"
