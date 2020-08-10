@@ -25,6 +25,83 @@ and open the template in the editor.
 	display: inline-block;
 }
 
+a,  a div div div > *{
+    color: black;
+    transition: .4s all;
+}
+
+a:hover, a:hover div div div > *{
+    color: #f03250 !important;
+}
+
 .link_ref:hover{
     color: #f03250 !important;
+}
+
+.lista_programmi{
+    list-style: none;
+}
+
+.lista_programmi li {
+    border-bottom: 1px solid #ccc;
+}
+
+small{
+    font-size : 70%;
+}
+
+.canali{
+    margin-top: 4em;
+}
+
+.canale{
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-right: 1px solid #ccc;
+}
+
+.days li a{
+    color: #f03250;
+}
+
+.day-number{
+    height: 6em;
+    color: #f03250;
+    border-radius: 50%;
+    border: 1px solid #f03250;
+    text-align: center;
+    padding: 2.2em;
+    font-weight: bold;
+    background: #ffffff;
+    cursor: pointer;
+    transition: .4s all;
+}
+
+.day-number.active{
+    height: 6em;
+    color: #ffffff;
+    border-radius: 50%;
+    border: 1px solid #f03250;
+    text-align: center;
+    padding: 2.2em;
+    font-weight: bold;
+    background: #f03250;
+    cursor: pointer;
+}
+
+.day-number:hover{
+    background: #f03250;
+    color: #ffffff;
+}
+
+.day-name small{
+ color: #f03250;
+}
+
+.fascie:first-child{
+    border-right: 0px;
+}
+
+.fascie:last-child{
+    border-left: 0px;
 }

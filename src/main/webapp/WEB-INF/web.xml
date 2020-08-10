@@ -57,6 +57,10 @@
         <servlet-name>Register</servlet-name>
         <servlet-class>com.mycompany.guida.tv.auth.Register</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PalinsestoGeneral</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.PalinsestoGeneral</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -76,6 +80,10 @@
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PalinsestoGeneral</servlet-name>
+        <url-pattern>/palinsesto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
