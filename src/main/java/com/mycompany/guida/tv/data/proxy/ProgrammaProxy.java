@@ -1,0 +1,84 @@
+package com.mycompany.guida.tv.data.proxy;
+
+import com.mycompany.guida.tv.data.DataItemProxy;
+import com.mycompany.guida.tv.data.DataLayer;
+
+import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
+import com.mycompany.guida.tv.data.model.Genere;
+
+import java.util.List;
+
+public class ProgrammaProxy extends ProgrammaImpl implements DataItemProxy {
+    private boolean modified;
+    protected final DataLayer dataLayer;
+
+    public ProgrammaProxy(String titolo, String descrizione, String img, String link_ref, String durata, List<Genere> generi, long version, DataLayer dataLayer) {
+        super(titolo, descrizione, img, link_ref, durata, generi, version);
+        this.modified = false;
+        this.dataLayer = dataLayer;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.modified = true;
+        super.setId(id);
+    }
+
+    @Override
+    public void setTitolo(String titolo) {
+        this.modified = true;
+        super.setTitolo(titolo);
+    }
+
+    @Override
+    public void setDescrizione(String descrizione) {
+        this.modified = true;
+        super.setDescrizione(descrizione);
+    }
+
+    @Override
+    public void setImg(String img) {
+        this.modified = true;
+        super.setImg(img);
+    }
+
+    @Override
+    public void setLink_ref(String link_ref) {
+        this.modified = true;
+        super.setLink_ref(link_ref);
+    }
+
+    @Override
+    public void setDurata(String durata) {
+        this.modified = true;
+        super.setDurata(durata);
+    }
+
+    @Override
+    public void setGeneri(List<Genere> generi) {
+        this.modified = true;
+        super.setGeneri(generi);
+    }
+
+    @Override
+    public void setVersion(long version) {
+        this.modified = true;
+        super.setVersion(version);
+    }
+
+    @Override
+    public void setKey(Integer key) {
+        this.modified = true;
+        super.setKey(key);
+    }
+
+    @Override
+    public boolean isModified() {
+        return this.modified;
+    }
+
+    @Override
+    public void setModified(boolean modified) {
+        this.modified=modified;
+    }
+}
