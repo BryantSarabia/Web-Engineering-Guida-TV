@@ -39,7 +39,7 @@ public class CanaleDAO_MySQL extends DAO implements CanaleDAO {
             dCanale = connection.prepareStatement("DELETE FROM canali WHERE id = ?");
             
         } catch (SQLException ex) {
-            Logger.getLogger("Errore nell'inizializzazione del DAO Genere");
+            Logger.getLogger("Errore nell'inizializzazione del DAO Canale");
         }
     }
     
