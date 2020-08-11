@@ -66,7 +66,7 @@ public class RicercaDAO_MySQL extends DAO implements RicercaDAO {
         RicercaProxy ricerca = createRicerca();
         try {
             ricerca.setKey(rs.getInt("id"));
-            ricerca.setQuery(rs.getString("query_string"));
+            ricerca.setQuery(rs.getString("query"));
         } catch(SQLException ex) {
             throw new DataException("Unable to create ricerca object form ResultSet", ex);
         }
