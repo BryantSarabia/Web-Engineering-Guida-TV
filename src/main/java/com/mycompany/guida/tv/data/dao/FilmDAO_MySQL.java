@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,35 +71,117 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO{
             film.setKey(rs.getInt("id"));
             film.setVersion(rs.getInt("version"));
             film.setTitolo(rs.getString("titolo"));
+            film.setDescrizione(rs.getString("descrizione"));
+            film.setImg(rs.getString("img"));
+            film.setLink_ref(rs.getString("link_ref"));
+            film.setDurata(rs.getString("durata"));
             
         } catch (SQLException ex){
             throw new DataException("Unable to create canale object form ResultSet", ex);
         }
+        
+        return film;
     }
     
     @Override
-    public Film getFilm(int arg0) throws DataException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Film getFilm(int key) throws DataException {
+        Film film = null;
+        
+        if (dataLayer.getCache().has(Film.class, key)) {
+            film = dataLayer.getCache().get(Film.class, key);
+        } else {
+            try {
+                getFilmByID.setInt(1, key);
+                try (ResultSet rs = getFilmByID.executeQuery()) {
+                    if (rs.next()) {
+                        film = createFilm(rs);
+                        dataLayer.getCache().add(Film.class, film);
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load film by ID", ex);
+            }
+        }
+        return film;
     }
 
     @Override
     public int getNumeroFilm() throws DataException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int result = 0;
+        
+        try {
+            try (ResultSet rs = getNumeroFilms.executeQuery()) {
+            
+                while(rs.next()) {
+                    result = rs.getInt("num");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to get numero film", ex);
+        }
+        
+        return result;
     }
 
     @Override
     public List<Film> getListaFilm() throws DataException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Film> returnList = new ArrayList<>();
+        
+        try {
+            try (ResultSet rs = getFilms.executeQuery()) {
+            
+                while(rs.next()) {
+                    returnList.add((Film) getFilm(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable get elenco canali", ex);
+        }
+         
+        
+        return returnList;
     }
 
     @Override
-    public List<Film> getListaFilm(int arg0, int arg1) throws DataException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Film> getListaFilm(int page, int elements) throws DataException {
+        List<Film> returnList = new ArrayList<>();
+        
+        try {
+            getFilmsPaginate.setInt(1, elements);
+            getFilmsPaginate.setInt(2, page * elements);
+            try (ResultSet rs = getFilmsPaginate.executeQuery()) {
+            
+                while(rs.next()) {
+                    returnList.add((Film) getFilm(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable to get elenco film paginato", ex);
+        }
+         
+        
+        return returnList;
     }
 
     @Override
-    public List<Film> getListaFilmPaginated(int arg0, int arg1) throws DataException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Film> getListaFilmPaginated(int first_index, int elements) throws DataException {
+        List<Film> returnList = new ArrayList<>();
+        
+        try {
+            getFilmsPaginate.setInt(1, elements);
+            getFilmsPaginate.setInt(2, first_index);
+            try (ResultSet rs = getFilmsPaginate.executeQuery()) {
+            
+                while(rs.next()) {
+                    returnList.add((Film) getFilm(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataException("Unable get elenco film paginato", ex);
+        }
+         
+        
+        return returnList;
     }
 
     @Override
