@@ -46,10 +46,12 @@ a:hover, a:hover div div div > *{
 .programma{
      border-bottom: 1px solid #ccc;
      transition: .4s all;
+         box-shadow: 5px 0px 5px #ccc;
 }
 
 .programma:hover{
     border-bottom: 1px solid #f03250;
+    box-shadow: 5px 0px 5px #f03250;
 }
 
 small{
@@ -64,7 +66,7 @@ small{
     margin-top: 2em;
     margin-bottom: 2em;
     border-right: 1px solid #ccc;
-    
+
 }
 
 .canale-logo{
@@ -127,6 +129,7 @@ small{
     cursor: pointer;
     color: #f03250;
     border: 1px solid #f03250;
+   box-shadow: 2px 5px 4px -1px #f03250;
     transition: .4s all;
 }
 
