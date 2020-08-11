@@ -36,7 +36,7 @@ public class RicercaDAO_MySQL extends DAO implements RicercaDAO {
             
             // PREPARE STATEMENTS
             getRicercaByID = connection.prepareStatement("SELECT * FROM ricerca WHERE id = ?");
-            insertRicerca = connection.prepareStatement("INSERT INTO ricerca (query_string, id_utente) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            insertRicerca = connection.prepareStatement("INSERT INTO ricerca (query, id_utente) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteRicerca = connection.prepareStatement("DELETE from ricerca WHERE id = ?");
             getRicercheUtente = connection.prepareStatement("SELECT id FROM ricerca WHERE id_utente = ?");
         } catch (SQLException ex) {
