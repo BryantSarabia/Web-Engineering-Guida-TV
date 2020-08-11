@@ -5,10 +5,6 @@ import com.mycompany.guida.tv.data.DataItem;
 
 public interface Canale extends DataItem<Integer> {
 
-    public int getId();
-
-    public void setId(int id);
-
     public String getNome();
 
     public void setNome(String nome);
@@ -21,9 +17,4 @@ public interface Canale extends DataItem<Integer> {
 
     public void setLogo(String logo);
 
-    @Override
-    public long getVersion();
-
-    @Override
-    public void setVersion(long version);
 }

@@ -10,16 +10,10 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
     private boolean modified;
     protected final DataLayer dataLayer;
 
-    public SerieProxy(Programma programma, String stagione, String episodio, long version,  DataLayer dataLayer) {
-        super(programma, stagione, episodio, version);
+    public SerieProxy(DataLayer dataLayer) {
+        super();
         this.modified = false;
         this.dataLayer = dataLayer;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
     }
 
     @Override
@@ -29,13 +23,13 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
     }
 
     @Override
-    public void setStagione(String stagione) {
+    public void setStagione(int stagione) {
         this.modified = true;
         super.setStagione(stagione);
     }
 
     @Override
-    public void setEpisodio(String episodio) {
+    public void setEpisodio(int episodio) {
         this.modified = true;
         super.setEpisodio(episodio);
     }

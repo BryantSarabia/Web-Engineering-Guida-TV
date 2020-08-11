@@ -2,11 +2,10 @@ package com.mycompany.guida.tv.data.model;
 
 import com.mycompany.guida.tv.data.DataItem;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public interface Programmazione extends DataItem<Integer> {
-
-    public int getId();
-
-    public void setId(int id);
 
     public Programma getProgramma();
 
@@ -16,17 +15,24 @@ public interface Programmazione extends DataItem<Integer> {
 
     public void setCanale(Canale canale);
 
-    public String getStart_time();
+    public LocalDateTime getStartTime();
 
-    public void setStart_time(String start_time);
+    public void setStartTime(LocalDateTime start_time);
 
     public String getTime();
 
-    public void setTime(String time);
+    public int getHour();
 
-    @Override
-    public long getVersion();
+    public String getEndTime();
 
-    @Override
-    public void setVersion(long version);
+    public Integer getDurata();
+
+    public void setDurata(Integer durata);
+
+    public String getDate();
+
+    public String getStartTimeFormatted(String pattern);
+
+    public boolean inOnda();
+
 }

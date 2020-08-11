@@ -1,61 +1,56 @@
+
 package com.mycompany.guida.tv.data.proxy;
 
+import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
+import com.mycompany.guida.tv.data.dao.CanaleDAO;
+import com.mycompany.guida.tv.data.dao.ProgrammaDAO;
+import com.mycompany.guida.tv.data.dao.ProgrammazioneDAO;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Programma;
+import com.mycompany.guida.tv.data.model.Programmazione;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemProxy {
-    private boolean modified;
-    protected final DataLayer dataLayer;
 
-    public ProgrammazioneProxy(Programma programma, Canale canale, String start_time, String time, long version, DataLayer dataLayer) {
-        super(programma, canale, start_time, time, version);
+    private boolean modified;
+    private int canale_key, programma_key;
+
+    private final DataLayer dataLayer;
+
+    public ProgrammazioneProxy(DataLayer dataLayer) {
+        super();
+
         this.modified = false;
+        this.canale_key = 0;
+        this.programma_key = 0;
+
         this.dataLayer = dataLayer;
     }
 
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
+    public int getCanale_key() {
+        return canale_key;
     }
 
-    @Override
-    public void setProgramma(Programma programma) {
-        this.modified = true;
-        super.setProgramma(programma);
+    public void setCanale_key(int canale_key) {
+        this.canale_key = canale_key;
     }
 
-    @Override
-    public void setCanale(Canale canale) {
-        this.modified = true;
-        super.setCanale(canale);
+    public int getProgramma_key() {
+        return programma_key;
     }
 
-    @Override
-    public void setStart_time(String start_time) {
-        this.modified = true;
-        super.setStart_time(start_time);
+    public void setProgramma_key(int programma_key) {
+        this.programma_key = programma_key;
     }
 
-    @Override
-    public void setTime(String time) {
-        super.setTime(time);
-    }
 
-    @Override
-    public void setVersion(long version) {
-        this.modified = true;
-        super.setVersion(version);
-    }
-
-    @Override
-    public void setKey(Integer key) {
-        this.modified = true;
-        super.setKey(key);
-    }
 
     @Override
     public boolean isModified() {
@@ -65,6 +60,59 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
     @Override
     public void setModified(boolean modified) {
         this.modified = modified;
-
     }
+
+    @Override
+    public Canale getCanale() {
+
+        if (super.getCanale() == null && canale_key > 0) {
+            try {
+                super.setCanale(((CanaleDAO) dataLayer.getDAO(Canale.class)).getCanale(canale_key));
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammazioneProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return super.getCanale();
+    }
+
+    @Override
+    public void setCanale(Canale canale) {
+        super.setCanale(canale);
+        this.modified = true;
+    }
+
+    @Override
+    public Programma getProgramma() {
+
+        if (super.getProgramma() == null && programma_key > 0) {
+            //UtilityMethods.debugConsole(this.getClass(), "getProgramma()", "Getting Program " + programma_key + " datalayer: " + dataLayer + " obj: " + dataLayer.getDAO(Programma.class));
+            try {
+                super.setProgramma(((ProgrammaDAO) dataLayer.getDAO(Programma.class)).getProgramma(programma_key));
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammazioneProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return super.getProgramma();
+    }
+
+    @Override
+    public void setProgramma(Programma programma) {
+        super.setProgramma(programma);
+        this.modified = true;
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime time) {
+        super.setStartTime(time);
+        this.modified = true;
+    }
+
+    @Override
+    public void setDurata(Integer durata) {
+        super.setDurata(durata);
+        this.modified = true;
+    }
+
 }

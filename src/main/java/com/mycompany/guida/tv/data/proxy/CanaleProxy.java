@@ -9,16 +9,10 @@ public class CanaleProxy extends CanaleImpl implements DataItemProxy {
     private boolean modified;
     protected final DataLayer dataLayer;
 
-    public CanaleProxy(String nome, int numero, String logo, long version, DataLayer dataLayer) {
-        super(nome, numero, logo, version);
+    public CanaleProxy( DataLayer dataLayer) {
+        super();
         this.modified = false;
         this.dataLayer = dataLayer;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
     }
 
     @Override

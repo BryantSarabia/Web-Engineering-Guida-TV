@@ -6,10 +6,6 @@ import java.util.List;
 
 public interface Genere extends DataItem<Integer> {
 
-    public int getId();
-
-    public void setId(int id);
-
     public String getNome();
 
     public void setNome(String nome);
@@ -18,9 +14,4 @@ public interface Genere extends DataItem<Integer> {
 
     public void setProgrammi(List<Programma> programmi);
 
-    @Override
-    public long getVersion();
-
-    @Override
-    public void setVersion(long version);
 }

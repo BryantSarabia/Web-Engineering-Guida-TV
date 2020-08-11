@@ -8,41 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgrammaImpl extends DataItemImpl<Integer> implements Programma {
-    private int id=0;
+
     private String titolo="";
     private String descrizione="";
     private String img="";
     private String link_ref="";
     private String durata="";
     private List<Genere> generi = new ArrayList<Genere>();
-    private long version=0;
 
-    public ProgrammaImpl(int id, String titolo, String descrizione, String img, String link_ref, String durata, List<Genere> generi, long version) {
-        this.id = id;
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.img = img;
-        this.link_ref = link_ref;
-        this.durata = durata;
-        this.generi = generi;
-        this.version = version;
-    }
-    public ProgrammaImpl(String titolo, String descrizione, String img, String link_ref, String durata, List<Genere> generi, long version) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.img = img;
-        this.link_ref = link_ref;
-        this.durata = durata;
-        this.generi = generi;
-        this.version = version;
-    }
 
-    public int getId() {
-        return id;
-    }
+    public ProgrammaImpl() {
+        super();
+        this.titolo = "";
+        this.descrizione = "";
+        this.img = "";
+        this.link_ref = "";
+        this.durata = null;
+        this.generi = null;
 
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitolo() {
@@ -93,13 +76,4 @@ public class ProgrammaImpl extends DataItemImpl<Integer> implements Programma {
         this.generi = generi;
     }
 
-    @Override
-    public long getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(long version) {
-        this.version = version;
-    }
 }

@@ -8,30 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenereImpl extends DataItemImpl<Integer> implements Genere {
-    private int id;
     private String nome;
     private List<Programma> programmi = new ArrayList<Programma>();
-    private long version;
 
-    public GenereImpl(int id, String nome, List<Programma> programmi, long version) {
-        this.id = id;
-        this.nome = nome;
-        this.programmi = programmi;
-        this.version = version;
-    }
 
-    public GenereImpl(String nome, List<Programma> programmi, long version) {
-        this.nome = nome;
-        this.programmi = programmi;
-        this.version = version;
-    }
+    public GenereImpl() {
+        super();
+        this.nome = "";
+        this.programmi = null;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -50,13 +35,4 @@ public class GenereImpl extends DataItemImpl<Integer> implements Genere {
         this.programmi = programmi;
     }
 
-    @Override
-    public long getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(long version) {
-        this.version = version;
-    }
 }

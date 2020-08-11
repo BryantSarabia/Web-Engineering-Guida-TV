@@ -3,9 +3,12 @@ import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Canale;
+import com.mycompany.guida.tv.data.model.Interesse;
+import com.mycompany.guida.tv.data.model.Ricerca;
 import com.mycompany.guida.tv.data.model.Ruolo;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -15,11 +18,12 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
     protected final DataLayer dataLayer;
 
-    public UtenteProxy(String nome, String cognome, String email, String password, String token, String exp_date, List<Ruolo> ruoli, List<Canale> interesa, long version, DataLayer dataLayer) {
-        super(nome, cognome, email, password, token, exp_date, ruoli, interesa, version);
-        this.modified = false;
+    public UtenteProxy(DataLayer dataLayer) {
+        super();
+        this.modified=false;
         this.dataLayer = dataLayer;
     }
+
     @Override
     public void setKey(Integer key) {
         this.modified = true;
@@ -32,26 +36,9 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setExp_date(String exp_date) {
-        super.setExp_date(exp_date);
-    }
-
-    @Override
     public void setVersion(long version) {
         this.modified = true;
         super.setVersion(version);
-    }
-
-    @Override
-    public int getId() {
-        this.modified = true;
-        return super.getId();
-    }
-
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
     }
 
     @Override
@@ -79,15 +66,31 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setRuoli(List<Ruolo> ruoli) {
+    public void setRuolo(Ruolo ruolo) {
         this.modified = true;
-        super.setRuoli(ruoli);
+        super.setRuolo(ruolo);
     }
 
     @Override
-    public void setInteresa(List<Canale> interesa) {
+    public void setRicerche(List<Ricerca> ricerche) {
         this.modified = true;
-        super.setInteresa(interesa);
+        super.setRicerche(ricerche);
+    }
+
+    @Override
+    public void setInteressi(List<Interesse> interessi) {
+        this.modified = true;
+        super.setInteressi(interessi);
+    }
+
+    @Override
+    public void setEmailVerifiedAt(LocalDate emailVerifiedAt) {
+        super.setEmailVerifiedAt(emailVerifiedAt);
+    }
+
+    @Override
+    public void setExp_date(LocalDate exp_date) {
+        super.setExp_date(exp_date);
     }
 
     @Override
