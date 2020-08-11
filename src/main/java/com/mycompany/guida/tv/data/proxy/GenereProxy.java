@@ -12,17 +12,12 @@ public class GenereProxy extends GenereImpl implements DataItemProxy {
     private boolean modified;
     protected final DataLayer dataLayer;
 
-    public GenereProxy(String nome, List<Programma> programmi, long version, DataLayer dataLayer) {
-        super(nome, programmi, version);
+    public GenereProxy( DataLayer dataLayer) {
+        super();
         this.modified = false;
         this.dataLayer = dataLayer;
     }
 
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
-    }
 
     @Override
     public void setNome(String nome) {

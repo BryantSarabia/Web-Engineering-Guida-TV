@@ -1,17 +1,18 @@
 package com.mycompany.guida.tv.data.model;
 import com.mycompany.guida.tv.data.DataItem;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface Utente extends DataItem<Integer> {
 
-    public int getId();
-
-    public void setId(int id);
-
     public String getNome();
 
     public void setNome(String nome);
+
+    public String getToken();
+
+    public void setToken(String token);
 
     public String getCognome();
 
@@ -25,17 +26,19 @@ public interface Utente extends DataItem<Integer> {
 
     public void setPassword(String password);
 
-    public List<Ruolo> getRuoli();
+    public Ruolo getRuolo();
 
-    public void setRuoli(List<Ruolo> ruoli);
+    public void setRuolo(Ruolo ruolo);
 
-    public List<Canale> getInteresa();
+    public List<Ricerca> getRicerche();
 
-    public void setInteresa(List<Canale> interesa);
+    public void setRicerche(List<Ricerca> ricerche);
 
-    @Override
-    public void setVersion(long version);
+    public List<Interesse> getInteressi();
 
-    public long getVersion();
+    public void setInteressi(List<Interesse> interessi);
 
+    public LocalDate getExp_date();
+
+    public LocalDate getEmailVerifiedAt();
 }

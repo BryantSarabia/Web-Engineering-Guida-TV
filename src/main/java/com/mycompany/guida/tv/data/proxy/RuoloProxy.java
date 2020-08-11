@@ -9,17 +9,12 @@ public class RuoloProxy extends RuoloImpl implements DataItemProxy {
     private boolean modified;
     protected final DataLayer dataLayer;
 
-    public RuoloProxy(String nome, String descrizione, long version, DataLayer dataLayer) {
-        super(nome, descrizione, version);
+    public RuoloProxy(DataLayer dataLayer) {
+        super();
         this.modified = false;
         this.dataLayer = dataLayer;
     }
 
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
-    }
 
     @Override
     public void setNome(String nome) {

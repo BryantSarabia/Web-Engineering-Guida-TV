@@ -1,49 +1,34 @@
 package com.mycompany.guida.tv.data.impl;
-import com.mycompany.guida.tv.data.model.Canale;
-import com.mycompany.guida.tv.data.model.Ruolo;
-import com.mycompany.guida.tv.data.model.Utente;
+import com.mycompany.guida.tv.data.model.*;
 import com.mycompany.guida.tv.data.DataItemImpl;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
-    private int id=0;
     private String nome="";
     private String cognome="";
     private String email="";
     private String password="";
     private String token="";
-    private String exp_date="";
-    private List<Ruolo> ruoli = new ArrayList<Ruolo>();
-    private List<Canale> interesa = new ArrayList<Canale>();
-    private long version=0;
+    private LocalDate emailVerifiedAt;
+    private LocalDate exp_date;
+    private Ruolo ruolo;
+    private List<Ricerca> ricerche;
+    private List<Interesse> interessi;
 
-    public UtenteImpl(int id, String nome, String cognome, String email, String password, String token, String exp_date, List<Ruolo> ruoli, List<Canale> interesa, long version) {
+    public UtenteImpl() {
         super();
-        this.id = id;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-        this.token = token;
-        this.exp_date = exp_date;
-        this.ruoli = ruoli;
-        this.interesa = interesa;
-        this.version = version;
-    }
-
-    public UtenteImpl(String nome, String cognome, String email, String password, String token, String exp_date, List<Ruolo> ruoli, List<Canale> interesa, long version) {
-        super();
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-        this.token = token;
-        this.exp_date = exp_date;
-        this.ruoli = ruoli;
-        this.interesa = interesa;
-        this.version = version;
+        this.nome = "";
+        this.cognome = "";
+        this.email = "";
+        this.password = "";
+        this.token = "";
+        this.emailVerifiedAt = null;
+        this.exp_date = null;
+        this.ruolo = null;
+        this.ricerche = null;
+        this.interessi = null;
     }
 
     public String getToken() {
@@ -54,31 +39,20 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.token = token;
     }
 
-    public String getExp_date() {
+    public LocalDate getExp_date() {
         return exp_date;
     }
 
-    public void setExp_date(String exp_date) {
+    public LocalDate getEmailVerifiedAt() {
+        return emailVerifiedAt;
+    }
+
+    public void setEmailVerifiedAt(LocalDate emailVerifiedAt) {
+        this.emailVerifiedAt = emailVerifiedAt;
+    }
+
+    public void setExp_date(LocalDate exp_date) {
         this.exp_date = exp_date;
-    }
-
-    @Override
-    public long getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -113,19 +87,27 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.password = password;
     }
 
-    public List<Ruolo> getRuoli() {
-        return ruoli;
+    public Ruolo getRuolo() {
+        return this.ruolo;
     }
 
-    public void setRuoli(List<Ruolo> ruoli) {
-        this.ruoli = ruoli;
+    public void setRuolo(Ruolo ruolo) {
+        this.ruolo = ruolo;
     }
 
-    public List<Canale> getInteresa() {
-        return interesa;
+    public List<Ricerca> getRicerche() {
+        return ricerche;
     }
 
-    public void setInteresa(List<Canale> interesa) {
-        this.interesa = interesa;
+    public void setRicerche(List<Ricerca> ricerche) {
+        this.ricerche = ricerche;
+    }
+
+    public List<Interesse> getInteressi() {
+        return interessi;
+    }
+
+    public void setInteressi(List<Interesse> interessi) {
+        this.interessi = interessi;
     }
 }

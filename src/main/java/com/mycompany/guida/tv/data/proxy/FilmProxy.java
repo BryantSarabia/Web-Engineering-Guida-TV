@@ -10,16 +10,10 @@ public class FilmProxy extends FilmImpl implements DataItemProxy {
     private boolean modified;
     protected final DataLayer dataLayer;
 
-    public FilmProxy(Programma programma, long version, DataLayer dataLayer) {
-        super(programma, version);
+    public FilmProxy(DataLayer dataLayer) {
+        super();
         this.modified = false;
         this.dataLayer = dataLayer;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.modified = true;
-        super.setId(id);
     }
 
     @Override
