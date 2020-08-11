@@ -42,8 +42,14 @@ a:hover, a:hover div div div > *{
     list-style: none;
 }
 
-.lista_programmi li {
-    border-bottom: 1px solid #ccc;
+
+.programma{
+     border-bottom: 1px solid #ccc;
+     transition: .4s all;
+}
+
+.programma:hover{
+    border-bottom: 1px solid #f03250;
 }
 
 small{
@@ -58,6 +64,18 @@ small{
     margin-top: 2em;
     margin-bottom: 2em;
     border-right: 1px solid #ccc;
+    
+}
+
+.canale-logo{
+    transition: .4s all;
+   
+   
+}
+
+.canale-logo h5:hover{
+    border-bottom: 1px solid #f03250;
+   
 }
 
 .days li a{
@@ -72,7 +90,7 @@ small{
     text-align: center;
     padding: 2.2em;
     font-weight: bold;
-    background: #ffffff;
+    background: #f7f8fa;
     cursor: pointer;
     transition: .4s all;
 }
@@ -89,19 +107,72 @@ small{
     cursor: pointer;
 }
 
-.day-number:hover{
-    background: #f03250;
-    color: #ffffff;
-}
 
 .day-name small{
  color: #f03250;
 }
 
-.fascie:first-child{
-    border-right: 0px;
+.palinsesto-date{
+    background: #fff;
 }
 
-.fascie:last-child{
-    border-left: 0px;
+.fascie{
+    margin-top: 2em;
+}
+
+.fascia{
+    height: 8em;
+    padding: 2em;
+    background: #f7f8fa;
+    cursor: pointer;
+    color: #f03250;
+    border: 1px solid #f03250;
+    transition: .4s all;
+}
+
+.fascia-icon img{
+    width: 2em;
+    height: 2em;
+    max-height: 2em;
+    max-width: 2em;
+    filter: invert(16%) sepia(102%) saturate(3296%) hue-rotate(347deg) brightness(100%) contrast(116%);
+}
+
+.fascia + .fascia{
+    border-right: 0;
+}
+
+.fascia:first-child{
+    border-right: 0;
+}
+
+.fascia:last-child{
+    border-right: 1px solid #f03250;
+}
+
+.day-number:hover, .fascia:hover{
+    background: #f03250;
+    color: #fff;
+}
+
+.fascia:hover .fascia-icon-mattina{
+    color:#feffd9;
+}
+
+.fascia:hover .fascia-icon-pomeriggio{
+    color: #fef500;
+}
+
+.fascia:hover .fascia-icon-notte{
+    color:#190849;
+}
+
+
+.fascia:hover div  h5{
+    color: #ffffff;
+    transition: .4s all;
+}
+
+.fascia:hover div img{
+       filter: invert(75%) sepia(102%) saturate(3296%) hue-rotate(361deg) brightness(100%) contrast(116%);
 }
