@@ -1,6 +1,4 @@
 package com.mycompany.guida.tv.data.dao;
 
-public interface ProgrammaDAO {
-
-
+public class FilmDAO_MySQL {
 }
