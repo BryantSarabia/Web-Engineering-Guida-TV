@@ -5,8 +5,10 @@
  */
 package com.mycompany.guida.tv.controller;
 
+import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
+import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -35,17 +37,50 @@ public class Home extends BaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException{
+        response.setContentType("text/html;charset=UTF-8");
+        
         try {
-            response.setContentType("text/html;charset=UTF-8");
-            action_default(request, response);
+            if(request.getParameter("page") != null && !request.getParameter("page").isEmpty()){
+               int page = SecurityLayer.checkNumeric(request.getParameter("page")); 
+               action_paginated(request, response, page);
+            } 
+            else {
+                action_default(request, response);
+            }
         } catch (TemplateManagerException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("exception", ex);
+            action_error(request, response);
+            
+        } catch (DataException ex){
+             Logger.getLogger(PalinsestoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         }
     
-    private void action_default(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException{
-        TemplateResult results = new TemplateResult(getServletContext());
-         results.activate("home.ftl.html", request, response);
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException{
+        action_paginated(request, response, 0);
+    }
+
+    private void action_paginated(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException{
+        
+        int numero_canali = 0;
+        int canali_per_pagina = 5;
+        
+        try{    
+            TemplateResult results = new TemplateResult(getServletContext());
+            
+            
+            
+            
+            results.activate("home.ftl.html", request, response);
+        } catch (DataException ex) {
+
+        }
+    }
+        
+
+    private void action_error(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
