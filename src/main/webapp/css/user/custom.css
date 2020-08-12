@@ -66,18 +66,33 @@ small{
     margin-top: 2em;
     margin-bottom: 2em;
     border-right: 1px solid #ccc;
-
 }
 
-.canale-logo{
-    transition: .4s all;
-   
-   
+.canale_head{
+    background: transparent;
+    border-bottom:0;
+   }
+
+.canale-logo h5{
+  position: relative;
 }
 
-.canale-logo h5:hover{
-    border-bottom: 1px solid #f03250;
-   
+.canale-logo h5:after{
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 0;
+    position: absolute;
+    background: #f03250;
+    transition: width 0.3s ease, left 0.3s ease 0s;
+    width: 0;
+}
+
+.canale-logo h5:hover:after{
+    width:100%;
+    right:100%;
 }
 
 .days li a{
@@ -114,9 +129,7 @@ small{
  color: #f03250;
 }
 
-.palinsesto-date{
-    background: #fff;
-}
+
 
 .fascie{
     margin-top: 2em;
@@ -131,6 +144,11 @@ small{
     border: 1px solid #f03250;
    box-shadow: 2px 5px 4px -1px #f03250;
     transition: .4s all;
+}
+
+.fascia.canale{
+    height: 6em;
+    padding: 1.4em;
 }
 
 .fascia-icon img{
@@ -178,4 +196,13 @@ small{
 
 .fascia:hover div img{
        filter: invert(75%) sepia(102%) saturate(3296%) hue-rotate(361deg) brightness(100%) contrast(116%);
+}
+
+.palinsesto-date{
+    background: #fff;
+}
+
+.palinsesto-canale{
+    border: 1px solid #f03250;
+    border-radius: 10px;
 }
