@@ -85,7 +85,7 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
     @Override
     public Programma getProgramma() {
 
-        if (super.getProgramma() == null && programma_key > 0) {
+       /* if (super.getProgramma() == null && programma_key > 0) {
             //UtilityMethods.debugConsole(this.getClass(), "getProgramma()", "Getting Program " + programma_key + " datalayer: " + dataLayer + " obj: " + dataLayer.getDAO(Programma.class));
             try {
                 super.setProgramma(((ProgrammaDAO) dataLayer.getDAO(Programma.class)).getProgramma(programma_key));
@@ -94,7 +94,8 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
             }
         }
 
-        return super.getProgramma();
+        return super.getProgramma(); */
+       return null;
     }
 
     @Override

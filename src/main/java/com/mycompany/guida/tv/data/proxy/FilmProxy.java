@@ -16,11 +16,6 @@ public class FilmProxy extends FilmImpl implements DataItemProxy {
         this.dataLayer = dataLayer;
     }
 
-    @Override
-    public void setProgramma(Programma programma) {
-        this.modified = true;
-        super.setProgramma(programma);
-    }
 
     @Override
     public void setVersion(long version) {

@@ -52,7 +52,7 @@ public class Home extends BaseController {
             action_error(request, response);
             
         } catch (DataException ex){
-             Logger.getLogger(PalinsestoServlet.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(PalinsestoGeneral.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         }
@@ -64,18 +64,10 @@ public class Home extends BaseController {
     private void action_paginated(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException{
         
         int numero_canali = 0;
-        int canali_per_pagina = 5;
-        
-        try{    
-            TemplateResult results = new TemplateResult(getServletContext());
-            
-            
-            
-            
+        int canali_per_pagina = 5;  
+            TemplateResult results = new TemplateResult(getServletContext());      
             results.activate("home.ftl.html", request, response);
-        } catch (DataException ex) {
-
-        }
+        
     }
         
 
