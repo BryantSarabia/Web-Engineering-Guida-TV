@@ -1,5 +1,5 @@
 <!-- Hero Section Begin -->
-<section class="hero set-bg" data-setbg="img/hero/hero-bg.jpg">
+<section class="hero set-bg" data-setbg="img/hero/hero-bg.jpg" style="background-image: url(img/hero/hero-bg.jpg);">
     <div class="container">
 
         <div class="row justify-content-center">
@@ -14,92 +14,94 @@
 
             </div>
 
-            <div class="search">
-                
-                <button id="cerca" class="nojs text-center">CERCA</button>
+            <div class="col-lg-12">
+                <div class="search">
 
-                <div class="col-lg-10 offset-1 search-container">
-                    <div class="row justify-content-center">
+                    <button id="cerca" class="text-center">CERCA</button>
 
-                        <div class="col-lg-12 text-center mt-4 mb-4">
-                            <h2>
-                                <i class="fa fa-search"></i>
-                                Cerca i tuoi programmi favoriti
-                            </h2>
+                    <div class="col-lg-10 offset-1 search-container nojs">
+                        <div class="row justify-content-center">
+
+                            <div class="col-lg-12 text-center mt-4 mb-4">
+                                <h2>
+                                    <i class="fa fa-search"></i>
+                                    Cerca i tuoi programmi favoriti
+                                </h2>
+                            </div>
+
+                            <form action="#" method="GET" class="col-lg-12">
+
+                                <div class="form-group row justify-content-center">
+                                    <label for="titolo" class="col-lg-2 col-form-label">Titolo</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control" id="titolo" name="titolo" placeholder="Titolo del programma"/> 
+                                    </div>
+                                </div>
+
+                                <div class="form-group row justify-content-center">
+                                    <label for="generi" class="col-lg-2 col-form-label">Generi</label>
+                                    <div class="col-lg-8">
+                                        <select id="generi" class="form-control" name="generi" multiple="multiple">
+                                            <option selected="selected" value="0">Tutti i generi</option>
+                                            <option value="1">Avventura</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row justify-content-center">
+                                    <label for="canali" class="col-lg-2 col-form-label">Canali</label>
+                                    <div class="col-lg-8">
+                                        <select id="canali" class="form-control" name="canali" multiple="multiple">
+                                            <option selected="selected" value="0">Tutti i canali</option>
+                                            <option value="1">RAI 1</option>
+                                            <option value="2">RAI 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row justify-content-center">
+                                    <label for="min_ora" class="col-lg-2 col-form-label">Ora di inizio minima</label>
+                                    <div class="col-lg-3">
+                                        <input class="form-control" type="time" id="min_ora" name="min_ora"/>
+                                    </div>
+
+
+
+                                    <label for="max_ora" class="col-lg-2 col-form-label">Ora di fine</label>
+                                    <div class="col-lg-3">
+                                        <input class="form-control" type="time" id="max_ora" name="max_ora"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row justify-content-center">
+                                    <label for="date_min" class="col-lg-2 col-form-label">Dal</label>
+                                    <div class="col-lg-3">
+                                        <input class="form-control dateTime" type="date" id="date_min" min="2020-08-12" max="2020-12-31" name="date_min" placeholder=""/>
+                                    </div>
+
+                                    <label for="date_max" class="col-lg-2 col-form-label">Al</label>
+                                    <div class="col-lg-3">
+                                        <input class="form-control dateTime" type="date" min="2020-08-12" max="2020-12-31" id="date_max" name="date_max"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row justify-content-center">
+                                    <div class="col-lg-4 text-center">
+                                        <button type="submit" class="btn primary-btn">
+                                            <i class="fa fa-search"></i>
+                                            Cerca
+                                        </button>
+                                    </div>
+                                </div
+
+
+
+
+                            </form>
+
+
                         </div>
-
-                        <form action="#" method="GET" class="col-lg-12">
-
-                            <div class="form-group row justify-content-center">
-                                <label for="titolo" class="col-lg-2 col-form-label">Titolo</label>
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="titolo" name="titolo" placeholder="Titolo del programma"/> 
-                                </div>
-                            </div>
-
-                            <div class="form-group row justify-content-center">
-                                <label for="generi" class="col-lg-2 col-form-label">Generi</label>
-                                <div class="col-lg-8">
-                                    <select id="generi" class="form-control" name="generi" multiple="multiple">
-                                        <option selected="selected" value="0">Tutti i generi</option>
-                                        <option value="1">Avventura</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row justify-content-center">
-                                <label for="canali" class="col-lg-2 col-form-label">Canali</label>
-                                <div class="col-lg-8">
-                                    <select id="canali" class="form-control" name="canali" multiple="multiple">
-                                        <option selected="selected" value="0">Tutti i canali</option>
-                                        <option value="1">RAI 1</option>
-                                        <option value="2">RAI 2</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row justify-content-center">
-                                <label for="min_ora" class="col-lg-2 col-form-label">Ora di inizio minima</label>
-                                <div class="col-lg-3">
-                                    <input class="form-control" type="time" id="min_ora" name="min_ora"/>
-                                </div>
-
-
-
-                                <label for="max_ora" class="col-lg-2 col-form-label">Ora di fine</label>
-                                <div class="col-lg-3">
-                                    <input class="form-control" type="time" id="max_ora" name="max_ora"/>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row justify-content-center">
-                                <label for="date_min" class="col-lg-2 col-form-label">Dal</label>
-                                <div class="col-lg-3">
-                                    <input class="form-control dateTime" type="date" id="date_min" min="2020-08-12" max="2020-12-31" name="date_min" placeholder=""/>
-                                </div>
-
-                                <label for="date_max" class="col-lg-2 col-form-label">Al</label>
-                                <div class="col-lg-3">
-                                    <input class="form-control dateTime" type="date" min="2020-08-12" max="2020-12-31" id="date_max" name="date_max"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group row justify-content-center">
-                                <div class="col-lg-4 text-center">
-                                    <button type="submit" class="btn primary-btn">
-                                        <i class="fa fa-search"></i>
-                                        Cerca
-                                    </button>
-                                </div>
-                            </div
-
-
-
-
-                        </form>
-
-
                     </div>
                 </div>
             </div>

@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : HP
 */
 
+#preloder, .loader{
+    display: none;
+}
+
 .hero{
     padding: 10em 0;
     padding-bottom: 5em;
@@ -222,7 +226,20 @@ small{
     transition: all .3s ease-out;
 }
 
-.nojs:hover + .search-container, .search-container:hover{
+.search-container.js{
+    border: 2px solid #f03250;
+    border-radius: 10px;
+    opacity: 1;
+    max-height: 100%;
+    box-shadow: 0px 0px 5px 3px #f03250;
+    -web-kit-box-shadow: 0px 0px 5px 3px #f03250;
+    -moz-box-shadow: 0px 0px 5px 3px #f03250;
+    padding: 2em;
+    margin-top: 2em;
+    transition: all .4s ease-in;
+}
+
+#cerca:hover + .search-container.nojs, .search-container.nojs:hover{
     display:block;
     border: 2px solid #f03250;
     border-radius: 10px;
@@ -235,3 +252,4 @@ small{
     margin-top: 2em;
     transition: all .4s ease-in;
 }
+
