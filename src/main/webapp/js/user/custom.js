@@ -38,4 +38,15 @@ function setDateTimeCheck() {
 }
 
 setDateTimeCheck();
+/*
+if($('#cerca').length){
+    let cerca = $('#cerca');
+    cerca.removeClass('nojs');
+    cerca.addClass('js');
+    $('.search-container').addClass('d-none');
+}
 
+$(document).on('click','#cerca',function(event){
+    $('.search-container').toggleClass('d-none');
+});
+*/

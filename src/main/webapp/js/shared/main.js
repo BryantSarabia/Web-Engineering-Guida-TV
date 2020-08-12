@@ -99,10 +99,6 @@
     });
     minamount.val('$' + rangeSliderPrice.slider("value"));
 
-    /*--------------------------
-        Select
-    ----------------------------*/
-    $("select").niceSelect();
 
     /*------------------
 		Single Product
