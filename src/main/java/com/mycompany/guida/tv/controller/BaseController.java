@@ -6,6 +6,7 @@
 package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -37,6 +38,17 @@ public abstract class  BaseController extends HttpServlet {
             request.setAttribute("datalayer", datalayer);
             
             System.out.println("Inizializzo DataLayer: " + datalayer);
+            
+            /**
+             * Navbar Management
+             */
+       
+            boolean logged = ( SecurityLayer.checkSession(request) != null && request.isRequestedSessionIdValid() && !request.getSession(false).isNew());
+            request.setAttribute("logged", logged);
+ 
+           
+            
+            
             processRequest(request, response);
         } catch (Exception ex) {
             ex.printStackTrace(); //for debugging only

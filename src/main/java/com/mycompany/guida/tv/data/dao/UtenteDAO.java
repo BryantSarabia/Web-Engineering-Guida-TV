@@ -14,7 +14,7 @@ public interface UtenteDAO {
 
     Utente getUtente(String email) throws DataException;
 
-    Utente getUtenteByUsername(String username) throws DataException;
+    Utente getUtenteByEmail (String username) throws DataException;
 
     Utente getUtenteByToken(String token) throws DataException;
 

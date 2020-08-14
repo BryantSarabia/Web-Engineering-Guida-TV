@@ -6,6 +6,9 @@
 package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.DataException;
+import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.data.model.Utente;
+import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -40,7 +43,7 @@ public class Profile extends BaseController {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws DataException
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -48,13 +51,24 @@ public class Profile extends BaseController {
         response.setContentType("text/html;charset=UTF-8");
         int fascia = 1;
         try {
-            TemplateResult results = new TemplateResult(getServletContext());
-            results.activate("profile.ftl.html", request, response);
-        } catch (TemplateManagerException ex) {
+           action_default(request, response);
+            
+        } catch (DataException | TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
-
         }
+        
+    }
+    
+   
+    
+      private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        
+        // Mi stampa la pagina di log in
+        TemplateResult results = new TemplateResult(getServletContext());
+        UtenteProxy me = (UtenteProxy)((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
+        request.setAttribute("me", me);
+        results.activate("profile.ftl.html", request, response);
         
     }
     
@@ -66,46 +80,5 @@ public class Profile extends BaseController {
         }
         return;
     }
-    
-
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

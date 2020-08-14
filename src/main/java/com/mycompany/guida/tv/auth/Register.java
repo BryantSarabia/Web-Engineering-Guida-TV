@@ -7,10 +7,15 @@ package com.mycompany.guida.tv.auth;
 
 import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.DataException;
+import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.data.impl.UtenteImpl;
+import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
+import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
+import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -33,18 +38,21 @@ public class Register extends BaseController {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
      @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException{
         response.setContentType("text/html;charset=UTF-8");
+        System.out.println( (GuidaTVDataLayer) request.getAttribute("datalayer"));
         
         try {
             if(request.getParameter("submit") != null){
+
                 action_register(request, response);
+                
             }
             else {
+                 System.out.println( (GuidaTVDataLayer) request.getAttribute("datalayer") );
                 action_default(request, response);
             }
         } catch (Exception ex) {
@@ -76,48 +84,80 @@ public class Register extends BaseController {
         
     }
        
-       private void action_register(HttpServletRequest request, HttpServletResponse response) {
+       private void action_register(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException, IOException, Exception {
         
-      /* Da fare */
-    }
+        String nome = ( request.getParameter("nome") != null) ? request.getParameter("nome") : "";
+        String cognome = ( request.getParameter("cognome") != null) ? request.getParameter("cognome") : "";
+        String email = ( request.getParameter("email") != null) ? request.getParameter("email") : "";
+        String password = ( request.getParameter("password") != null) ? request.getParameter("password") : "";
+        String confirm = ( request.getParameter("password_confirm") != null) ? request.getParameter("password_confirm") : "";
+        boolean valid = true;
+        String error_msg = "";
+        
+        if (!nome.isEmpty() && !cognome.isEmpty() && !email.isEmpty() && !password.isEmpty() && !confirm.isEmpty()) {
+   
+            // Sanitizzo tutti i campi e controllo se i campi sono validi
+            if(!SecurityLayer.CheckEmail(email)) {
+                           System.out.println("ciao");
+                error_msg += "Email non valida, \n";
+                valid = false;
+            }
+            if(!password.equals(confirm)) {
+                error_msg += "Le password non combaciano, \n";
+                valid = false;
+            }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+            
+            // Controllo se l'email e l'username sono presenti nel DB
+            Utente exists_email = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(email);
+            if(exists_email != null ) {
+                error_msg += "Email non disponibile, \n";
+                valid = false;
+            }
+                     
+            if(valid) {
+               
+                Utente me = new UtenteImpl();
+                me.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+                me.setEmail(email);
+                me.setNome(nome);
+                me.setCognome(cognome);
+                
+               // me.setRuolo(((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(2));
+                me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));     
+                me.setExpirationDate(LocalDate.now().plusDays(1));
+                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
+                
+                if(me.getKey() == 0) {
+                    error_msg += "Errore nell'inserimento dell'utente, \n";
+                    valid = false;
+                }/*
+                else {
+                    // Invio email e faccio redirect
+                    
+                    // Logica di invio email mancante, stampo su file. Try with resource sul buffer
+                    
+                    UtilityMethods.sendEmailWithCodes(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me, "Conferma la tua email cliccando sul link in basso", EmailTypes.CONFIRM_EMAIL);
+                    // redirect
+                    if (request.getParameter("referrer") != null) {
+                        response.sendRedirect(request.getParameter("referrer"));
+                    } else {
+                        response.sendRedirect("login");
+                    }
+                }*/
+                    response.sendRedirect("login");
+            }
+            
+        }
+        else {
+            error_msg = "Compila correttamente tutti i campi.";
+            valid = false;
+        }
+        
+        if(!valid) {
+            request.setAttribute("error", error_msg);
+            action_default(request, response);                
+        }
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

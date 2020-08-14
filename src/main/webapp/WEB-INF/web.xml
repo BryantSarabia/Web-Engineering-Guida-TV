@@ -69,6 +69,10 @@
         <servlet-name>Profile</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.Profile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.auth.Logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -100,6 +104,10 @@
     <servlet-mapping>
         <servlet-name>Profile</servlet-name>
         <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

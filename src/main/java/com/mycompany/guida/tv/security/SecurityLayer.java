@@ -1,7 +1,18 @@
 package com.mycompany.guida.tv.security;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Base64;
 import java.util.Calendar;
+import java.util.regex.Pattern;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,10 +21,9 @@ import javax.servlet.http.HttpSession;
 public class SecurityLayer {
 
     //--------- SESSION SECURITY ------------    
-     //questa funzione esegue una serie di controlli di sicurezza
+    //questa funzione esegue una serie di controlli di sicurezza
     //sulla sessione corrente. Se la sessione non è valida, la cancella
     //e ritorna null, altrimenti la aggiorna e la restituisce
-    
     //this method executed a set of standard chacks on the current session.
     //If the session exists and is valid, it is rerutned, otherwise
     //the session is invalidated and the method returns null
@@ -100,7 +110,6 @@ public class SecurityLayer {
     //questa funzione aggiunge un backslash davanti a
     //tutti i caratteri "pericolosi", usati per eseguire
     //SQL injection attraverso i parametri delle form
-    
     //this function adds backslashes in front of
     //all the "malicious" charcaters, usually exploited
     //to perform SQL injection through form parameters
@@ -124,6 +133,65 @@ public class SecurityLayer {
         } else {
             throw new NumberFormatException("String argument is null");
         }
+    }
+
+    public static boolean CheckEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."
+                + "[a-zA-Z0-9_+&*-]+)*@"
+                + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
+                + "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null) {
+            return false;
+        }
+        return pat.matcher(email).matches();
+    }
+
+    public static String removeSpecialChars(String input) {
+        return input.replaceAll("[^\\p{L}0-9']", "");
+    }
+
+    public static String removeSpecialCharsQuery(String input) {
+        return input.replaceAll("[^\\p{L}0-9'\\s\\+]", "");
+    }
+    
+     public static LocalDate checkDate(String input) {
+        try {
+            return LocalDate.parse(input, DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+    
+    public static LocalTime checkTime(String input) {
+        try {
+            return LocalTime.parse(input, DateTimeFormatter.ISO_LOCAL_TIME);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+    
+    
+    public static String encrypt(String phrase, String key) throws Exception {
+        DESKeySpec desKeySpec = new DESKeySpec(key.getBytes(StandardCharsets.UTF_8));
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("DES");
+        SecretKey secretKey = secretKeyFactory.generateSecret(desKeySpec);
+        byte[] dataBytes = phrase.getBytes(StandardCharsets.UTF_8);
+        Cipher cipher = Cipher.getInstance("DES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        return Base64.getEncoder().encodeToString(cipher.doFinal(dataBytes));
+    }
+    
+    public static String decrypt(String enc_phrase, String key) throws Exception {
+        byte[] dataBytes = Base64.getDecoder().decode(enc_phrase);
+        DESKeySpec desKeySpec = new DESKeySpec(key.getBytes(StandardCharsets.UTF_8));
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("DES");
+        SecretKey secretKey = secretKeyFactory.generateSecret(desKeySpec);
+        Cipher cipher = Cipher.getInstance("DES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] dataBytesDecrypted = (cipher.doFinal(dataBytes));
+        return new String(dataBytesDecrypted);
     }
 
     //--------- CONNECTION SECURITY ------------
@@ -152,7 +220,7 @@ public class SecurityLayer {
 
         //ricostruiamo la url cambiando il protocollo e la porta COME SPECIFICATO NELLA CONFIGURAZIONE DI TOMCAT
         //rebuild the url changing port and protocol AS SPECIFIED IN THE SERVER CONFIGURATION
-        String newUrl = "https://" + server + ":8443" +  context + path + (info != null ? info : "") + (query != null ? "?" + query : "");
+        String newUrl = "https://" + server + ":8443" + context + path + (info != null ? info : "") + (query != null ? "?" + query : "");
         try {
             //ridirigiamo il client
             //redirect

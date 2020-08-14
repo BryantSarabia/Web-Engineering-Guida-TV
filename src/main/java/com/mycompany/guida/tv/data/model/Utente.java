@@ -1,4 +1,5 @@
 package com.mycompany.guida.tv.data.model;
+
 import com.mycompany.guida.tv.data.DataItem;
 
 import java.time.LocalDate;
@@ -39,6 +40,10 @@ public interface Utente extends DataItem<Integer> {
     public void setInteressi(List<Interesse> interessi);
 
     public LocalDate getExp_date();
+
+    public void setExpirationDate(LocalDate ld);
+
+    void setEmailVerifiedAt(LocalDate date);
 
     public LocalDate getEmailVerifiedAt();
 }

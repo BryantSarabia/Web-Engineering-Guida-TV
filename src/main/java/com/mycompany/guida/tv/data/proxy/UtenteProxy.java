@@ -89,8 +89,8 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setExp_date(LocalDate exp_date) {
-        super.setExp_date(exp_date);
+    public void setExpirationDate(LocalDate exp_date) {
+        super.setExpirationDate(exp_date);
     }
 
     @Override

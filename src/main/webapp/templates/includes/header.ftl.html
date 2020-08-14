@@ -12,24 +12,28 @@
                         <nav class="header__menu mobile-menu ">
                             <ul>
                                 <li><a href="./">Home</a></li>
-                                <li><a href="./palinsesto">Palinsesto</a></li>
-                                <li><a href="./canale">Canale</a></li>
+                                <li><a href="palinsesto">Palinsesto</a></li>
+                                <li><a href="canale">Canale</a></li>
+                                <#if logged>
                                 <li><a href="#">Me</a>
                                     <ul class="dropdown">
                                         <li><a href="./about.html">Admin Panel</a></li>
-                                        <li><a href="./profile">Profile</a></li>
-                                        <li><a href="./blog-details.html">Logout</a></li>
-                                      
+                                        <li><a href="profile">Profile</a></li>
+                                        <li><a href="logout">Logout</a></li>
                                     </ul>
                                 </li>
+                                </#if>
                                 <li><a href="./blog.html">Blog</a></li>
-                                <li><a href="./register">Register</a></li>
+                                <#if !logged>
+                                <li><a href="register">Register</a></li>
+                                </#if>
                             </ul>
                         </nav>
+                        <#if !logged>
                         <div class="header__menu__right">
-
                             <a href="./login" class="login-btn"><i class="fa fa-user"></i></a>
                         </div>
+                        </#if>
                     </div>
                 </div>
 
