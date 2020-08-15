@@ -253,3 +253,12 @@ small{
     transition: all .4s ease-in;
 }
 
+.profile_daily_email, .profile_info{
+    border: 1px solid #f03250;
+    border-radius: 10px;
+}
+
+.profile_info_form{
+    padding-top: 4em;
+}
+

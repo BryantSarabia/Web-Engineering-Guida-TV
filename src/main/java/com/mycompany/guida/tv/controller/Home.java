@@ -6,6 +6,7 @@
 package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.DataException;
+import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
@@ -38,7 +39,7 @@ public class Home extends BaseController {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException{
         response.setContentType("text/html;charset=UTF-8");
-        
+
         try {
             if(request.getParameter("page") != null && !request.getParameter("page").isEmpty()){
                int page = SecurityLayer.checkNumeric(request.getParameter("page")); 
@@ -46,6 +47,7 @@ public class Home extends BaseController {
             } 
             else {
                 action_default(request, response);
+          
             }
         } catch (TemplateManagerException ex) {
             request.setAttribute("exception", ex);

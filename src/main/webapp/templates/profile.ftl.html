@@ -1,0 +1,107 @@
+
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 mb-5">
+                <div class="contact__widget">
+                    <div class="contact__widget__address">
+                        <h3 class="text-center">Benvenuto al tuo profilo</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 mr-1">
+
+                <div class="row p-1 justify-content-center profile_daily_email">
+                    <form action="#" method="POST">
+                        <div class="row mt-2 mb-4">
+                            <div class="col-lg-12 text-center">
+                                <h3>Email giornalera</h3>
+                                <small>Personalizza la tua mail giornalera!</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row col-lg-12">
+                            <label for="canali_profile" class="col-form-label">Seleziona i tuoi canali preferiti</label>
+                            <select class="form-control" name="canali" id="canali_profile" multiple="multiple">
+                                <option>RAI 1</option>
+                                <option>RAI 2</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group row col-lg-12">
+                            <label for="fascia" class="col-form-label">Seleziona la fascia oraria</label>
+                            <select class="form-control" name="fascia" id="fascia" multiple="multiple">
+                                <option value="0">Tutto il giorno</option>
+                                <option value="1">Mattina</option>
+                                <option value="2">Pomeriggio</option>
+                                <option value="3">Sera</option>
+                                <option value="4">Notte</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group row col-lg-12">
+                            <label for="ricerche" class="col-form-label">Seleziona una ricerca</label>
+                            <select class="form-control" name="ricerche" id="ricerche">
+                                <option>Ricerca 1 (harry potter, RAI 1)</option>
+                                <option>Ricerca 2 (breaking bad, Mediaset)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-check col-lg-12">
+                            <input name="desidero" type="radio" id="desidero" value="1">
+                            <label for="desidero">Desidero ricevere mail giornaliere</label>
+                        </div>
+                        <div class="form-check col-lg-12">
+                            <input name="desidero" type="radio" id="non_desidero" value="0">
+                            <label for="non_desidero">Non desidero ricevere mail giornaliere</label>
+                        </div>
+
+                        <div class="text-center mt-2 mb-2">
+                            <button type="submit" class="btn primary-btn">salva</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-6  profile_info ml-4">
+
+                 <div class="col-lg-12 text-center mt-3 mb-2">
+                        <h3>Modifica la tua password</h3>
+                    </div>
+
+                <form action="#" class="contact__form profile_info_form " method="POST">
+
+
+                    <div class="form-group row justify-content-center mt-2">
+                        <div class="col-lg-1 align-self-center pr-0">  <i class="fa fa-user"></i>  </div>
+                        <div class="col-lg-6 col-md-6 pl-0">
+                            <input type="text" placeholder="Email" name="email" class="form-control" value="${me.email}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-lg-1 align-self-center pr-0"> <i class="fa fa-key" aria-hidden="true"></i> </div>
+                        <div class="col-lg-6 col-md-6 pl-0">
+                            <input type="password" placeholder="Password" name="password" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-lg-1 align-self-center pr-0"> <i class="fa fa-key" aria-hidden="true"></i> </div>
+                        <div class="col-lg-6 col-md-6 pl-0">
+                            <input type="password" placeholder="Confirm password" name="confirm_password" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center mt-2">
+                        <div class="col-lg-6 col-md-6 text-center">
+                            <button type="submit" class="btn primary-btn">INVIA</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->

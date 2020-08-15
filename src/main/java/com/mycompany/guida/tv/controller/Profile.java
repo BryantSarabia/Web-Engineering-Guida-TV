@@ -7,6 +7,8 @@ package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.data.model.Utente;
+import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -32,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author HP
  */
-public class PalinsestoGeneral extends BaseController {
+public class Profile extends BaseController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,31 +43,32 @@ public class PalinsestoGeneral extends BaseController {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws DataException
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
         response.setContentType("text/html;charset=UTF-8");
         int fascia = 1;
-         System.out.println( (GuidaTVDataLayer) request.getAttribute("datalayer") );
         try {
-            if (request.getParameter("fascia") != null) {
-                fascia = SecurityLayer.checkNumeric(request.getParameter("fascia"));
-                if (fascia >= 1 && fascia <= 4) {
-                    // Se la fascia non è valida la lascio a 1 (Mattina) altrimenti eseguo la action get_by_fascia
-                    action_get_by_fascia(request, response, fascia);
-                }
-            } else {
-                action_default(request, response);
-            }
-        } catch (TemplateManagerException ex) {
+           action_default(request, response);
+            
+        } catch (DataException | TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
-
-        } catch (DataException ex) {
-            Logger.getLogger(PalinsestoGeneral.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+    }
+    
+   
+    
+      private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        
+        // Mi stampa la pagina di log in
+        TemplateResult results = new TemplateResult(getServletContext());
+        UtenteProxy me = (UtenteProxy)((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
+        request.setAttribute("me", me);
+        results.activate("profile.ftl.html", request, response);
         
     }
     
@@ -77,19 +80,5 @@ public class PalinsestoGeneral extends BaseController {
         }
         return;
     }
-    
-      
-      private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        
-        action_get_by_fascia(request, response, 1);
-        
-    }
-      
-      private void action_get_by_fascia(HttpServletRequest request, HttpServletResponse response, int fascia) throws TemplateManagerException, DataException {
-        /* Da fare */
-        TemplateResult results = new TemplateResult(getServletContext());
-        results.activate("palinsesto.ftl.html", request, response);
-    }
-
 
 }
