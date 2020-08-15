@@ -122,6 +122,7 @@ public class Register extends BaseController {
                 me.setEmail(email);
                 me.setNome(nome);
                 me.setCognome(cognome);
+                System.out.println(me.getPassword());
                 
                // me.setRuolo(((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(2));
                 me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));     
