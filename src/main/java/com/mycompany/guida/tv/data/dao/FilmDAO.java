@@ -2,11 +2,14 @@ package com.mycompany.guida.tv.data.dao;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.model.Film;
+import java.sql.ResultSet;
 import java.util.List;
 
 public interface FilmDAO{
     
     Film createFilm();
+    
+    Film createFilm(ResultSet rs) throws DataException;
     
     Film getFilm(int key) throws DataException;
     
@@ -20,6 +23,6 @@ public interface FilmDAO{
     
     void storeFilm(Film film) throws DataException;
     
-    void deleteFilm(Film film) throws DataException;
+    void deleteFilm(int key) throws DataException;
             
 }
