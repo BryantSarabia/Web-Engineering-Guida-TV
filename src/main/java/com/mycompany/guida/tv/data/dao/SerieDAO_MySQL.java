@@ -172,7 +172,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
     
     @Override
     public List<Serie> getListaSeriePaginated(int start_element, int elements) throws DataException{
-        
+        return null;
     }
     
     @Override
