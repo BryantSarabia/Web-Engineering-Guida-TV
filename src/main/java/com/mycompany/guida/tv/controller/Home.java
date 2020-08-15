@@ -7,11 +7,17 @@ package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.data.model.Canale;
+import com.mycompany.guida.tv.data.model.Genere;
+import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -37,41 +43,68 @@ public class Home extends BaseController {
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException{
+            throws ServletException {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            if(request.getParameter("page") != null && !request.getParameter("page").isEmpty()){
-               int page = SecurityLayer.checkNumeric(request.getParameter("page")); 
-               action_paginated(request, response, page);
-            } 
-            else {
+            if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+                int page = SecurityLayer.checkNumeric(request.getParameter("page"));
+                action_paginated(request, response, page);
+            } else {
                 action_default(request, response);
-          
+
             }
         } catch (TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
-            
-        } catch (DataException ex){
-             Logger.getLogger(PalinsestoGeneral.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (DataException ex) {
+            Logger.getLogger(PalinsestoGeneral.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        }
-    
-    private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException{
+
+    }
+
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
         action_paginated(request, response, 0);
     }
 
-    private void action_paginated(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException{
-        
+    private void action_paginated(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException {
+
         int numero_canali = 0;
-        int canali_per_pagina = 5;  
-            TemplateResult results = new TemplateResult(getServletContext());      
+        int canali_per_pagina = 5;
+
+        try {
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
+            numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
+            Map<Canale, Programmazione> current = new TreeMap();
+           // Map<Canale, Map<Programmazione, List<Genere>>> current = new TreeMap();
+           // Map<Programmazione, List<Genere>> prog_and_generi = new TreeMap();
+
+            for (Canale c : canali) {
+                // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
+                Programmazione programmazione = c.getProgrammazioneCorrente();
+                   System.out.println(programmazione.getProgramma());
+                if (programmazione != null) {
+                  //  List<Genere> generi = programmazione.getProgramma().getGeneri();
+                  //  prog_and_generi.put(programmazione,generi);
+                    current.put(c, programmazione);
+
+                } else {
+                    current.put(c, null);
+                }
+            }
+
+            request.setAttribute("numero_pagine", (int) (Math.ceil(numero_canali / canali_per_pagina)));
+            request.setAttribute("pagina", page);
+            request.setAttribute("current_prog", current);
             results.activate("home.ftl.html", request, response);
-        
+        } catch (DataException ex) {
+            request.setAttribute("message", "Data access exception: " + ex.getMessage());
+            action_error(request, response);
+        }
+
     }
-        
 
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

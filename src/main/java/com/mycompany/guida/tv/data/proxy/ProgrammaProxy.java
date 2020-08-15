@@ -53,6 +53,8 @@ public class ProgrammaProxy extends ProgrammaImpl implements DataItemProxy {
         this.modified = true;
         super.setGeneri(generi);
     }
+    
+    
 
     @Override
     public void setVersion(long version) {
