@@ -34,7 +34,7 @@ public class CanaleDAO_MySQL extends DAO implements CanaleDAO {
             getCanaliPaginate = connection.prepareStatement("SELECT * FROM canali ORDER BY numero ASC LIMIT ? OFFSET ?");
             getCanaleByID = connection.prepareStatement("SELECT * FROM canali WHERE id = ?");
             getNumeroCanali = connection.prepareStatement("SELECT COUNT(*) AS num FROM canali");
-            iCanale = connection.prepareStatement("INSERT INTO canali(numero, nome, logo VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            iCanale = connection.prepareStatement("INSERT INTO canali(numero, nome, logo) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uCanale = connection.prepareStatement("UPDATE canali SET numero=?, nome=?, logo=?, version=? WHERE ID = ? AND Version = ?");
             dCanale = connection.prepareStatement("DELETE FROM canali WHERE id = ?");
             

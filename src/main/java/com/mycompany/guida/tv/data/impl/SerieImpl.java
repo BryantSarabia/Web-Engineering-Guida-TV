@@ -4,25 +4,15 @@ import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Serie;
 
-public class SerieImpl extends DataItemImpl<Integer> implements Serie {
+public class SerieImpl extends ProgrammaImpl implements Serie {
 
-    private Programma programma;
     private int stagione;
     private int episodio;
 
     public SerieImpl() {
         super();
-        this.programma = null;
         this.stagione = 0;
         this.episodio = 0;
-    }
-
-    public Programma getProgramma() {
-        return programma;
-    }
-
-    public void setProgramma(Programma programma) {
-        this.programma = programma;
     }
 
     public int getStagione() {
