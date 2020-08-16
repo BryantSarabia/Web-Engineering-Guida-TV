@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/guida-tv">
-
-
-    <Resource 
-        driverClassName="com.mysql.cj.jdbc.Driver"
-        auth="Container"
-        username="root"
-        password=""
-        url="jdbc:mysql://localhost/guida-tv?serverTimezone=UTC"
-        name="jdbc/guidatv"
-        type="javax.sql.DataSource"
-        maxActive="10"
-        maxIdle="5"
-        maxWait="10000"
-    />
-
+  <Resource auth="Container" driverClassName="com.mysql.cj.jdbc.Driver" maxActive="10" maxIdle="5" maxWait="10000" name="jdbc/guidatv" password="" type="javax.sql.DataSource" url="jdbc:mysql://localhost/guida-tv?serverTimezone=UTC" username="root"/>
 </Context>

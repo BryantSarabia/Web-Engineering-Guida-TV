@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
 
-    private PreparedStatement countUsers, getUtente, insertUtente, updateUtente, loginUtente, getUtenteByEmail, getUtenteByToken, getUtentiSendEmail, getUtentiPaginated, dUtente, checkToken;
+    private PreparedStatement countUsers, getUtenteByID, insertUtente, updateUtente, loginUtente, getUtenteByEmail, getUtenteByToken, getUtentiSendEmail, getUtentiPaginated, dUtente, checkToken;
 
     public UtenteDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -33,8 +33,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
         try {
 
             // PREPARE STATEMENTS
-            countUsers = connection.prepareStatement("SELECT COUNT(*) AS NumeroUtenti FROM Utente");
-            getUtente = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
+            countUsers = connection.prepareStatement("SELECT COUNT(*) AS NumeroUtenti FROM utenti");
+            getUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
             insertUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, email, password, id_ruolo, token, exp_date) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateUtente = connection.prepareStatement("UPDATE utenti SET nome=?, cognome=?, email=?,password=?, id_ruolo=? ,email_verified_at=?, token=?, exp_date=?, version=? WHERE ID=? and version=?");
             loginUtente = connection.prepareStatement("SELECT id, password FROM utenti WHERE email = ?");
@@ -56,7 +56,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
              * CLOSE ALL STATEMENTS
              */
             countUsers.close();
-            getUtente.close();
+            getUtenteByID.close();
             insertUtente.close();
             updateUtente.close();
             loginUtente.close();
@@ -119,8 +119,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             utente = dataLayer.getCache().get(Utente.class, utente_key);
         } else {
             try {
-                getUtente.setInt(1, utente_key);
-                try (ResultSet rs = getUtente.executeQuery()) {
+                getUtenteByID.setInt(1, utente_key);
+                try (ResultSet rs = getUtenteByID.executeQuery()) {
                     if (rs.next()) {
                         utente = createUtente(rs);
                         dataLayer.getCache().add(Utente.class, utente);

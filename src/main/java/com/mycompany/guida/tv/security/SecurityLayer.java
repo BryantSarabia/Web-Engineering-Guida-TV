@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 public class SecurityLayer {
 
     private static DataLayer dataLayer;
+    private static String STATIC_KEY = "ChiaveProgettoGuidaTV";
 
     //--------- SESSION SECURITY ------------    
     //questa funzione esegue una serie di controlli di sicurezza
@@ -262,15 +263,15 @@ public class SecurityLayer {
        return sb.toString();
 }
     
-    public static void generateVerificationLink(String file_path, Utente utente){
-        String link = "localhost:8080/guida-tv/verifyemail";
-        
-        String encrypted_token = BCrypt.hashpw(utente.getToken(), BCrypt.gensalt());
-        String encrypted_email = BCrypt.hashpw(utente.getEmail(), BCrypt.gensalt());
-        
-        link += "?token=" + encrypted_token + "&code=" + encrypted_email;
-        
+    public static void generateVerificationLink(String file_path, Utente utente){      
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_path, true))) {
+            String link = "localhost:8080/guida-tv/verifyemail";
+        
+            String encrypted_token = BCrypt.hashpw(utente.getToken(), BCrypt.gensalt());
+            String encrypted_email = SecurityLayer.encrypt(utente.getEmail(), STATIC_KEY);
+            
+            link += "?token=" + encrypted_token + "&code=" + encrypted_email;
+            
             System.out.println("Writing link");
             writer.write("Hi " + utente.getNome());
             writer.newLine();
@@ -278,8 +279,16 @@ public class SecurityLayer {
             writer.newLine();
             writer.write(link);
             System.out.println("Link successfully written");
+            
         } catch (IOException ex) {
+            Logger.getLogger(SecurityLayer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex){
             Logger.getLogger(SecurityLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static String getStaticKey(){
+        return STATIC_KEY;
+    }
+
 }
