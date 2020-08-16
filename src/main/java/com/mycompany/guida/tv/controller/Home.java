@@ -79,25 +79,14 @@ public class Home extends BaseController {
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
-            List<Genere> generi = new ArrayList<Genere>();
             Map<Canale, Programmazione> current = new TreeMap();
-            Map<Programma, List<Genere>> prog_and_generi = new TreeMap();
 
             for (Canale c : canali) {
                 // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
                 Programmazione programmazione = c.getProgrammazioneCorrente();
 
                 if (programmazione != null) {
-
                     current.put(c, programmazione);
-
-                    //Programma programma = programmazione.getProgramma();
-                    //System.out.println(programmazione.getProgramma().getKey() + " HOLADFJAKLDFJA");
-                    //  generi = programma.getGeneri();
-                    //   System.out.println(programma);
-                    //if (generi != null) {
-                    // prog_and_generi.put(programma, generi);
-                    // }
                 } else {
                     current.put(c, null);
                 }
@@ -106,7 +95,6 @@ public class Home extends BaseController {
             request.setAttribute("numero_pagine", (int) (Math.ceil(numero_canali / canali_per_pagina)));
             request.setAttribute("pagina", page);
             request.setAttribute("current_prog", current);
-            request.setAttribute("generi", prog_and_generi);
             results.activate("home.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());

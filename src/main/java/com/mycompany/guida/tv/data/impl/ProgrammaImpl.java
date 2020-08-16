@@ -76,4 +76,23 @@ public class ProgrammaImpl extends DataItemImpl<Integer> implements Programma {
         this.generi = generi;
     }
 
+          /**
+     * Ordino in base al titolo
+     * @param o
+     */
+
+    @Override
+     public int compareTo(Object o) {
+        if(o instanceof ProgrammaImpl) {
+            if( this.getTitolo().length() < ((ProgrammaImpl) o).getTitolo().length() ) {
+                return -1;
+            } 
+            else if( this.getTitolo().length() > ((ProgrammaImpl) o).getTitolo().length() ) {
+                return 1;
+            } 
+            else return 0;
+        }
+        else return super.compareTo(o);
+    }
+
 }

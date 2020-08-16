@@ -36,14 +36,14 @@ public class GenereDAO_MySQL extends DAO implements GenereDAO {
 
         try {
 
-            getGenereByID = connection.prepareStatement("SELECT * FROM Genere WHERE id = ?");
+            getGenereByID = connection.prepareStatement("SELECT * FROM generi WHERE id = ?");
             getGeneriByProg = connection.prepareStatement("SELECT generi.id, generi.nome FROM generi JOIN programma_ha_generi ON generi.id = programma_ha_generi.id_genero JOIN programmi ON programmi.id = programma_ha_generi.id_programma WHERE programmi.id=? ");
             getGeneri = connection.prepareStatement("SELECT * FROM generi ORDER BY nome");
-            getNumeroGeneri = connection.prepareStatement("SELECT COUNT(*) AS num FROM Genere");
-            getGeneriPaginated = connection.prepareStatement("SELECT * FROM Genere LIMIT ? OFFSET ?");
-            iGenere = connection.prepareStatement("INSERT INTO Genere(nome, descrizione) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-            uGenere = connection.prepareStatement("UPDATE genere SET nome=?, version=? WHERE id = ? AND version = ?");
-            dGenere = connection.prepareStatement("DELETE FROM genere WHERE id = ?");
+            getNumeroGeneri = connection.prepareStatement("SELECT COUNT(*) AS num FROM generi");
+            getGeneriPaginated = connection.prepareStatement("SELECT * FROM generi LIMIT ? OFFSET ?");
+            iGenere = connection.prepareStatement("INSERT INTO generi(nome) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            uGenere = connection.prepareStatement("UPDATE generi SET nome=?, version=? WHERE id = ? AND version = ?");
+            dGenere = connection.prepareStatement("DELETE FROM generi WHERE id = ?");
 
         } catch (SQLException ex) {
             Logger.getLogger("Errore nell'inizializzazione del DAO Genere");

@@ -40,10 +40,14 @@
                                         </div>
                                         <ul>
                                             <#if programmazione.programma??>
-                                            <#list generi as programma, genere>
+                                            <#list programmazione.programma.generi as genere>
+
+
                                             <li><i class="fa fa-genderless" aria-hidden="true"></i>
                                                 ${genere.nome}
                                             </li>
+
+
                                             <#else>
                                             <li><i class="fa fa-genderless" aria-hidden="true"></i>
                                                 Nessun genero

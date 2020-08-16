@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenereImpl extends DataItemImpl<Integer> implements Genere {
+
     private String nome;
     private List<Programma> programmi = new ArrayList<Programma>();
-
 
     public GenereImpl() {
         super();
@@ -33,6 +33,25 @@ public class GenereImpl extends DataItemImpl<Integer> implements Genere {
 
     public void setProgrammi(List<Programma> programmi) {
         this.programmi = programmi;
+    }
+    
+      /**
+     * Ordino in base al genere
+     * @param o
+     */
+
+    @Override
+     public int compareTo(Object o) {
+        if(o instanceof GenereImpl) {
+            if( this.getNome().length() < ((GenereImpl) o).getNome().length() ) {
+                return -1;
+            } 
+            else if( this.getNome().length() > ((GenereImpl) o).getNome().length() ) {
+                return 1;
+            } 
+            else return 0;
+        }
+        else return super.compareTo(o);
     }
 
 }
