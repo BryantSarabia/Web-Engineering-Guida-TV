@@ -1,4 +1,4 @@
-/*package com.mycompany.guida.tv.data.proxy;
+package com.mycompany.guida.tv.data.proxy;
 
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
@@ -14,12 +14,6 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
         super();
         this.modified = false;
         this.dataLayer = dataLayer;
-    }
-
-    @Override
-    public void setProgramma(Programma programma) {
-        this.modified = true;
-        super.setProgramma(programma);
     }
 
     @Override
@@ -57,4 +51,3 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
 
     }
 }
-*/
