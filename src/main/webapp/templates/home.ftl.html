@@ -11,27 +11,48 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
+                    <#list current_prog as canale, programmazione>
+
                     <div class="col-lg-4 col-md-6">
                         <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_1.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
+                            <#if programmazione.programma??>
+                            <div class="listing__item__pic set-bg" data-setbg="${programmazione.programma.img}" style="background-image: url(${programmazione.programma.img});">
+                            <#else>
+                             <div class="listing__item__pic set-bg" data-setbg="img_tv/static/no-image.png" style="background-image: url(img_tv/static/no-image.png);">
+                            </#if>
+                                <img src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>" alt="${canale.logo} logo">
+                                <div class="listing__item__pic__tag">${canale.nome}</div>
                                 <div class="listing__item__pic__btns">
                                     <a href="#"><span class="icon_zoom-in_alt"></span></a>
                                 </div>
                             </div>
                             <div class="listing__item__text">
                                 <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
+                                    <a href="#"><h5><#if programmazione.programma??>${programmazione.programma.titolo}<#else>Nessuna programmazione in onda</#if></h5></a>
                                     <div class="listing__item__text__rating">
                                         <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
+                                            <h6><#if programmazione??>${programmazione.time} - ${programmazione.endTime}<#else>Nessuna programmazione in onda</#if></h6>
                                         </div>
                                     </div>
                                     <ul>
+                                        <#if programmazione.programma??>
+                                        <#list programmazione.programma.generi as genere>
                                         <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
+                                            ${genere.nome}
+                                        </li>
+                                        <#else>
+                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
+                                            Nessun genero
+                                        </li>
+                                        </#list>
+                                        <#else>
+                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
+                                            Nessuna programmazione
+                                        </li>
+                                        </#if>
+                                        <#if programmazione??>
+                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="${programmazione.programma.link_ref}" target="_blank">Info</a></li>
+                                        </#if>
                                     </ul>
                                 </div>
                                 <div class="listing__item__text__info">
@@ -43,165 +64,14 @@
                         </div>
                     </div>
                     
-                    <div class="col-lg-4 col-md-6">
-                        <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_1.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
-                                <div class="listing__item__pic__btns">
-                                    <a href="#"><span class="icon_zoom-in_alt"></span></a>
-                                </div>
-                            </div>
-                            <div class="listing__item__text">
-                                <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
-                                    <div class="listing__item__text__rating">
-                                        <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
-                                    </ul>
-                                </div>
-                                <div class="listing__item__text__info">
-                                    <div class="listing__item__text__info__left">
-                                        <span>Stagione 2, Puntata 31</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     
-                    <div class="col-lg-4 col-md-6">
-                        <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_1.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
-                                <div class="listing__item__pic__btns">
-                                    <a href="#"><span class="icon_zoom-in_alt"></span></a>
-                                </div>
+                    <#else>
+                            <div class="container">
+                                <p>Nessuna programmazione in onda</p>
                             </div>
-                            <div class="listing__item__text">
-                                <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
-                                    <div class="listing__item__text__rating">
-                                        <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
-                                    </ul>
-                                </div>
-                                <div class="listing__item__text__info">
-                                    <div class="listing__item__text__info__left">
-                                        <span>Stagione 2, Puntata 31</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </#list>
                     
-                    <div class="col-lg-4 col-md-6">
-                        <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_1.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
-                                <div class="listing__item__pic__btns">
-                                    <a href="#"><span class="icon_zoom-in_alt"></span></a>
-                                </div>
-                            </div>
-                            <div class="listing__item__text">
-                                <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
-                                    <div class="listing__item__text__rating">
-                                        <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
-                                    </ul>
-                                </div>
-                                <div class="listing__item__text__info">
-                                    <div class="listing__item__text__info__left">
-                                        <span>Stagione 2, Puntata 31</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-6">
-                        <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_1.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
-                                <div class="listing__item__pic__btns">
-                                    <a href="#"><span class="icon_zoom-in_alt"></span></a>
-                                </div>
-                            </div>
-                            <div class="listing__item__text">
-                                <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
-                                    <div class="listing__item__text__rating">
-                                        <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
-                                    </ul>
-                                </div>
-                                <div class="listing__item__text__info">
-                                    <div class="listing__item__text__info__left">
-                                        <span>Stagione 2, Puntata 31</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-6">
-                        <div class="listing__item">
-                            <div class="listing__item__pic set-bg" data-setbg="img_tv/progs/prog_1.jpg" style="background-image: url(img_tv/progs/prog_2.jpg);">
-                                <img src="img_tv/canali/small/1.png" alt="">
-                                <div class="listing__item__pic__tag">RAI 1</div>
-                                <div class="listing__item__pic__btns">
-                                    <a href="#"><span class="icon_zoom-in_alt"></span></a>
-                                </div>
-                            </div>
-                            <div class="listing__item__text">
-                                <div class="listing__item__text__inside">
-                                    <a href="#"><h5>L'Eredita'</h5></a>
-                                    <div class="listing__item__text__rating">
-                                        <div class="listing__item__rating__star">
-                                            <h6>18:00 - 20:00</h6>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li><i class="fa fa-genderless" aria-hidden="true"></i>
-                                            Generi: Commedia, Azione</li>
-                                        <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="https://it.wikipedia.org/wiki/L%27eredit%C3%A0_(programma_televisivo)" target="_blank">Info</a></li>
-                                    </ul>
-                                </div>
-                                <div class="listing__item__text__info">
-                                    <div class="listing__item__text__info__left">
-                                        <span>Stagione 2, Puntata 31</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+         
                 </div>
             </div>
         </div>

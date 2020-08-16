@@ -1,4 +1,3 @@
-
 package com.mycompany.guida.tv.data.model;
 
 import com.mycompany.guida.tv.data.DataItem;
@@ -16,5 +15,9 @@ public interface Canale extends DataItem<Integer> {
     public String getLogo();
 
     public void setLogo(String logo);
+
+    void setProgrammazioneCorrente(Programmazione programmazioneCorrente);
+
+    Programmazione getProgrammazioneCorrente();
 
 }

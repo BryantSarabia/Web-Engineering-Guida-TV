@@ -12,6 +12,7 @@ import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
+import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -51,34 +53,75 @@ public class Profile extends BaseController {
         response.setContentType("text/html;charset=UTF-8");
         int fascia = 1;
         try {
-           action_default(request, response);
-            
-        } catch (DataException | TemplateManagerException ex) {
+            HttpSession s = SecurityLayer.checkSession(request);
+            if (s != null) {
+                if (request.getParameter("update_password") != null) {
+                    action_update_password(request, response);
+                } else {
+                    action_default(request, response);
+                }
+            } else {
+                action_loginredirect(request, response);
+            }
+
+        } catch (IOException | DataException | TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
         }
-        
+
     }
-    
-   
-    
-      private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        
-        // Mi stampa la pagina di log in
+
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+
         TemplateResult results = new TemplateResult(getServletContext());
-        UtenteProxy me = (UtenteProxy)((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
+        UtenteProxy me = (UtenteProxy) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
         request.setAttribute("me", me);
         results.activate("profile.ftl.html", request, response);
-        
+
     }
-    
-      private void action_error(HttpServletRequest request, HttpServletResponse response) {
+
+    private void action_update_password(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        String password = (request.getParameter("password") != null) ? request.getParameter("password") : "";
+        String confirm = (request.getParameter("password_confirm") != null) ? request.getParameter("password_confirm") : "";
+        boolean valid = true;
+        String error_msg = "";
+
+        if (!password.isEmpty() && !confirm.isEmpty()) {
+
+            if (!password.equals(confirm)) {
+                error_msg += "Le password non combaciano, \n";
+                valid = false;
+            }
+
+            if (valid) {
+
+                UtenteProxy me = (UtenteProxy) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
+                me.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
+
+            }
+            if (!valid) {
+                request.setAttribute("error", error_msg);
+            } else {
+                request.setAttribute("message", "Info updated successfully");
+            }
+            action_default(request, response);
+
+        }
+
+    }
+
+    private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
             (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
         } else {
             (new FailureResult(getServletContext())).activate((String) request.getAttribute("message"), request, response);
         }
         return;
+    }
+    
+     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("login");
     }
 
 }
