@@ -20,7 +20,7 @@
                             <#else>
                              <div class="listing__item__pic set-bg" data-setbg="img_tv/static/no-image.png" style="background-image: url(img_tv/static/no-image.png);">
                             </#if>
-                                <img src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>" alt="${canale.logo} logo">
+                            <a href="canale?c_key=${canale.key}"><img src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>" alt="${canale.logo} logo"></a>
                                 <div class="listing__item__pic__tag">${canale.nome}</div>
                                 <div class="listing__item__pic__btns">
                                     <a href="#"><span class="icon_zoom-in_alt"></span></a>
