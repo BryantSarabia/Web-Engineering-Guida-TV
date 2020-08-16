@@ -31,7 +31,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
             
             getSeries = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma ORDER BY titolo ASC");
             getSeriesPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
-            getSerieByID = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE serie.id=?");
+            getSerieByID = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
             getNumeroSerie = connection.prepareStatement("SELECT COUNT(*) AS num FROM serie");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             iSerie = connection.prepareStatement("INSERT INTO serie(id_programma,stagione,episodio) VALUES (?,?,?)");

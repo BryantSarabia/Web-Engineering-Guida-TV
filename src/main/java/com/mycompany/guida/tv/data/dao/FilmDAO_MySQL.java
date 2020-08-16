@@ -32,7 +32,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO {
 
             getFilms = connection.prepareStatement("SELECT * FROM programmi JOIN films ON programmi.id = films.id_programma ORDER BY titolo ASC");
             getFilmsPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN films ON programmi.id = films.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
-            getFilmByID = connection.prepareStatement("SELECT * FROM programmi JOIN films ON programmi.id = films.id_programma WHERE films.id=?");
+            getFilmByID = connection.prepareStatement("SELECT * FROM programmi JOIN films ON programmi.id = films.id_programma WHERE programmi.id=?");
             getNumeroFilms = connection.prepareStatement("SELECT COUNT(*) AS num FROM films");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             iFilm = connection.prepareStatement("INSERT INTO films(id_programma) VALUES (?)");
