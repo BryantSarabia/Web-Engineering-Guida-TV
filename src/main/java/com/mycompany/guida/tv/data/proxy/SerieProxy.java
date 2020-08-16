@@ -1,9 +1,15 @@
 package com.mycompany.guida.tv.data.proxy;
 
+import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
+import com.mycompany.guida.tv.data.dao.GenereDAO;
 import com.mycompany.guida.tv.data.impl.SerieImpl;
+import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class SerieProxy extends SerieImpl implements DataItemProxy {
@@ -49,5 +55,18 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
     public void setModified(boolean modified) {
         this.modified = modified;
 
+    }
+    
+              @Override
+    public List<Genere> getGeneri() {
+        if( super.getGeneri() == null ) {
+            try {
+                super.setGeneri(((GenereDAO) dataLayer.getDAO(Genere.class)).getGeneri(this.getKey()));
+                
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammaProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return super.getGeneri();
     }
 }
