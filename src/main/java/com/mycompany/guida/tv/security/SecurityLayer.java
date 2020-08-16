@@ -1,13 +1,25 @@
 package com.mycompany.guida.tv.security;
 
+import com.mycompany.guida.tv.data.DataException;
+import com.mycompany.guida.tv.data.DataLayer;
+import com.mycompany.guida.tv.data.dao.UtenteDAO;
+import com.mycompany.guida.tv.data.model.Utente;
+import com.mycompany.guida.tv.data.proxy.UtenteProxy;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -19,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class SecurityLayer {
+
+    private static DataLayer dataLayer;
 
     //--------- SESSION SECURITY ------------    
     //questa funzione esegue una serie di controlli di sicurezza
@@ -235,6 +249,37 @@ public class SecurityLayer {
                 //otherwise, raise an exception
                 throw new ServletException("Cannot redirect to https!");
             }
+        }
+    }
+    
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
+
+    public static String randomString(int length){
+       StringBuilder sb = new StringBuilder(length);
+       for( int i = 0; i < length; i++ ) 
+          sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+       return sb.toString();
+}
+    
+    public static void generateVerificationLink(String file_path, Utente utente){
+        String link = "localhost:8080/guida-tv/verifyemail";
+        
+        String encrypted_token = BCrypt.hashpw(utente.getToken(), BCrypt.gensalt());
+        String encrypted_email = BCrypt.hashpw(utente.getEmail(), BCrypt.gensalt());
+        
+        link += "?token=" + encrypted_token + "&code=" + encrypted_email;
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_path, true))) {
+            System.out.println("Writing link");
+            writer.write("Hi " + utente.getNome());
+            writer.newLine();
+            writer.write("Click the link below to confirm your email");
+            writer.newLine();
+            writer.write(link);
+            System.out.println("Link successfully written");
+        } catch (IOException ex) {
+            Logger.getLogger(SecurityLayer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

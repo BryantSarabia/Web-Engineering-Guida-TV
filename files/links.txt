@@ -1,0 +1,3 @@
+Hi Giacomo
+Click the link below to confirm your email
+localhost:8080/guida-tv/verifyemail?token=$2a$10$aS3tiq1IgHXr5xtYl/IlSOYFfGrHgvHu3HP4BjWXdoaPNLK44YjnS&code=$2a$10$yBOsbTR4rRzG7RYYYTiKUOqDdXEAuxyR9GTePzsFf8GU0GB9M0uF2

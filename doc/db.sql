@@ -184,10 +184,10 @@ DROP TABLE IF EXISTS `programma_ha_generi`;
 CREATE TABLE `programma_ha_generi`(
 `id` INT(10) NOT NULL AUTO_INCREMENT,
 `id_programma` INT(10) NOT NULL,
-`id_genero` INT(10) NOT NULL,
+`id_genere` INT(10) NOT NULL,
 PRIMARY KEY (`id`),
 CONSTRAINT `id_programma_genero` FOREIGN KEY (`id_programma`) REFERENCES `programmi` (`id`) ON DELETE CASCADE,
-CONSTRAINT `id_genero_programma` FOREIGN KEY (`id_genero`) REFERENCES `generi` (`id`) ON DELETE CASCADE
+CONSTRAINT `id_genere_programma` FOREIGN KEY (`id_genere`) REFERENCES `generi` (`id`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `programma_ha_generi` WRITE;

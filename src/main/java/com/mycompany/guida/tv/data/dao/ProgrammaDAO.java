@@ -7,27 +7,27 @@ import java.util.List;
 public interface ProgrammaDAO {
 
 
-    // SERVE A CREARE IL PROGRAMMA
+    //Helper per creare un oggetto programma
     Programma createProgramma();
     
-    // CONTA I PROGRAMMI PRESENTI SUL DB
+    //Metodo che restituisce il numero di programmi presenti sul db
     Integer getNumeroProgrammi() throws DataException;
     
-    // RESTITUISCE TUTTI I PROGRAMMI PRESENTI 
+    //Metodo che restituisce tutti i programmi presenti sul db
     List<Programma> getProgrammi() throws DataException;
     
-    // RESTITUISCE UNA LISTA PAGINATA DI PROGRAMMI
+    //Metodo per la paginazione dei programmi
     List<Programma> getProgrammiPaginated(int start_item, int elements) throws DataException;
     
-    // RESTITUISCE IL PROGRAMMA DALLA CHIAVE
+    //Metodo che restituisce un programma in base all'id specificato
     Programma getProgramma(int key) throws DataException;
     
-    // EFFETTUA LA RICERCA DEI PROGRAMMI PER NOME E PER GENERE (Tutte le diverse combinazioni)
+    //Metodo per effettuare la ricerca di un programma in base a nome e genere
     List<Programma> cercaProgrammi(String nome, int genere_key) throws DataException;
     
-    // INSERISCE O AGGIORNA UN PROGRAMMA
+    //Metodo per inserire o aggiornare un programma
     void storeProgramma(Programma p) throws DataException;
     
-    // ELIMINA UN PROGRAMMA
+    //Metodo per eliminare un programma
     void deleteProgramma(int key) throws DataException;
 }

@@ -6,6 +6,10 @@
         <param-value>d:/Java/TomcatWork</param-value>
     </context-param>
     <context-param>
+        <param-name>files.directory</param-name>
+        <param-value>E:/Desktop/Desktop/Progetti/Web-Engineering-Guida-TV/files</param-value>
+    </context-param>
+    <context-param>
         <param-name>view.outline_template</param-name>
         <param-value>outline.ftl.html</param-value>
     </context-param>
@@ -73,6 +77,10 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>com.mycompany.guida.tv.auth.Logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VerifyEmail</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.VerifyEmail</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -108,6 +116,10 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VerifyEmail</servlet-name>
+        <url-pattern>/verifyemail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

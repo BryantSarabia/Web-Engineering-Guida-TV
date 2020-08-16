@@ -211,12 +211,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                     insertUtente.setNull(5, java.sql.Types.INTEGER); // Se l'utente non ha nessun ruolo, lo setto a 1 di default
                 }
                 
-                insertUtente.setString(5, utente.getToken());
+                insertUtente.setString(6, utente.getToken());
 
                 if (utente.getExp_date() != null) {
-                    insertUtente.setDate(6, java.sql.Date.valueOf(utente.getExp_date()));
+                    insertUtente.setDate(7, java.sql.Date.valueOf(utente.getExp_date()));
                 } else {
-                    insertUtente.setNull(6, java.sql.Types.DATE);
+                    insertUtente.setNull(7, java.sql.Types.DATE);
                 }
 
                 if (insertUtente.executeUpdate() == 1) {

@@ -117,35 +117,33 @@ public class Register extends BaseController {
                      
             if(valid) {
                
-                Utente me = new UtenteImpl();
-                me.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-                me.setEmail(email);
-                me.setNome(nome);
-                me.setCognome(cognome);
-                System.out.println(me.getPassword());
+                Utente newUser = new UtenteImpl();
+                newUser.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+                newUser.setEmail(email);
+                newUser.setNome(nome);
+                newUser.setCognome(cognome);
+                System.out.println(newUser.getPassword());
                 
                // me.setRuolo(((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(2));
-                me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));     
-                me.setExpirationDate(LocalDate.now().plusDays(1));
-                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
+                newUser.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));     
+                newUser.setExpirationDate(LocalDate.now().plusDays(1));
+                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(newUser);
                 
-                if(me.getKey() == 0) {
+                if(newUser.getKey() == 0) {
                     error_msg += "Errore nell'inserimento dell'utente, \n";
                     valid = false;
-                }/*
+                }
                 else {
-                    // Invio email e faccio redirect
-                    
-                    // Logica di invio email mancante, stampo su file. Try with resource sul buffer
-                    
-                    UtilityMethods.sendEmailWithCodes(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me, "Conferma la tua email cliccando sul link in basso", EmailTypes.CONFIRM_EMAIL);
-                    // redirect
+                    //Non invio mail ma stampo il link in un file .txt
+                    SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/links.txt", newUser);
+                   
+                    //Redirect
                     if (request.getParameter("referrer") != null) {
                         response.sendRedirect(request.getParameter("referrer"));
                     } else {
                         response.sendRedirect("login");
                     }
-                }*/
+                }
                     response.sendRedirect("login");
             }
             
