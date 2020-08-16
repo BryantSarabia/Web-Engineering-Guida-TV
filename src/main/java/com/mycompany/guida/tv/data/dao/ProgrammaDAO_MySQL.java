@@ -19,9 +19,9 @@ import java.util.logging.Logger;
 public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
     private PreparedStatement countPrograms;
-    private PreparedStatement getProgrammi, getProgrammiPaginated, getProgrammiDistinctSerie;
-    private PreparedStatement getProgrammaByID, getIDSerie, getRelated;
-    private PreparedStatement getProgrammiByNome, getProgrammiByGenere, getProgrammiByNomeGenere;
+    private PreparedStatement getProgrammi, getProgrammiPaginated;
+    private PreparedStatement getProgrammaByID;
+    private PreparedStatement getProgrammiByTitolo, getProgrammiByGenere, getProgrammiByTitoloAndGenere;
     private PreparedStatement iProgramma, uProgramma, dProgramma;
 
     public ProgrammaDAO_MySQL(DataLayer dl) {
@@ -39,15 +39,12 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
             getProgrammi = connection.prepareStatement("SELECT * FROM programmi");
             getProgrammaByID = connection.prepareStatement("SELECT * FROM programmi WHERE id = ?");
             getProgrammiPaginated = connection.prepareStatement("SELECT * FROM programmi LIMIT ? OFFSET ?");
-            getProgrammiByNome = connection.prepareStatement("SELECT * FROM programmi WHERE nome COLLATE UTF8_GENERAL_CI LIKE ?");
-            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programmi WHERE id_genere = ?");
-            getIDSerie = connection.prepareStatement("SELECT * FROM programmi WHERE id = id_serie");
-            getProgrammiByNomeGenere = connection.prepareStatement("SELECT * FROM programmi WHERE nome COLLATE UTF8_GENERAL_CI LIKE ? AND id_genere = ?");
-            iProgramma = connection.prepareStatement("INSERT INTO programmi(nome, descrizione, link_ref_img, link_ref_details, id_serie, stagione, episodio, id_classificazione, id_genere, durata) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uProgramma = connection.prepareStatement("UPDATE programmi SET nome=?, descrizione=?, link_ref_img=?, link_ref_details=?, id_serie=?, stagione=?, episodio=?, id_classificazione=?, id_genere=?, durata=?, version=? WHERE id=? AND version=?");
+            getProgrammiByTitolo = connection.prepareStatement("SELECT * FROM programmi WHERE titolo LIKE ?");
+            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id = programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere = ?");
+            getProgrammiByTitoloAndGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id = programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere = ? AND programmi.titolo LIKE ?");
+            iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id=? AND version=?");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
-            getProgrammiDistinctSerie = connection.prepareStatement("SELECT * FROM programmi WHERE id_serie IS NULL OR id_serie = id");
-            getRelated = connection.prepareStatement("SELECT * FROM programmi WHERE id <> ? AND id_genere = ? LIMIT 4");
 
         } catch (SQLException ex) {
             Logger.getLogger("Errore nell'inizializzazione del DAO Programma");
@@ -63,9 +60,6 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
             getProgrammi.close();
             getProgrammaByID.close();
             getProgrammiPaginated.close();
-            getIDSerie.close();
-            getProgrammiDistinctSerie.close();
-            getRelated.close();
             iProgramma.close();
             uProgramma.close();
             dProgramma.close();
@@ -76,9 +70,7 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
     @Override
     public Integer getNumeroProgrammi() throws DataException {
-        /**
-         * Implementare
-         */
+        
         Integer returnValue = -1;
 
         try {
@@ -115,18 +107,11 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
     }
 
-    /**
-     * HELPER PER CREARE PROGRAMMA DA RESULTSET
-     *
-     * @param rs
-     * @return
-     * @throws DataException
-     */
     public Programma createProgramma(ResultSet rs) throws DataException {
         ProgrammaProxy p = createProgramma();
         try {
             p.setKey(rs.getInt("id"));
-            p.setTitolo(rs.getString("nome"));
+            p.setTitolo(rs.getString("titolo"));
             p.setDescrizione(rs.getString("descrizione"));
             p.setImg(rs.getString("img"));
             p.setLink_ref(rs.getString("link_ref"));
@@ -198,10 +183,9 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
         } else if (nome != null && genere_key == 0) {
 
             try {
-                //UtilityMethods.debugConsole(this.getClass(), "cerca", getProgrammiByNome.toString());
-                getProgrammiByNome.setString(1, "%" + nome + "%");
-                //UtilityMethods.debugConsole(this.getClass(), "cerca", getProgrammiByNome.toString());
-                try (ResultSet rs = getProgrammiByNome.executeQuery()) {
+                getProgrammiByTitolo.setString(1, "%" + nome + "%");
+                
+                try (ResultSet rs = getProgrammiByTitolo.executeQuery()) {
 
                     while (rs.next()) {
                         returnList.add((Programma) getProgramma(rs.getInt("id")));
@@ -214,9 +198,9 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
         } else if (nome != null && genere_key > 0) {
 
             try {
-                getProgrammiByNomeGenere.setString(1, "%" + nome + "%");
-                getProgrammiByNomeGenere.setInt(2, genere_key);
-                try (ResultSet rs = getProgrammiByNomeGenere.executeQuery()) {
+                getProgrammiByTitoloAndGenere.setString(1, "%" + nome + "%");
+                getProgrammiByTitoloAndGenere.setInt(2, genere_key);
+                try (ResultSet rs = getProgrammiByTitoloAndGenere.executeQuery()) {
                     while (rs.next()) {
                         returnList.add((Programma) getProgramma(rs.getInt("id")));
                     }
@@ -247,24 +231,6 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
             }
         } catch (SQLException ex) {
             throw new DataException("Unable get elenco programmi paginato", ex);
-        }
-
-        return returnList;
-    }
-
-    @Override
-    public List<Programma> getIdSerie() throws DataException {
-        List<Programma> returnList = new ArrayList<>();
-
-        try {
-            try (ResultSet rs = getIDSerie.executeQuery()) {
-
-                while (rs.next()) {
-                    returnList.add((Programma) getProgramma(rs.getInt("id")));
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable get elenco Serie TV", ex);
         }
 
         return returnList;
@@ -343,43 +309,6 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
         } catch (SQLException ex) {
             throw new DataException("Unable to delete programma by ID", ex);
         }
-    }
-
-    @Override
-    public List<Programma> getProgrammiDistinctSerie() throws DataException {
-        List<Programma> returnList = new ArrayList<>();
-
-        try {
-            try (ResultSet rs = getProgrammiDistinctSerie.executeQuery()) {
-
-                while (rs.next()) {
-                    returnList.add((Programma) getProgramma(rs.getInt("id")));
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable return program list", ex);
-        }
-
-        return returnList;
-    }
-
-    @Override
-    public List<Programma> getRelatedPrograms(Programma prgrm) throws DataException {
-        List<Programma> returnList = new ArrayList<>();
-
-        try {
-            getRelated.setInt(1, prgrm.getKey());
-            try (ResultSet rs = getRelated.executeQuery()) {
-
-                while (rs.next()) {
-                    returnList.add((Programma) getProgramma(rs.getInt("id")));
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataException("Unable get related programs", ex);
-        }
-
-        return returnList;
     }
 
 }
