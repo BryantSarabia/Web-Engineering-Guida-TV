@@ -7,11 +7,13 @@ import com.mycompany.guida.tv.data.dao.CanaleDAO;
 import com.mycompany.guida.tv.data.dao.FilmDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammaDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammazioneDAO;
+import com.mycompany.guida.tv.data.dao.SerieDAO;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Serie;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -87,7 +89,25 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
         if (super.getProgramma() == null && programma_key > 0) {
             //UtilityMethods.debugConsole(this.getClass(), "getProgramma()", "Getting Program " + programma_key + " datalayer: " + dataLayer + " obj: " + dataLayer.getDAO(Programma.class));
             try {
-                super.setProgramma(((FilmDAO) dataLayer.getDAO(Film.class)).getFilm(programma_key));
+                
+                Programma programma = ((FilmDAO) dataLayer.getDAO(Film.class)).getFilm(programma_key);
+                if(programma == null) {
+                    programma = ((SerieDAO) dataLayer.getDAO(Serie.class)).getSerie(programma_key);
+                }
+                
+                if(programma == null) {
+                    programma = ((ProgrammaDAO) dataLayer.getDAO(Programma.class)).getProgramma(programma_key);
+                }
+                
+                if(programma == null) {
+                    throw new DataException("The program doesn't exist");
+                } else {
+                    //super.setProgramma(programma);
+                }
+                
+                super.setProgramma(programma);
+                
+                //super.setProgramma(((FilmDAO) dataLayer.getDAO(Film.class)).getFilm(programma_key));
             } catch (DataException ex) {
                 Logger.getLogger(ProgrammazioneProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
