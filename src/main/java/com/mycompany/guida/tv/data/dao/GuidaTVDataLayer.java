@@ -7,6 +7,7 @@ import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.model.Utente;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -23,9 +24,10 @@ public class GuidaTVDataLayer extends DataLayer {
         registerDAO(Utente.class, new UtenteDAO_MySQL(this));
         registerDAO(Canale.class, new CanaleDAO_MySQL(this));
         registerDAO(Programmazione.class, new ProgrammazioneDAO_MySQL(this));
-        // registerDAO(Programma.class, new ProgrammaDAO_MySQL(this));
+        registerDAO(Programma.class, new ProgrammaDAO_MySQL(this));
         registerDAO(Film.class, new FilmDAO_MySQL(this));
         registerDAO(Genere.class, new GenereDAO_MySQL(this));
+        registerDAO(Serie.class, new SerieDAO_MySQL(this));
 
     }
 
@@ -40,6 +42,10 @@ public class GuidaTVDataLayer extends DataLayer {
      */
     public CanaleDAO getCanaleDAO() {
         return (CanaleDAO) getDAO(Canale.class);
+    }
+    
+    public SerieDAO getSerieDAO() {
+        return (SerieDAO) getDAO(Serie.class);
     }
 
     public ProgrammaDAO getProgrammaDAO() {
