@@ -55,8 +55,11 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO{
             getFilmByID.close();
             getFilmsPaginate.close();
             getNumeroFilms.close();
+            iProgramma.close();
             iFilm.close();
+            uProgramma.close();
             uFilm.close();
+            dProgramma.close();
             dFilm.close();
         } catch (SQLException ex) {
             Logger.getLogger(UtenteDAO_MySQL.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,7 +85,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO{
             film.setDurata(rs.getString("durata"));
             
         } catch (SQLException ex){
-            throw new DataException("Unable to create canale object form ResultSet", ex);
+            throw new DataException("Unable to create film object form ResultSet", ex);
         }
         
         return film;
@@ -140,7 +143,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO{
                 }
             }
         } catch (SQLException ex) {
-            throw new DataException("Unable get elenco canali", ex);
+            throw new DataException("Unable get elenco film", ex);
         }
          
         
@@ -293,7 +296,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO{
                 }
             } else throw new SQLException();
         } catch (SQLException ex) {
-            throw new DataException("Unable to delete canale by ID", ex);
+            throw new DataException("Unable to delete film by ID", ex);
         }
     }
 }
