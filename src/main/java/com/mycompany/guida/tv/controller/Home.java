@@ -90,15 +90,14 @@ public class Home extends BaseController {
                 if (programmazione != null) {
 
                     current.put(c, programmazione);
-                    
-                    Programma programma = programmazione.getProgramma();
-                            System.out.println(programmazione.getProgramma().getGeneri() + " HOLADFJAKLDFJA");
-                 //  generi = programma.getGeneri();
-                 //   System.out.println(programma);
-                    if (generi != null) {
-                       // prog_and_generi.put(programma, generi);
-                    }
 
+                    //Programma programma = programmazione.getProgramma();
+                    //System.out.println(programmazione.getProgramma().getKey() + " HOLADFJAKLDFJA");
+                    //  generi = programma.getGeneri();
+                    //   System.out.println(programma);
+                    //if (generi != null) {
+                    // prog_and_generi.put(programma, generi);
+                    // }
                 } else {
                     current.put(c, null);
                 }
@@ -108,7 +107,7 @@ public class Home extends BaseController {
             request.setAttribute("pagina", page);
             request.setAttribute("current_prog", current);
             request.setAttribute("generi", prog_and_generi);
-           // results.activate("home.ftl.html", request, response);
+            results.activate("home.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);
