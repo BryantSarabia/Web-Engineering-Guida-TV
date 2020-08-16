@@ -1,12 +1,16 @@
 package com.mycompany.guida.tv.data.proxy;
 
+import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
+import com.mycompany.guida.tv.data.dao.GenereDAO;
 
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
 import com.mycompany.guida.tv.data.model.Genere;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProgrammaProxy extends ProgrammaImpl implements DataItemProxy {
     private boolean modified;
@@ -76,5 +80,19 @@ public class ProgrammaProxy extends ProgrammaImpl implements DataItemProxy {
     @Override
     public void setModified(boolean modified) {
         this.modified=modified;
+    }
+    
+       @Override
+    public List<Genere> getGeneri() {
+        //UtilityMethods.debugConsole(this.getClass(), "getGenere", "sono in get genere super: " + super.getGenere() + " key " + genere_key);
+        if( super.getGeneri() == null ) {
+            try {
+                super.setGeneri(((GenereDAO) dataLayer.getDAO(Genere.class)).getGeneri(this.getKey()));
+                
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammaProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return super.getGeneri();
     }
 }

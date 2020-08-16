@@ -9,12 +9,14 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Genere;
+import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -77,18 +79,24 @@ public class Home extends BaseController {
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
+            List<Genere> generi = new ArrayList<Genere>();
             Map<Canale, Programmazione> current = new TreeMap();
-           // Map<Canale, Map<Programmazione, List<Genere>>> current = new TreeMap();
-           // Map<Programmazione, List<Genere>> prog_and_generi = new TreeMap();
+            Map<Programma, List<Genere>> prog_and_generi = new TreeMap();
 
             for (Canale c : canali) {
                 // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
                 Programmazione programmazione = c.getProgrammazioneCorrente();
-                   System.out.println(programmazione.getProgramma());
+
                 if (programmazione != null) {
-                  //  List<Genere> generi = programmazione.getProgramma().getGeneri();
-                  //  prog_and_generi.put(programmazione,generi);
+
                     current.put(c, programmazione);
+                    
+                    Programma programma = programmazione.getProgramma();
+                    generi = programma.getGeneri();
+
+                    if (generi != null) {
+                        prog_and_generi.put(programma, generi);
+                    }
 
                 } else {
                     current.put(c, null);
@@ -98,6 +106,7 @@ public class Home extends BaseController {
             request.setAttribute("numero_pagine", (int) (Math.ceil(numero_canali / canali_per_pagina)));
             request.setAttribute("pagina", page);
             request.setAttribute("current_prog", current);
+            request.setAttribute("generi", prog_and_generi);
             results.activate("home.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());

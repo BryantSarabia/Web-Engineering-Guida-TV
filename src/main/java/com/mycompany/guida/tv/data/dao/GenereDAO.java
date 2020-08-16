@@ -16,6 +16,8 @@ public interface GenereDAO {
     
     List<Genere> getGeneri() throws DataException;
     
+    List<Genere> getGeneri(int key) throws DataException;
+    
     void storeGenere(Genere g) throws DataException;
     
     void deleteGenere(int key) throws DataException;

@@ -36,7 +36,7 @@
                                     </div>
                                     <ul>
                                         <#if programmazione.programma??>
-                                        <#list programmazione.programma.generi as genere>
+                                        <#list generi as programma, genere>
                                         <li><i class="fa fa-genderless" aria-hidden="true"></i>
                                             ${genere.nome}
                                         </li>
