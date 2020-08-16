@@ -1,4 +1,4 @@
-package com.mycompany.guida.tv.data.proxy;
+/*package com.mycompany.guida.tv.data.proxy;
 
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
@@ -57,3 +57,4 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
 
     }
 }
+*/

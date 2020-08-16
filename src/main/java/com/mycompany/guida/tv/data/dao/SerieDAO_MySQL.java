@@ -1,4 +1,4 @@
-package com.mycompany.guida.tv.data.dao;
+/*package com.mycompany.guida.tv.data.dao;
 
 import com.mycompany.guida.tv.data.DAO;
 import com.mycompany.guida.tv.data.DataException;
@@ -50,7 +50,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
             /**
              * CLOSE ALL STATEMENTS
              */ 
-            getSeries.close();
+ /*           getSeries.close();
             getSerieByID.close();
             getSeriesPaginate.close();
             getNumeroSerie.close();
@@ -319,3 +319,4 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
     }
     
 }
+*/
