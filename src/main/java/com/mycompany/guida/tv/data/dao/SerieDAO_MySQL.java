@@ -1,4 +1,4 @@
-/*package com.mycompany.guida.tv.data.dao;
+package com.mycompany.guida.tv.data.dao;
 
 import com.mycompany.guida.tv.data.DAO;
 import com.mycompany.guida.tv.data.DataException;
@@ -50,7 +50,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
             /**
              * CLOSE ALL STATEMENTS
              */ 
- /*           getSeries.close();
+            getSeries.close();
             getSerieByID.close();
             getSeriesPaginate.close();
             getNumeroSerie.close();
@@ -245,8 +245,8 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
                 uSerie.setInt(5, serie.getKey());
                 uSerie.setLong(6, current_version);
             } else { //insert
-                if(/*getProgramma(key).isNotEmpty()*/){         //se il programma esiste già e voglio solo aggiungere un episodio
-                    iSerie.setInt(1, key);
+                if(true/*getProgramma(key).isNotEmpty()*/){         //se il programma esiste già e voglio solo aggiungere un episodio
+                    //iSerie.setInt(1, key);
                     iSerie.setInt(2, serie.getStagione());
                     iSerie.setInt(3, serie.getEpisodio());
                 } else {
@@ -319,4 +319,3 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
     }
     
 }
-*/
