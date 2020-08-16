@@ -10,6 +10,7 @@ import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.proxy.GenereProxy;
+import com.mycompany.guida.tv.shared.Methods;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -229,10 +230,10 @@ public class GenereDAO_MySQL extends DAO implements GenereDAO {
         List<Genere> returnList = new ArrayList<>();
 
         try {
-            
+
             getGeneriByProg.setInt(1, key);
             try (ResultSet rs = getGeneriByProg.executeQuery()) {
-                
+
                 while (rs.next()) {
                     returnList.add((Genere) getGenere(rs.getInt("id")));
                 }

@@ -7,6 +7,7 @@ import com.mycompany.guida.tv.data.dao.GenereDAO;
 
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
 import com.mycompany.guida.tv.data.model.Genere;
+import com.mycompany.guida.tv.shared.Methods;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -84,7 +85,6 @@ public class ProgrammaProxy extends ProgrammaImpl implements DataItemProxy {
     
        @Override
     public List<Genere> getGeneri() {
-        //UtilityMethods.debugConsole(this.getClass(), "getGenere", "sono in get genere super: " + super.getGenere() + " key " + genere_key);
         if( super.getGeneri() == null ) {
             try {
                 super.setGeneri(((GenereDAO) dataLayer.getDAO(Genere.class)).getGeneri(this.getKey()));
