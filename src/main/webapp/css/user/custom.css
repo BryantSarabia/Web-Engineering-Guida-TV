@@ -139,15 +139,18 @@ small{
     margin-top: 2em;
 }
 
-.fascia{
+.fascia {
     height: 8em;
     padding: 2em;
     background: #f7f8fa;
     cursor: pointer;
-    color: #f03250;
     border: 1px solid #f03250;
     box-shadow: 2px 5px 4px -1px #f03250;
     transition: .4s all;
+}
+
+.fascia a{
+    color: #f03250;
 }
 
 .fascia.canale{
@@ -180,20 +183,20 @@ small{
     color: #fff;
 }
 
-.fascia:hover .fascia-icon-mattina{
+.fascia:hover a .fascia-icon-mattina{
     color:#feffd9;
 }
 
-.fascia:hover .fascia-icon-pomeriggio{
+.fascia:hover a .fascia-icon-pomeriggio{
     color: #fef500;
 }
 
-.fascia:hover .fascia-icon-notte{
+.fascia:hover a .fascia-icon-notte{
     color:#190849;
 }
 
 
-.fascia:hover div  h5{
+.fascia:hover a div  h5{
     color: #ffffff;
     transition: .4s all;
 }

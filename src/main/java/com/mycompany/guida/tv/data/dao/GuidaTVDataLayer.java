@@ -55,11 +55,11 @@ public class GuidaTVDataLayer extends DataLayer {
     public FilmDAO getFilmDAO() {
         return (FilmDAO) getDAO(Film.class);
     }
-    /*
+    
     public ProgrammazioneDAO getProgrammazioneDAO() {
         return (ProgrammazioneDAO) getDAO(Programmazione.class);
     }
-    */
+    /*
     public GenereDAO getGenereDAO() {
         return (GenereDAO) getDAO(Genere.class);
     }
