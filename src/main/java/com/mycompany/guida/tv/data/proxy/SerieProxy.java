@@ -17,12 +17,6 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
     }
 
     @Override
-    public void setProgramma(Programma programma) {
-        this.modified = true;
-        super.setProgramma(programma);
-    }
-
-    @Override
     public void setStagione(int stagione) {
         this.modified = true;
         super.setStagione(stagione);
