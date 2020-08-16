@@ -35,19 +35,19 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
         try {
 
             // PREPARE STATEMENTS
-            countPrograms = connection.prepareStatement("SELECT COUNT(*) AS NumeroProgrammi FROM Programma");
-            getProgrammi = connection.prepareStatement("SELECT * FROM programma");
-            getProgrammaByID = connection.prepareStatement("SELECT * FROM programma WHERE id = ?");
-            getProgrammiPaginated = connection.prepareStatement("SELECT * FROM programma LIMIT ? OFFSET ?");
-            getProgrammiByNome = connection.prepareStatement("SELECT * FROM programma WHERE nome COLLATE UTF8_GENERAL_CI LIKE ?");
-            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programma WHERE id_genere = ?");
-            getIDSerie = connection.prepareStatement("SELECT * FROM programma WHERE id = id_serie");
-            getProgrammiByNomeGenere = connection.prepareStatement("SELECT * FROM programma WHERE nome COLLATE UTF8_GENERAL_CI LIKE ? AND id_genere = ?");
-            iProgramma = connection.prepareStatement("INSERT INTO programma(nome, descrizione, link_ref_img, link_ref_details, id_serie, stagione, episodio, id_classificazione, id_genere, durata) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uProgramma = connection.prepareStatement("UPDATE programma SET nome=?, descrizione=?, link_ref_img=?, link_ref_details=?, id_serie=?, stagione=?, episodio=?, id_classificazione=?, id_genere=?, durata=?, version=? WHERE id=? AND version=?");
-            dProgramma = connection.prepareStatement("DELETE FROM Programma WHERE id = ?");
-            getProgrammiDistinctSerie = connection.prepareStatement("SELECT * FROM programma WHERE id_serie IS NULL OR id_serie = id");
-            getRelated = connection.prepareStatement("SELECT * FROM Programma WHERE id <> ? AND id_genere = ? LIMIT 4");
+            countPrograms = connection.prepareStatement("SELECT COUNT(*) AS NumeroProgrammi FROM programmi");
+            getProgrammi = connection.prepareStatement("SELECT * FROM programmi");
+            getProgrammaByID = connection.prepareStatement("SELECT * FROM programmi WHERE id = ?");
+            getProgrammiPaginated = connection.prepareStatement("SELECT * FROM programmi LIMIT ? OFFSET ?");
+            getProgrammiByNome = connection.prepareStatement("SELECT * FROM programmi WHERE nome COLLATE UTF8_GENERAL_CI LIKE ?");
+            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programmi WHERE id_genere = ?");
+            getIDSerie = connection.prepareStatement("SELECT * FROM programmi WHERE id = id_serie");
+            getProgrammiByNomeGenere = connection.prepareStatement("SELECT * FROM programmi WHERE nome COLLATE UTF8_GENERAL_CI LIKE ? AND id_genere = ?");
+            iProgramma = connection.prepareStatement("INSERT INTO programmi(nome, descrizione, link_ref_img, link_ref_details, id_serie, stagione, episodio, id_classificazione, id_genere, durata) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uProgramma = connection.prepareStatement("UPDATE programmi SET nome=?, descrizione=?, link_ref_img=?, link_ref_details=?, id_serie=?, stagione=?, episodio=?, id_classificazione=?, id_genere=?, durata=?, version=? WHERE id=? AND version=?");
+            dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
+            getProgrammiDistinctSerie = connection.prepareStatement("SELECT * FROM programmi WHERE id_serie IS NULL OR id_serie = id");
+            getRelated = connection.prepareStatement("SELECT * FROM programmi WHERE id <> ? AND id_genere = ? LIMIT 4");
 
         } catch (SQLException ex) {
             Logger.getLogger("Errore nell'inizializzazione del DAO Programma");
