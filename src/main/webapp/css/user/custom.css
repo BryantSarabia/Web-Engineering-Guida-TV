@@ -306,3 +306,6 @@ small{
     padding-top: 4em;
 }
 
+.dettagli_titolo h3{
+    border-bottom: 2px solid #f03250;
+}

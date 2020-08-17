@@ -39,7 +39,7 @@
 
                 <div class="row col-lg-12 m-0 p-0 fascie align-items-center">
 
-                    <div class="col-lg m-0 fascia canale <#if (fascia==1)>active</#if>">
+                    <div class="col-lg m-0 fascia canale <#if (fascia==0)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=0<#if day?? >&day=${day}</#if>">
 
 
@@ -67,7 +67,7 @@
 
 
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==1)>active</#if>">
+                    <div class="col-lg  m-0 fascia canale <#if (fascia==2)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=2<#if day?? >&day=${day}</#if>">
                             <div class="fascia-icon-pomeriggio col-lg-12 text-center">
                                 <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
@@ -78,7 +78,7 @@
                         </a>
                     </div>
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==1)>active</#if>">
+                    <div class="col-lg  m-0 fascia canale <#if (fascia==3)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=3<#if day?? >&day=${day}</#if>">
                             <div class="fascia-icon col-lg-12 text-center">
                                 <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
@@ -89,7 +89,7 @@
                         </a>
                     </div>
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==1)>active</#if>">
+                    <div class="col-lg  m-0 fascia canale <#if (fascia==4)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=4<#if day?? >&day=${day}</#if>">
                             <div class="fascia-icon-notte col-lg-12 text-center">
                                 <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
@@ -112,7 +112,7 @@
                         <ul class="lista_programmi ">
                             <#list programmazioni as programmazione>
                             <li>
-                                <a href="#">
+                                <a href="programma?p_key=${programmazione.programma.key}">
                                     <div class="row programma">
 
                                         <div class="col-lg-2 align-self-center">
