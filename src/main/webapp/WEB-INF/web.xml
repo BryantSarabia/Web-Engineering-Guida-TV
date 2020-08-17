@@ -81,6 +81,10 @@
         <servlet-name>VerifyEmail</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.VerifyEmail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dashboard</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Dashboard</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -120,6 +124,10 @@
     <servlet-mapping>
         <servlet-name>VerifyEmail</servlet-name>
         <url-pattern>/verifyemail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

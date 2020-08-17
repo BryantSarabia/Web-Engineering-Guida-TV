@@ -2,6 +2,7 @@ package com.mycompany.guida.tv.security;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataLayer;
+import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.dao.UtenteDAO;
 import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
@@ -104,7 +105,14 @@ public class SecurityLayer {
             return s;
         }
     }
-
+    public static boolean checkAdminSession(HttpServletRequest request) throws DataException {
+        //return true;
+        HttpSession s = checkSession(request);
+        if(s == null) return false;
+        else {
+            return ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid")).getRuolo().getKey() == 2;
+        }
+    }
     public static HttpSession createSession(HttpServletRequest request, String username, int userid) {
         HttpSession s = request.getSession(true);
         s.setAttribute("username", username);
