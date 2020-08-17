@@ -98,7 +98,6 @@ public class Register extends BaseController {
    
             // Sanitizzo tutti i campi e controllo se i campi sono validi
             if(!SecurityLayer.CheckEmail(email)) {
-                           System.out.println("ciao");
                 error_msg += "Email non valida, \n";
                 valid = false;
             }

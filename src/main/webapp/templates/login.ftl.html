@@ -1,38 +1,39 @@
 
-    <!-- Contact Section Begin -->
-    <section class="contact spad">
-        <div class="container">
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
 
-            <div class="row justify-content-center">
-                <div class="col-lg-12 col-md-12">
-                    <div class="contact__widget">
-                        <div class="contact__widget__address">
-                            <h4 class="text-center">LOGIN</h4>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12">
+                <div class="contact__widget">
+                    <div class="contact__widget__address">
+                        <h4 class="text-center">LOGIN</h4>
                     </div>
                 </div>
-                <div class="col-lg-12 col-md-12">
-                    <form action="login" class="contact__form" method="POST">
-                         <#if error??><p class="alert alert-danger" role="alert">${error}</p></#if>
-                        <div class="form-group row justify-content-center">
-                            <div class="col-lg-6 col-md-6">
-                                <input type="text" placeholder="Email" name="email" class="form-control">
-                            </div>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <form action="login" class="contact__form" method="POST">
+                    <#if error??><p class="alert alert-danger" role="alert">${error}</p></#if>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-lg-6 col-md-6">
+                            <input type="text" placeholder="Email" name="email" class="form-control">
                         </div>
-                        <div class="form-group row justify-content-center">
-                            <div class="col-lg-6 col-md-6">
-                                <input type="password" placeholder="Password" name="password" class="form-control">
-                            </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-lg-6 col-md-6">
+                            <input type="password" placeholder="Password" name="password" class="form-control">
                         </div>
-                          <input type="hidden" name="submit" value="submit">
-                        <div class="form-group row justify-content-center">
-                            <div class="col-lg-6 col-md-6 text-center">
-                                <button type="submit" class="site-btn">INVIA</button>
-                            </div>
+                    </div>
+                    <input type="hidden" name="submit" value="submit">
+                    <input type="hidden" name="referrer" value="${request_uri}">
+                    <div class="form-group row justify-content-center">
+                        <div class="col-lg-6 col-md-6 text-center">
+                            <button type="submit" class="site-btn">INVIA</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
-    <!-- Contact Section End -->
+    </div>
+</section>
+<!-- Contact Section End -->

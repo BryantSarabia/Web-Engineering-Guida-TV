@@ -9,6 +9,7 @@ import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,38 +25,44 @@ import javax.sql.DataSource;
  *
  * @author HP
  */
-public abstract class  BaseController extends HttpServlet {
+public abstract class BaseController extends HttpServlet {
 
-        // INITIALIZE THE DATASOURCE WITH CONNECTION POOLING
+    // INITIALIZE THE DATASOURCE WITH CONNECTION POOLING
     @Resource(name = "jdbc/guidatv")
     private DataSource ds;
-    
+
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException;
 
- private void processBaseRequest(HttpServletRequest request, HttpServletResponse response) {
+    private void processBaseRequest(HttpServletRequest request, HttpServletResponse response) {
         try (GuidaTVDataLayer datalayer = new GuidaTVDataLayer(ds)) {
             datalayer.init();
             request.setAttribute("datalayer", datalayer);
-            
+
             System.out.println("Inizializzo DataLayer: " + datalayer);
-            
+
             /**
              * Navbar Management
              */
-       
-            boolean logged = ( SecurityLayer.checkSession(request) != null && request.isRequestedSessionIdValid() && !request.getSession(false).isNew());
+            boolean logged = (SecurityLayer.checkSession(request) != null && request.isRequestedSessionIdValid() && !request.getSession(false).isNew());
             request.setAttribute("logged", logged);
- 
-           
-            
-            
+
+            String request_uri = URLEncoder.encode(request.getRequestURI() + "?" + request.getQueryString(), "UTF-8");
+            request.setAttribute("request_uri", request_uri);
+
+            // GIORNI DELLA SETTIMANA
+            List<LocalDate> settimana = new ArrayList();
+            for (int i = 0; i <= 7; i++) {
+                settimana.add(LocalDate.now().plusDays(i));
+            }
+            request.setAttribute("settimana", settimana);
+
             processRequest(request, response);
         } catch (Exception ex) {
             ex.printStackTrace(); //for debugging only
         }
     }
 
- @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processBaseRequest(request, response);

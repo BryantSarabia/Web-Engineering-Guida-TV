@@ -10,271 +10,163 @@
         </div>
 
         <div class="row palinsesto-date ">
-            
-        <div class="row col-lg-12 m-2 justify-content-between">
-            <div class="col-lg-1 day-number active"><span>17</span></div>
-            <div class="col-lg-1 day-number"><span>18</span></div>  
-            <div class="col-lg-1 day-number"><span>19</span></div>  
-            <div class="col-lg-1 day-number"><span>20</span></div>  
-            <div class="col-lg-1 day-number"><span>21</span></div>  
-            <div class="col-lg-1 day-number"><span>22</span></div>  
-            <div class="col-lg-1 day-number"><span>23</span></div>  
-        </div>
-        <div class="row col-lg-12 m-2 justify-content-between">
-            <div class="col-lg-1 day-name text-center"><small>LUNEDI</small></div>
-            <div class="col-lg-1 day-name text-center"><small>MARTEDI</small></div>  
-            <div class="col-lg-1 day-name text-center"><small>MERCOLEDI</small></div>
-            <div class="col-lg-1 day-name text-center"><small>GIOVEDI</small></div>  
-            <div class="col-lg-1 day-name text-center"><small>VENERDI</small></div>  
-            <div class="col-lg-1 day-name text-center"><small>SABATO</small></div>  
-            <div class="col-lg-1 day-name text-center"><small>DOMENICA</small></div>  
-        </div>
 
-        <div class="row col-lg-12 m-2 fascie align-items-center">
-
-            <div class="col-lg-3 fascia">
-
-                <div class="fascia-icon-mattina col-lg-12 text-center">
-                    <i class="fa fa-coffee fa-2x" aria-hidden="true"></i>
-                </div>
-                <div class="col-lg-12 text-center">
-                    <h5>Mattina</h5>
-                </div>
+            <div class="row col-lg-12 m-2 justify-content-between">
+                <#list settimana as giorno>
+                <a href="palinsesto?day=${giorno.toString()}" class="col-lg-1 p-1"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
+                </#list>
+            </div>
+            <div class="row col-lg-12 m-2 justify-content-between">
+                <#list settimana as giorno>
+                <div class="col-lg-1 day-name text-center"><small>
+                        <#if giorno.getDayOfWeek()  == 'MONDAY' >Luned&igrave;
+                        <#elseif giorno.getDayOfWeek()  == 'TUESDAY'>Marted&igrave;
+                        <#elseif giorno.getDayOfWeek()  == 'WEDNESDAY'>Mercoled&igrave;
+                        <#elseif giorno.getDayOfWeek()  == 'THURSDAY'>Gioved&igrave;
+                        <#elseif giorno.getDayOfWeek()  == 'FRIDAY'>Venerd&igrave;
+                        <#elseif giorno.getDayOfWeek()  == 'SATURDAY'>Sabato
+                        <#elseif giorno.getDayOfWeek()  == 'SUNDAY'>Domenica
+                        </#if>
+                    </small></div>
+                </#list>
 
             </div>
 
-            <div class="col-lg-3 fascia">
-                <div class="fascia-icon-pomeriggio col-lg-12 text-center">
-                    <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
-                </div>
-                <div class="col-lg-12 text-center">
-                    <h5>Pomeriggio</h5>
-                </div>
-            </div>
+            <div class="row col-lg-12 m-2 fascie align-items-center">
 
-            <div class="col-lg-3  fascia">
-                <div class="fascia-icon col-lg-12 text-center">
-                    <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
-                </div>
-                <div class="col-lg-12 text-center">
-                    <h5>Sera</h5>
-                </div>
-            </div>
 
-            <div class="col-lg-3 fascia">
-                <div class="fascia-icon-notte col-lg-12 text-center">
-                    <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
+                <div class="col-lg-3 fascia <#if (fascia==1)>active</#if>">
+                    <a href="palinsesto?fascia=1<#if day?? >&day=${day}</#if>">
+                        <div class="fascia-icon-mattina col-lg-12 text-center">
+                            <i class="fa fa-coffee fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <h5>Mattina</h5>
+                        </div>
+                    </a>
                 </div>
-                <div class="col-lg-12 text-center">
-                    <h5>Notte</h5>
-                </div>
-            </div>
 
-        </div>
+
+
+                <div class="col-lg-3 fascia <#if (fascia==2)>active</#if>">
+                    <a href="palinsesto?fascia=2<#if day?? >&day=${day}</#if>">
+                        <div class="fascia-icon-pomeriggio col-lg-12 text-center">
+                            <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <h5>Pomeriggio</h5>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-3  fascia <#if (fascia==3)>active</#if>">
+                    <a href="palinsesto?fascia=3<#if day?? >&day=${day}</#if>">
+                        <div class="fascia-icon col-lg-12 text-center">
+                            <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <h5>Sera</h5>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-3 fascia <#if (fascia==4)>active</#if>">
+                    <a href="palinsesto?fascia=4<#if day?? >&day=${day}</#if>">
+                        <div class="fascia-icon-notte col-lg-12 text-center">
+                            <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <h5>Notte</h5>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
         </div>
 
         <div class="row col-lg-12 canali">
 
-
-            <div class="row  canale  justify-content-center ">
+            <#list palinsesto as canale,programmazioni>
+            <div class="row col-lg-12  canale  justify-content-center ">
 
                 <div class="canale-logo col-lg-3 col-md-6">
-                    <a href="#"><img src="img_tv/canali/small/1.png"  alt=""></a>
-                    <a href="#"><h5>RAI 1</h5></a>
-                    <small>Dalle 06:00 alle 12:00</small>
+
+                    <div class="col-lg-12">
+                        <#if canale.logo??>
+                        <a href="canale?c_key=${canale.key}"><img src="${canale.logo}"  alt="${canale.nome}"></a>
+                        <#else>
+                        <a href="canale?c_key=${canale.key}"><img src="img_tv/static/no_img.png"  alt="${canale.nome}"></a>
+                        </#if>
+                    </div>
+
+                    <div class="col-lg-12 mt-2">
+                        <a href="canale?c_key=${canale.key}"><h5>${canale.nome}</h5></a>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <small>${start} - ${end}</small>
+                    </div>
+
                 </div>
+
 
                 <div class="col-lg-9 col-md-6">
+                    <#if (programmazioni?size > 0)>
                     <ul class="lista_programmi">
-                        <li><a href="#">
-                                <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_11.jpg">
-                                    </div>
-
-                                    <div class="row col-lg-8">
-
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
-                                        </div>   
-
-
-                                        <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
-                                        </div>
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
+                        <#list programmazioni as programmazione>
                         <li>
                             <a href="#">
                                 <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_11.jpg">
+                                    <div class="col-lg-3 col-md-2">
+                                        <#if programmazione.programma.img??><img class="programma_img" src="${programmazione.programma.img}">
+                                        <#else>
+                                        <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
+                                        </#if>
                                     </div>
 
-                                    <div class="row col-lg-8">
+                                    <div class="row col-lg-9">
 
                                         <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
+                                            <h5>${programmazione.programma.titolo}</h5>
                                         </div>
                                         <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
+                                            <small>(${programmazione.programma.durata} min)</small>
                                         </div>   
 
-
                                         <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
+                                            <#list programmazione.programma.generi as genere>
+                                            <small>${genere.nome} <#sep>, </#sep></small>
+                                            <#else>
+                                            <small>Questo programma non ha generi></small>
+                                            </#list>
                                         </div>
+
                                         <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
+                                            <small>${programmazione.time}</small>
                                         </div>
 
                                     </div>
                                 </div>
                             </a>
                         </li>
-
-
-                        <li>
-                            <a href="#">
-                                <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_11.jpg">
-                                    </div>
-
-                                    <div class="row col-lg-8">
-
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
-                                        </div>   
-
-
-                                        <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
-                                        </div>
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                        </#list>
                     </ul>
+                     <#else>
+                <div class="col-lg-9 text-center align-self-center">
+                    <p>Nessuna programmazione</p> 
                 </div>
+                </#if>
+                </div>
+               
+
+
             </div>
 
+            <#else>
 
-            <div class="row canale  justify-content-center">
+            <p>Nessuna programmazione</p>
 
-                <div class="col-lg-3 col-md-6">
-                    <img src="img_tv/canali/small/2.png"  alt="">
-                    <h5>RAI 1</h5>
-                    <small>Dalle 06:00 alle 12:00</small>
-                </div>
-
-                <div class="col-lg-9 col-md-6">
-                    <ul class="lista_programmi">
-                        <li><a href="#">
-                                <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_3.jpg">
-                                    </div>
-
-                                    <div class="row col-lg-8">
-
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
-                                        </div>   
-
-
-                                        <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
-                                        </div>
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_3.jpg">
-                                    </div>
-
-                                    <div class="row col-lg-8">
-
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
-                                        </div>   
-
-
-                                        <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
-                                        </div>
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="row programma">
-                                    <div class="col-lg-4 col-md-2">
-                                        <img src="img_tv/progs/prog_3.jpg">
-                                    </div>
-
-                                    <div class="row col-lg-8">
-
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>Garfield a New York</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(120 min)</small>
-                                        </div>   
-
-
-                                        <div class="col-lg-10 align-self-center">
-                                            <h6>Animazione</h6>
-                                        </div>
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>06:00</small>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </a>   
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            </#list>
 
         </div>
     </div>

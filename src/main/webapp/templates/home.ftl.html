@@ -15,7 +15,7 @@
 
                     <div class="col-lg-4 col-md-6">
                         <div class="listing__item">
-                            <#if programmazione.programma??>
+                            <#if programmazione??>
                             <div class="listing__item__pic set-bg" data-setbg="${programmazione.programma.img}" style="background-image: url(${programmazione.programma.img});">
                                 <#else>
                                 <div class="listing__item__pic set-bg" data-setbg="img_tv/static/no-image.png" style="background-image: url(img_tv/static/no-image.png);">
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="listing__item__text">
                                     <div class="listing__item__text__inside">
-                                        <#if programmazione.programma??>
+                                        <#if programmazione??>
                                         <a href="programma?p_key=${programmazione.programma.key}"><h5>${programmazione.programma.titolo}</h5></a>
                                         <#else>
                                         <a href="canale?c_key=${canale.key}"><h5>Nessuna programmazione in onda</h5></a>
@@ -39,7 +39,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <#if programmazione.programma??>
+                                            <#if programmazione??>
                                             <#list programmazione.programma.generi as genere>
 
 
@@ -58,11 +58,12 @@
                                                 Nessuna programmazione
                                             </li>
                                             </#if>
-                                            <#if programmazione.programma??>
+                                            <#if programmazione??>
                                             <li><i class="fa fa-info" aria-hidden="true"></i> <a class="link_ref" href="${programmazione.programma.link_ref}" target="_blank">Info</a></li>
                                             </#if>
                                         </ul>
                                     </div>
+                                    <#if programmazione??>
                                     <div class="listing__item__text__info">
                                         <div class="listing__item__text__info__left">
                                             <#if programmazione.programma.stagione??>
@@ -72,6 +73,7 @@
                                             </#if>
                                         </div>
                                     </div>
+                                    </#if>
                                 </div>
                             </div>
                         </div>

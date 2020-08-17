@@ -86,10 +86,12 @@
                                     </div>
                                 </div>
 
+                                <#if logged>
                                 <div class="form-check col-lg-12">
-                                    <input name="desidero_cerca" type="radio" id="desidero_cerca" value="1">
-                                    <label for="desidero_cerca">Desidero ricevere una mail giornaliera</label>
+                                    <input name="send_email" type="radio" id="send_email" value="1">
+                                    <label for="send_email">Desidero ricevere una mail giornaliera</label>
                                 </div>
+                                </#if>
 
                                 <div class="form-group row justify-content-center">
                                     <div class="col-lg-4 text-center">

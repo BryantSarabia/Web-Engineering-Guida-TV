@@ -16,8 +16,11 @@ import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +75,10 @@ public class Login extends BaseController {
         if (s != null) {
             response.sendRedirect("profile");
         } else {
-
+            
+            String request_uri = URLDecoder.decode(request.getParameter("referrer"), "UTF-8");
+            request.setAttribute("request_uri",request_uri);
+            
             TemplateResult results = new TemplateResult(getServletContext());
             results.activate("login.ftl.html", request, response);
         }
@@ -107,6 +113,7 @@ public class Login extends BaseController {
                     response.sendRedirect("confirmEmail");
                 } /* else */ if (request.getParameter("referrer") != null) {
                     response.sendRedirect(request.getParameter("referrer"));
+
                 } else {
                     response.sendRedirect("profile");
                 }
@@ -120,6 +127,5 @@ public class Login extends BaseController {
         }
 
     }
-
 
 }
