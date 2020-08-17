@@ -62,7 +62,6 @@ public class Dashboard extends BaseController {
         request.setAttribute("numero_canali", numero_canali);
        request.setAttribute("numero_programmazioni", numero_programmazioni);
         request.setAttribute("me", me);
-        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin_template"));
      */   results.activate("/admin/index.ftl.html", request, response);
 
     }
