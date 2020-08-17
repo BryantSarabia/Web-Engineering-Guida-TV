@@ -26,7 +26,6 @@ public class Dashboard extends BaseController {
             boolean admin = true;//SecurityLayer.checkAdminSession(request);
 
             if (admin) {
-                //UtilityMethods.debugConsole(this.getClass(), "action_sendEmail", "default");
                 action_default(request, response);
             } else {
                 action_loginredirect(request, response);
