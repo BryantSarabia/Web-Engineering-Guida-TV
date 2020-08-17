@@ -85,6 +85,10 @@
         <servlet-name>Dashboard</servlet-name>
         <servlet-class>com.mycompany.guida.tv.admin.Dashboard</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Programma</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.DettagliProgramma</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -128,6 +132,10 @@
     <servlet-mapping>
         <servlet-name>Dashboard</servlet-name>
         <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Programma</servlet-name>
+        <url-pattern>/programma</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
