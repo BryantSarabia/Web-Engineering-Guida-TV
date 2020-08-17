@@ -25,6 +25,7 @@
         <param-name>view.template_directory</param-name>
         <param-value>templates</param-value>
     </context-param>
+
     <context-param>
         <param-name>view.data.author</param-name>
         <param-value>HP</param-value>
@@ -32,6 +33,10 @@
     <context-param>
         <param-name>view.data.homepage_url</param-name>
         <param-value>homepage</param-value>
+    </context-param>
+    <context-param>
+        <param-name>view.outline_admin</param-name>
+        <param-value>outline_admin.ftl.html</param-value>
     </context-param>
     <context-param>
         <param-name>view.encoding</param-name>

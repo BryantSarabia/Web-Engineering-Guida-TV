@@ -26,7 +26,6 @@ public class Dashboard extends BaseController {
             boolean admin = true;//SecurityLayer.checkAdminSession(request);
 
             if (admin) {
-                //UtilityMethods.debugConsole(this.getClass(), "action_sendEmail", "default");
                 action_default(request, response);
             } else {
                 action_loginredirect(request, response);
@@ -62,7 +61,9 @@ public class Dashboard extends BaseController {
         request.setAttribute("numero_canali", numero_canali);
        request.setAttribute("numero_programmazioni", numero_programmazioni);
         request.setAttribute("me", me);
-     */   results.activate("/admin/index.ftl.html", request, response);
+     */
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/index.ftl.html", request, response);
 
     }
 
