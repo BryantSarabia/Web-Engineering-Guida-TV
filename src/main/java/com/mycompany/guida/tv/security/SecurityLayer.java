@@ -295,6 +295,18 @@ public class SecurityLayer {
         }
     }
     
+        
+    public static boolean checkBoolean(String s) throws NumberFormatException {
+        if (s != null) {
+            int n = Integer.parseInt(s);
+            if(n != 0 && n != 1) return false;
+            return true;
+        } else {
+            throw new NumberFormatException("String argument is null");
+        }
+    }
+    
+    
     public static String getStaticKey(){
         return STATIC_KEY;
     }

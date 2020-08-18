@@ -5,8 +5,10 @@ import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Genere;
+import com.mycompany.guida.tv.data.model.Interessa;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Ricerca;
 import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.model.Utente;
 import java.sql.SQLException;
@@ -28,7 +30,8 @@ public class GuidaTVDataLayer extends DataLayer {
         registerDAO(Film.class, new FilmDAO_MySQL(this));
         registerDAO(Genere.class, new GenereDAO_MySQL(this));
         registerDAO(Serie.class, new SerieDAO_MySQL(this));
-
+        registerDAO(Ricerca.class, new RicercaDAO_MySQL(this));
+        registerDAO(Interessa.class, new InteressaDAO_MySQL(this));
     }
 
     public UtenteDAO getUtenteDAO() {
@@ -43,7 +46,7 @@ public class GuidaTVDataLayer extends DataLayer {
     public CanaleDAO getCanaleDAO() {
         return (CanaleDAO) getDAO(Canale.class);
     }
-    
+
     public SerieDAO getSerieDAO() {
         return (SerieDAO) getDAO(Serie.class);
     }
@@ -55,10 +58,15 @@ public class GuidaTVDataLayer extends DataLayer {
     public FilmDAO getFilmDAO() {
         return (FilmDAO) getDAO(Film.class);
     }
-    
+
     public ProgrammazioneDAO getProgrammazioneDAO() {
         return (ProgrammazioneDAO) getDAO(Programmazione.class);
     }
+
+    public GenereDAO getGenereDAO() {
+        return (GenereDAO) getDAO(Genere.class);
+    }
+
     /*
     public GenereDAO getGenereDAO() {
         return (GenereDAO) getDAO(Genere.class);
@@ -67,12 +75,13 @@ public class GuidaTVDataLayer extends DataLayer {
     public ClassificazioneDAO getClassificazioneDAO() {
         return (ClassificazioneDAO) getDAO(Classificazione.class);
     }
-    
+     */
     public RicercaDAO getRicercaDAO() {
         return (RicercaDAO) getDAO(Ricerca.class);
     }
-    
-    public InteresseDAO getInteresseDAO() {
-        return (InteresseDAO) getDAO(Interesse.class);
-    } */
+
+    public InteressaDAO getInteressaDAO() {
+        return (InteressaDAO) getDAO(Interessa.class);
+    }
+
 }

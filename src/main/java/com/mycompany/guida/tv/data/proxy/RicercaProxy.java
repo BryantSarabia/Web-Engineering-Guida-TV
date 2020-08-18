@@ -2,7 +2,7 @@ package com.mycompany.guida.tv.data.proxy;
 
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
-import com.mycompany.guidatv.data.model.impl.RicercaImpl;
+import com.mycompany.guida.tv.data.impl.RicercaImpl;
 
 public class RicercaProxy extends RicercaImpl implements DataItemProxy {
 

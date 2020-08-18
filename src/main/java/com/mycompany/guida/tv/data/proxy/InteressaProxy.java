@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class InteresseProxy extends InteresseImpl implements DataItemProxy {
+public class InteressaProxy extends InteresseImpl implements DataItemProxy {
 
     private int id_utente;
     private int id_canale;
@@ -22,7 +22,7 @@ public class InteresseProxy extends InteresseImpl implements DataItemProxy {
 
     private final DataLayer dataLayer;
 
-    public InteresseProxy(DataLayer d) {
+    public InteressaProxy(DataLayer d) {
         super();
 
         this.dataLayer = d;
@@ -76,7 +76,7 @@ public class InteresseProxy extends InteresseImpl implements DataItemProxy {
             try {
                 super.setCanale(((CanaleDAO) dataLayer.getDAO(Canale.class)).getCanale(id_canale));
             } catch (DataException ex) {
-                Logger.getLogger(InteresseProxy.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InteressaProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -89,7 +89,7 @@ public class InteresseProxy extends InteresseImpl implements DataItemProxy {
             try {
                 super.setUtente(((UtenteDAO) dataLayer.getDAO(Utente.class)).getUtente(id_utente));
             } catch (DataException ex) {
-                Logger.getLogger(InteresseProxy.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InteressaProxy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

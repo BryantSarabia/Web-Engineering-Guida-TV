@@ -36,7 +36,7 @@ public class RicercaDAO_MySQL extends DAO implements RicercaDAO {
             
             // PREPARE STATEMENTS
             getRicercaByID = connection.prepareStatement("SELECT * FROM ricerca WHERE id = ?");
-            insertRicerca = connection.prepareStatement("INSERT INTO ricerca (query, id_utente) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            insertRicerca = connection.prepareStatement("INSERT INTO ricerca (id_utente, query) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
             deleteRicerca = connection.prepareStatement("DELETE from ricerca WHERE id = ?");
             getRicercheUtente = connection.prepareStatement("SELECT id FROM ricerca WHERE id_utente = ?");
         } catch (SQLException ex) {
@@ -73,6 +73,7 @@ public class RicercaDAO_MySQL extends DAO implements RicercaDAO {
         return ricerca;
     }
     
+  
     @Override
     public RicercaProxy createRicerca() {
         return new RicercaProxy(getDataLayer());
@@ -129,8 +130,8 @@ public class RicercaDAO_MySQL extends DAO implements RicercaDAO {
                 // UPDATE NOT IMPLEMENTED - Non necessario
             } else { 
                 // INSERT RICERCA
-                insertRicerca.setString(1, ricerca.getQuery());
-                insertRicerca.setInt(2, id_utente);
+                insertRicerca.setInt(1, id_utente);
+                insertRicerca.setString(2, ricerca.getQuery());
                 
                 if (insertRicerca.executeUpdate() == 1) {
                     //getGeneratedKeys per leggere chiave generata

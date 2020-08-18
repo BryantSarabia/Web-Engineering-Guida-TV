@@ -87,6 +87,20 @@
 
 
                     </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <div class="blog__pagination">
+                                <#list 1..(numero_pagine+1) as p>
+                                <a <#if (p-1) == pagina>class="page_active"</#if> href="?page=${p-1}">${p}</a>
+                                </#list>
+                                <#if pagina < numero_pagine>
+                                <a href="?page=${pagina+1}">NEXT</a>
+                                </#if>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

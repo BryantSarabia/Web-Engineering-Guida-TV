@@ -35,11 +35,17 @@ public interface Utente extends DataItem<Integer> {
 
     public void setRicerche(List<Ricerca> ricerche);
 
-    public List<Interesse> getInteressi();
+    public List<Interessa> getInteressi();
 
-    public void setInteressi(List<Interesse> interessi);
+    public void setInteressi(List<Interessa> interessi);
+
+    Boolean getSendEmail();
+
+    void setSendEmail(Boolean send);
 
     public LocalDate getExp_date();
+
+    void cleanInteressi();
 
     public void setExpirationDate(LocalDate ld);
 

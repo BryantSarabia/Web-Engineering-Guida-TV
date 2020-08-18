@@ -1,0 +1,103 @@
+<!-- Most Search Section Begin -->
+<section class="most-search spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>PALINSESTO</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-lg-12 canali">
+
+            <#list risultati as canale,programmazioni>
+            <div class="row col-lg-12  canale  justify-content-center ">
+
+                <div class="canale-logo col-lg-3 col-md-6">
+
+                    <div class="col-lg-12">
+                        <#if canale.logo??>
+                        <a href="canale?c_key=${canale.key}"><img src="${canale.logo}"  alt="${canale.nome}"></a>
+                        <#else>
+                        <a href="canale?c_key=${canale.key}"><img src="img_tv/static/no_img.png"  alt="${canale.nome}"></a>
+                        </#if>
+                    </div>
+
+                    <div class="col-lg-12 mt-2">
+                        <a href="canale?c_key=${canale.key}"><h5>${canale.nome}</h5></a>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-lg-9 col-md-6">
+                    <#if (programmazioni?size > 0)>
+                    <ul class="lista_programmi">
+                        <#list programmazioni as programmazione>
+                        <li>
+                            <a href="programma?p_key=${programmazione.programma.key}">
+                                <div class="row programma">
+                                    <div class="col-lg-3 col-md-2">
+                                        <#if programmazione.programma.img??><img class="programma_img" src="${programmazione.programma.img}">
+                                        <#else>
+                                        <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
+                                        </#if>
+                                    </div>
+
+                                    <div class="row col-lg-9">
+
+                                        <div class="col-lg-10 col-md-10 align-self-center">
+                                            <h5>${programmazione.programma.titolo}</h5>
+                                        </div>
+                                        <div class="col-lg-2 col-md-10 align-self-center">
+                                            <small>(${programmazione.programma.durata} min)</small>
+                                        </div>   
+
+                                        <div class="col-lg-10 align-self-center">
+                                            <#list programmazione.programma.generi as genere>
+                                            <small>${genere.nome} <#sep>, </#sep></small>
+                                            <#else>
+                                            <small>Questo programma non ha generi></small>
+                                            </#list>
+                                        </div>
+
+                                        <div class="col-lg-2 align-self-center">
+                                            <small>${programmazione.time}</small>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        </#list>
+                    </ul>
+                    <#else>
+                    <div class="col-lg-9 text-center align-self-center">
+                        <p>Nessuna programmazione</p> 
+                    </div>
+                    </#if>
+                </div>
+
+
+
+            </div>
+
+            <#else>
+            
+            
+            <div class="alert alert-danger col-lg text-center" role="alert">
+                   Nessuna programmazione
+            </div>
+
+            
+         
+
+            </#list>
+
+
+        </div>
+    </div>
+</section>
+<!-- Most Search Section End -->

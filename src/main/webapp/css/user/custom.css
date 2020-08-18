@@ -309,3 +309,9 @@ small{
 .dettagli_titolo h3{
     border-bottom: 2px solid #f03250;
 }
+
+.blog__pagination a:hover {
+    background: #f03250;
+    color: #ffffff !important; 
+    border-color: #f03250;
+}

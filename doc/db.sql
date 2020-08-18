@@ -69,7 +69,7 @@ UNIQUE KEY `numero_unique` (`numero`)
 
 LOCK TABLES `canali` WRITE;
 /*!40000 ALTER TABLE `canali` DISABLE KEYS */;
-INSERT INTO `canali` VALUES (1,1,'Rai1','img_tv/canali/small/1.png',0),(2,2,'Rai 2','img_tv/canali/small/2.png',0),(3,3,'Rai 3','img_tv/canali/small/3.png',0),(4,4,'Rete 4','img_tv/canali/small/4.png',0),(5,5,'Canale 5','img_tv/canali/small/5.png',0),(6,6,'Italia 1','img_tv/canali/small/6.png',0),(7,7,'LA 7','img_tv/canali/small/7.png',0),(8,21,'Rai 4','img_tv/canali/small/8.png',0),(9,23,'Rai 5','img_tv/canali/small/9.png',0),(10,25,'Rai Premium','img_tv/canali/small/10.png',0),(11,24,'Rai Movie','img_tv/canali/small/11.png',0),(12,29,'LA 7d','img/canali/small/12.png',0),(13,26,'Cielo','img_tv/canali/small/13.png',0);
+INSERT INTO `canali` VALUES (1,1,'Rai1','img_tv/canali/small/1.png',0),(2,2,'Rai 2','img_tv/canali/small/2.png',0),(3,3,'Rai 3','img_tv/canali/small/3.png',0),(4,4,'Rete 4','img_tv/canali/small/4.png',0),(5,5,'Canale 5','img_tv/canali/small/5.png',0),(6,6,'Italia 1','img_tv/canali/small/6.png',0),(7,7,'LA 7','img_tv/canali/small/7.png',0),(8,21,'Rai 4','img_tv/canali/small/8.png',0),(9,23,'Rai 5','img_tv/canali/small/9.png',0),(10,25,'Rai Premium','img_tv/canali/small/10.png',0),(11,24,'Rai Movie','img_tv/canali/small/11.png',0),(12,29,'LA 7d','img_tv/canali/small/12.png',0),(13,26,'Cielo','img_tv/canali/small/13.png',0);
 /*!40000 ALTER TABLE `canali` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,8 +163,8 @@ CREATE TABLE `interessa`(
 `id` INT(10) NOT NULL AUTO_INCREMENT,
 `id_canale` INT(10) NOT NULL,
 `id_utente` INT(10) NOT NULL,
-`start_time` DATE NOT NULL,
-`end_time` DATE NOT NULL,
+`start_time` TIME NOT NULL,
+`end_time` TIME NOT NULL,
 PRIMARY KEY (`id`),
 CONSTRAINT `id_interessa_canale` FOREIGN KEY (`id_canale`) REFERENCES `canali` (`id`) ON DELETE CASCADE,
 CONSTRAINT `id_interessa_utente` FOREIGN KEY (`id_utente`) REFERENCES `utenti` (`id`) ON DELETE CASCADE

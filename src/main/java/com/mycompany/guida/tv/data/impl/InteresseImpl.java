@@ -2,11 +2,11 @@ package com.mycompany.guida.tv.data.impl;
 
 import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Canale;
-import com.mycompany.guida.tv.data.model.Interesse;
 import com.mycompany.guida.tv.data.model.Utente;
 import java.time.LocalTime;
+import com.mycompany.guida.tv.data.model.Interessa;
 
-public class InteresseImpl extends DataItemImpl<Integer> implements Interesse {
+public class InteresseImpl extends DataItemImpl<Integer> implements Interessa {
 
     private Canale canale;
     private Utente utente;

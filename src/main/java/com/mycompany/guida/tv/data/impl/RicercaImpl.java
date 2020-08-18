@@ -1,4 +1,4 @@
-package com.mycompany.guidatv.data.model.impl;
+package com.mycompany.guida.tv.data.impl;
 
 import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Ricerca;

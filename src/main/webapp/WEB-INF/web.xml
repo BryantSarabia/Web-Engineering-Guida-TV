@@ -25,7 +25,6 @@
         <param-name>view.template_directory</param-name>
         <param-value>templates</param-value>
     </context-param>
-
     <context-param>
         <param-name>view.data.author</param-name>
         <param-value>HP</param-value>
@@ -94,6 +93,10 @@
         <servlet-name>Programma</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.DettagliProgramma</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Cerca</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.Cerca</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -141,6 +144,10 @@
     <servlet-mapping>
         <servlet-name>Programma</servlet-name>
         <url-pattern>/programma</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cerca</servlet-name>
+        <url-pattern>/cerca</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
