@@ -9,14 +9,14 @@
                     <div class="contact__widget__address">
                         <h3 class="text-center">Benvenuto al tuo profilo</h3>
                     </div>
-                     <#if message??><p class="alert alert-success" role="alert">${message}</p></#if>
+                    <#if message??><p class="alert alert-success" role="alert">${message}</p></#if>
                 </div>
             </div>
 
             <div class="col-lg-6 col-md-6 mr-1">
 
                 <div class="row p-1 justify-content-center profile_daily_email">
-                    <form action="#" method="POST">
+                    <form action="profile" method="POST">
                         <div class="row mt-2 mb-4">
                             <div class="col-lg-12 text-center">
                                 <h3>Email giornalera</h3>
@@ -27,14 +27,17 @@
                         <div class="form-group row col-lg-12">
                             <label for="canali_profile" class="col-form-label">Seleziona i tuoi canali preferiti</label>
                             <select class="form-control" name="canali" id="canali_profile" multiple="multiple">
-                                <option>RAI 1</option>
-                                <option>RAI 2</option>
+                                <#list canali as canale>
+                                <option value="${canale.key}" >${canale.nome}</option>
+                                <#else>
+                                <option>Nessun canale sul DB</option>
+                                </#list>
                             </select>
                         </div>
 
                         <div class="form-group row col-lg-12">
-                            <label for="fascia" class="col-form-label">Seleziona la fascia oraria</label>
-                            <select class="form-control" name="fascia" id="fascia" multiple="multiple">
+                            <label for="fasce" class="col-form-label">Seleziona la fascia oraria</label>
+                            <select class="form-control" name="fasce" id="fasce" multiple="multiple">
                                 <option value="0">Tutto il giorno</option>
                                 <option value="1">Mattina</option>
                                 <option value="2">Pomeriggio</option>
@@ -44,21 +47,34 @@
                         </div>
 
                         <div class="form-group row col-lg-12">
-                            <label for="ricerche" class="col-form-label">Seleziona una ricerca</label>
-                            <select class="form-control" name="ricerche" id="ricerche">
-                                <option>Ricerca 1 (harry potter, RAI 1)</option>
-                                <option>Ricerca 2 (breaking bad, Mediaset)</option>
-                            </select>
+                            <div class="dropdown show">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="ricerche" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Le tue richerche
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="ricerche">
+                                    <#list me.ricerche as ricerca>
+                                    <a href="cerca?${ricerca.query}" class="dropdown-item" target="_blank">Ricerca ${ricerca?index+1}</a><br/>
+                                    <#else>
+                                    <a href="#" class="dropdown-item">Nessuna ricerca salvata</a><br/>
+                                    </#list>
+
+                                </div>
+
+                            </div>
                         </div>
 
                         <div class="form-check col-lg-12">
-                            <input name="desidero" type="radio" id="desidero" value="1">
+                            <input name="desidero" type="radio" id="desidero" value="1" <#if me.sendEmail>checked="checked"</#if>>
                             <label for="desidero">Desidero ricevere mail giornaliere</label>
                         </div>
                         <div class="form-check col-lg-12">
-                            <input name="desidero" type="radio" id="non_desidero" value="0">
+                            <input name="desidero" type="radio" id="non_desidero" value="0" <#if !me.sendEmail>checked="checked"</#if>>
                             <label for="non_desidero">Non desidero ricevere mail giornaliere</label>
                         </div>
+
+                        <input type="hidden" value="submit" name="submit"/>
+
 
                         <div class="text-center mt-2 mb-2">
                             <button type="submit" class="btn primary-btn">salva</button>
@@ -72,7 +88,7 @@
                 <div class="col-lg-12 text-center mt-3 mb-2">
                     <h3>Modifica la tua password</h3>
                 </div>
-                 <#if error??><p class="alert alert-danger" role="alert">${error}</p></#if>
+                <#if error??><p class="alert alert-danger" role="alert">${error}</p></#if>
 
                 <form action="profile" class="contact__form profile_info_form " method="POST">
 
@@ -102,7 +118,10 @@
                     </div>
                     <input type="hidden" value="update_password" name="update_password"/>
                 </form>
+
+
             </div>
+
 
         </div>
     </div>

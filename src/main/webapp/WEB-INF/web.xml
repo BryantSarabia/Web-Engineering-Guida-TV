@@ -34,6 +34,10 @@
         <param-value>homepage</param-value>
     </context-param>
     <context-param>
+        <param-name>view.outline_admin</param-name>
+        <param-value>outline_admin.ftl.html</param-value>
+    </context-param>
+    <context-param>
         <param-name>view.encoding</param-name>
         <param-value>ISO-8859-1</param-value>
     </context-param>
@@ -81,6 +85,18 @@
         <servlet-name>VerifyEmail</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.VerifyEmail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dashboard</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Dashboard</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Programma</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.DettagliProgramma</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Cerca</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.Cerca</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prova</servlet-name>
         <url-pattern>/prova</url-pattern>
@@ -120,6 +136,18 @@
     <servlet-mapping>
         <servlet-name>VerifyEmail</servlet-name>
         <url-pattern>/verifyemail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Programma</servlet-name>
+        <url-pattern>/programma</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cerca</servlet-name>
+        <url-pattern>/cerca</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

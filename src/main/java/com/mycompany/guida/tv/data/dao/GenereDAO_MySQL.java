@@ -37,7 +37,7 @@ public class GenereDAO_MySQL extends DAO implements GenereDAO {
         try {
 
             getGenereByID = connection.prepareStatement("SELECT * FROM generi WHERE id = ?");
-            getGeneriByProg = connection.prepareStatement("SELECT generi.id, generi.nome FROM generi JOIN programma_ha_generi ON generi.id = programma_ha_generi.id_genero JOIN programmi ON programmi.id = programma_ha_generi.id_programma WHERE programmi.id=? ");
+            getGeneriByProg = connection.prepareStatement("SELECT generi.id, generi.nome FROM generi JOIN programma_ha_generi ON generi.id = programma_ha_generi.id_genere JOIN programmi ON programmi.id = programma_ha_generi.id_programma WHERE programmi.id=? ");
             getGeneri = connection.prepareStatement("SELECT * FROM generi ORDER BY nome");
             getNumeroGeneri = connection.prepareStatement("SELECT COUNT(*) AS num FROM generi");
             getGeneriPaginated = connection.prepareStatement("SELECT * FROM generi LIMIT ? OFFSET ?");

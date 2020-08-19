@@ -51,12 +51,12 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             getProgrammazioneByTimestamp = connection.prepareStatement("SELECT * FROM programmazioni WHERE start_time BETWEEN ? AND ?");
             getProgrammazioneByTimestampCanale = connection.prepareStatement("SELECT * FROM programmazioni WHERE id_canale = ? AND start_time BETWEEN ? AND ?");
             getProgrammazioneByID = connection.prepareStatement("SELECT * FROM programmazioni WHERE id = ?");
-            getCurrentProgrammazioneCanale = connection.prepareStatement("SELECT * FROM programmazioni WHERE id_canale = ?  ORDER BY id_canale ASC"); /* AND start_time < NOW() AND ( UNIX_TIMESTAMP(start_time) + durata * 60) > UNIX_TIMESTAMP(NOW()) */
+            getCurrentProgrammazioneCanale = connection.prepareStatement("SELECT * FROM programmazioni WHERE id_canale = ? AND start_time < NOW() AND ( UNIX_TIMESTAMP(start_time) + durata * 60) > UNIX_TIMESTAMP(NOW()) ORDER BY id_canale ASC");
             getProgrammazioneCorrente = connection.prepareStatement("SELECT * FROM programmazioni WHERE start_time <= NOW() AND ( UNIX_TIMESTAMP(start_time) + durata * 60) > UNIX_TIMESTAMP(NOW()) ORDER BY id_canale ASC");
             getProgrammazioneSpecifica = connection.prepareStatement("SELECT * FROM programmazioni WHERE id_programma = ? AND DATE(start_time) BETWEEN ? AND ? ORDER BY id_canale ASC, start_time DESC");
             getProgrammazioneSerie = connection.prepareStatement("SELECT * FROM programmazioni WHERE id_programma IN (SELECT id FROM webeng_proj.programma where id_serie = ? ORDER BY stagione, episodio ASC) AND start_time BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW() ORDER BY start_time DESC");
             getProgrammazioniPaginated = connection.prepareStatement("SELECT * FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ? ORDER BY id_canale, start_time DESC LIMIT ? OFFSET ?");
-            getNumeroProgrammazioni = connection.prepareStatement("SELECT COUNT(*) AS num FROM Programmazione WHERE DATE(start_time) BETWEEN ? AND ?");
+            getNumeroProgrammazioni = connection.prepareStatement("SELECT COUNT(*) AS num FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ?");
             iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, version=? WHERE id = ? AND version = ?");
             getLatest = connection.prepareStatement("SELECT * FROM programmazioni ORDER BY id DESC LIMIT ?");

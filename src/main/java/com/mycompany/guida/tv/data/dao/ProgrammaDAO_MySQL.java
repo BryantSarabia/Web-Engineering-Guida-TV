@@ -40,8 +40,8 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
             getProgrammaByID = connection.prepareStatement("SELECT * FROM programmi WHERE id = ?");
             getProgrammiPaginated = connection.prepareStatement("SELECT * FROM programmi LIMIT ? OFFSET ?");
             getProgrammiByTitolo = connection.prepareStatement("SELECT * FROM programmi WHERE titolo LIKE ?");
-            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id = programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere = ?");
-            getProgrammiByTitoloAndGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id = programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere = ? AND programmi.titolo LIKE ?");
+            getProgrammiByGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id=programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere=?");
+            getProgrammiByTitoloAndGenere = connection.prepareStatement("SELECT * FROM programmi JOIN programma_ha_generi ON programmi.id=programma_ha_generi.id_programma WHERE programma_ha_generi.id_genere= ? AND programmi.titolo LIKE ?");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id=? AND version=?");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");

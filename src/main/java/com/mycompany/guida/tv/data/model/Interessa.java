@@ -3,7 +3,7 @@ package com.mycompany.guida.tv.data.model;
 import com.mycompany.guida.tv.data.DataItem;
 import java.time.LocalTime;
 
-public interface Interesse extends DataItem<Integer> {
+public interface Interessa extends DataItem<Integer> {
 
     Utente getUtente();
 

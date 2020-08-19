@@ -58,6 +58,16 @@ a:hover, a:hover div div div > *{
     box-shadow: 5px 0px 5px #f03250;
 }
 
+
+.programma_img{
+    min-width: 150px;
+    min-height: 150px;
+    height:150px;
+    
+    max-height: 150px;
+    max-width: 150px;
+}
+
 small{
     font-size : 70%;
 }
@@ -70,7 +80,9 @@ small{
     margin-top: 2em;
     margin-bottom: 2em;
     border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
+
 
 .canale_head{
     background: transparent;
@@ -109,7 +121,8 @@ small{
     border-radius: 50%;
     border: 1px solid #f03250;
     text-align: center;
-    padding: 2.2em;
+    padding: 1em;
+    line-height: 4em;
     font-weight: bold;
     background: #f7f8fa;
     cursor: pointer;
@@ -122,7 +135,8 @@ small{
     border-radius: 50%;
     border: 1px solid #f03250;
     text-align: center;
-    padding: 2.2em;
+    padding: 1em;
+    /*line-height: 4em;*/
     font-weight: bold;
     background: #f03250;
     cursor: pointer;
@@ -183,11 +197,24 @@ small{
     color: #fff;
 }
 
+.fascia.active{
+    background: #f03250;
+    color: #fff;
+}
 .fascia:hover a .fascia-icon-mattina{
     color:#feffd9;
 }
 
+.fascia.active a .fascia-icon-mattina{
+    color:#feffd9;
+
+}
+
 .fascia:hover a .fascia-icon-pomeriggio{
+    color: #fef500;
+}
+
+.fascia.active a .fascia-icon-pomeriggio{
     color: #fef500;
 }
 
@@ -195,14 +222,28 @@ small{
     color:#190849;
 }
 
+.fascia.active a .fascia-icon-notte{
+    color:#190849;
+
+}
 
 .fascia:hover a div  h5{
     color: #ffffff;
     transition: .4s all;
 }
 
+.fascia.active a div h5{
+    color: #ffffff;
+    transition: .4s all;
+}
+
 .fascia:hover div img{
     filter: invert(75%) sepia(102%) saturate(3296%) hue-rotate(361deg) brightness(100%) contrast(116%);
+}
+
+.fascia.active div img{
+    filter: invert(75%) sepia(102%) saturate(3296%) hue-rotate(361deg) brightness(100%) contrast(116%);
+
 }
 
 .palinsesto-date{
@@ -265,3 +306,12 @@ small{
     padding-top: 4em;
 }
 
+.dettagli_titolo h3{
+    border-bottom: 2px solid #f03250;
+}
+
+.blog__pagination a:hover {
+    background: #f03250;
+    color: #ffffff !important; 
+    border-color: #f03250;
+}

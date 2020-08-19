@@ -35,8 +35,8 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             // PREPARE STATEMENTS
             countUsers = connection.prepareStatement("SELECT COUNT(*) AS NumeroUtenti FROM utenti");
             getUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
-            insertUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, email, password, id_ruolo, token, exp_date) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            updateUtente = connection.prepareStatement("UPDATE utenti SET nome=?, cognome=?, email=?,password=?, id_ruolo=? ,email_verified_at=?, token=?, exp_date=?, version=? WHERE ID=? and version=?");
+            insertUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, email, password, id_ruolo,,token, exp_date) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            updateUtente = connection.prepareStatement("UPDATE utenti SET nome=?, cognome=?, email=?,password=?, id_ruolo=?, send_email=?, email_verified_at=?, token=?, exp_date=?, version=? WHERE ID=? and version=?");
             loginUtente = connection.prepareStatement("SELECT id, password FROM utenti WHERE email = ?");
             getUtenteByEmail = connection.prepareStatement("SELECT id FROM utenti WHERE email = ?");
             getUtenteByToken = connection.prepareStatement("SELECT * FROM utenti WHERE token = ?");
@@ -170,29 +170,29 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                     updateUtente.setNull(5, java.sql.Types.INTEGER);
                 }
 
-                /*int send_email = utente.getSendEmail() ? 1 : 0;
-                updateUtente.setBoolean(5, utente.getSendEmail()); */
-                //UtilityMethods.debugConsole(this.getClass(), "update", updateUtente.toString());
+                int send_email = utente.getSendEmail() ? 1 : 0;
+                updateUtente.setBoolean(6, utente.getSendEmail());
+
                 if (utente.getEmailVerifiedAt() != null) {
-                    updateUtente.setDate(6, java.sql.Date.valueOf(utente.getEmailVerifiedAt()));
+                    updateUtente.setDate(7, java.sql.Date.valueOf(utente.getEmailVerifiedAt()));
                 } else {
-                    updateUtente.setNull(6, java.sql.Types.DATE);
+                    updateUtente.setNull(7, java.sql.Types.DATE);
                 }
 
-                updateUtente.setString(7, utente.getToken());
+                updateUtente.setString(8, utente.getToken());
 
                 if (utente.getExp_date() != null) {
-                    updateUtente.setDate(8, java.sql.Date.valueOf(utente.getExp_date()));
+                    updateUtente.setDate(9, java.sql.Date.valueOf(utente.getExp_date()));
                 } else {
-                    updateUtente.setNull(8, java.sql.Types.DATE);
+                    updateUtente.setNull(9, java.sql.Types.DATE);
                 }
                 //UtilityMethods.debugConsole(this.getClass(), "store utente", updateUtente.toString());
                 long current_version = utente.getVersion();
                 long next_version = current_version + 1;
 
-                updateUtente.setLong(9, next_version);
-                updateUtente.setInt(10, utente.getKey());
-                updateUtente.setLong(11, current_version);
+                updateUtente.setLong(10, next_version);
+                updateUtente.setInt(11, utente.getKey());
+                updateUtente.setLong(12, current_version);
 
                 if (updateUtente.executeUpdate() == 0) {
                     throw new OptimisticLockException(utente);
@@ -205,12 +205,12 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
                 insertUtente.setString(3, utente.getEmail());
                 insertUtente.setString(4, utente.getPassword());
 
-                  if (utente.getRuolo() != null) {
+                if (utente.getRuolo() != null) {
                     insertUtente.setInt(5, utente.getRuolo().getKey());
                 } else {
                     insertUtente.setNull(5, java.sql.Types.INTEGER); // Se l'utente non ha nessun ruolo, lo setto a 1 di default
                 }
-                
+
                 insertUtente.setString(6, utente.getToken());
 
                 if (utente.getExp_date() != null) {

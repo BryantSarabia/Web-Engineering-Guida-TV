@@ -13,11 +13,12 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private String email;
     private String password;
     private String token;
+    private Boolean sendEmail;
     private LocalDate emailVerifiedAt;
     private LocalDate exp_date;
     private Ruolo ruolo;
     private List<Ricerca> ricerche;
-    private List<Interesse> interessi;
+    private List<Interessa> interessi;
 
     public UtenteImpl() {
         super();
@@ -26,6 +27,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
         this.email = "";
         this.password = "";
         this.token = "";
+        this.sendEmail = false;
         this.emailVerifiedAt = null;
         this.exp_date = null;
         this.ruolo = null;
@@ -52,13 +54,11 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     public LocalDate getEmailVerifiedAt() {
         return emailVerifiedAt;
     }
-    
+
     @Override
     public void setEmailVerifiedAt(LocalDate emailVerifiedAt) {
         this.emailVerifiedAt = emailVerifiedAt;
     }
-
-   
 
     @Override
     public String getNome() {
@@ -88,6 +88,16 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     @Override
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Boolean getSendEmail() {
+        return sendEmail;
+    }
+
+    @Override
+    public void setSendEmail(Boolean send) {
+        this.sendEmail = send;
     }
 
     @Override
@@ -121,13 +131,18 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
-    public List<Interesse> getInteressi() {
+    public List<Interessa> getInteressi() {
         return interessi;
     }
 
     @Override
-    public void setInteressi(List<Interesse> interessi) {
+    public void setInteressi(List<Interessa> interessi) {
         this.interessi = interessi;
+    }
+
+    @Override
+    public void cleanInteressi() {
+        this.interessi = null;
     }
 
     @Override
