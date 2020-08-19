@@ -10,6 +10,7 @@ import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Serie;
+import com.mycompany.guida.tv.data.proxy.SerieProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -21,10 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class DettagliProgramma extends BaseController {
 
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,12 +34,11 @@ public class DettagliProgramma extends BaseController {
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException{
-        
-        
+            throws ServletException {
+
         try {
             response.setContentType("text/html;charset=UTF-8");
-            if(request.getParameter("p_key") != null) {
+            if (request.getParameter("p_key") != null) {
                 action_default(request, response);
             } else {
                 action_without_parameter(request, response);
@@ -49,9 +47,9 @@ public class DettagliProgramma extends BaseController {
             request.setAttribute("exception", ex);
             action_error(request, response);
         }
-        
+
     }
-    
+
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
             (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
@@ -60,26 +58,26 @@ public class DettagliProgramma extends BaseController {
         }
         return;
     }
-    
+
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        
+
         int id_programma = SecurityLayer.checkNumeric(request.getParameter("p_key"));
-        
+
         try {
             TemplateResult results = new TemplateResult(getServletContext());
-            
-            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
-            
-            if(p == null) throw new DataException("Programma non esistente");
-            
-            List<Programmazione> serie;
-           
-            if(p instanceof Serie){
-                serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSerie(p.getKey());
-            } else {
-                serie = new ArrayList<>();
+
+            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id_programma);
+            if (p == null) {
+               p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
+            } else if(p == null) {
+                throw new DataException("Programma non esistente");
             }
 
+            List<Programmazione> series;
+
+            series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSerie(p.getKey());
+
+            request.setAttribute("series", series);
             request.setAttribute("programma", p);
             results.activate("programma.ftl.html", request, response);
         } catch (DataException ex) {

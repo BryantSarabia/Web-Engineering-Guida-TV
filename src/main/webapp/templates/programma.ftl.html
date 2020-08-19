@@ -23,9 +23,19 @@
                 </div>
                 <div class="row">
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <h6>Descrizione: </h6><p>${programma.descrizione}</p>
                     </div>
+
+                    <#if programma.stagione??>
+                    <div class="col-lg-12">
+                        <h6>Stagione: </h6><p>${programma.stagione}</p>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <h6>Episodio: </h6><p>${programma.episodio}</p>
+                    </div>
+                    </#if>
 
                     <div class="col-lg-12">
                         <h6>Generi: </h6>
@@ -51,6 +61,82 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row justify-content-center mt-5 mb-2">
+            <div class="dettagli_titolo">
+                <h3 class="text-center"> Altri episodi in questo mese </h3>
+            </div>
+        </div>
+
+
+        <div class="row" id="series-slider">
+            <#if (series?size > 0)>
+            <#list series as programmazione>
+            <div>
+
+                <div class="row col-lg-12  canale slider justify-content-center ">
+
+                    <div class="canale-logo col-lg-3 col-md-6">
+
+                        <div class="col-lg-12">
+                            <#if programmazione.canale.logo??>
+                            <a href="canale?c_key=${programmazione.canale.key}"><img src="${programmazione.canale.logo}"  alt="${programmazione.canale.nome}"></a>
+                            <#else>
+                            <a href="canale?c_key=${programmazione.canale.key}"><img src="img_tv/static/no_img.png"  alt="${programmazione.canale.nome}"></a>
+                            </#if>
+                        </div>
+
+                        <div class="col-lg-12 mt-2">
+                            <a href="canale?c_key=${programmazione.canale.key}"><h5>${programmazione.canale.nome}</h5></a>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-9 col-md-6">
+                        <a href="programma?p_key=${programmazione.programma.key}">
+                            <div class="row programma">
+                                <div class="col-lg-3 col-md-2">
+                                    <#if programmazione.programma.img??><img class="programma_img" src="${programmazione.programma.img}">
+                                    <#else>
+                                    <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
+                                    </#if>
+                                </div>
+
+                                <div class="row col-lg-9">
+
+                                    <div class="col-lg-10 col-md-10 align-self-center">
+                                        <h5>${programmazione.programma.titolo}</h5>
+                                        <small> (Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio})</small>
+                                    </div>
+                                    <div class="col-lg-2 col-md-10 align-self-center">
+                                        <small>(${programmazione.programma.durata} min)</small>
+                                    </div>   
+
+                                    <div class="col-lg-10 align-self-center">
+                                        <#list programmazione.programma.generi as genere>
+                                        <small>${genere.nome} <#sep>, </#sep></small>
+                                        <#else>
+                                        <small>Questo programma non ha generi></small>
+                                        </#list>
+                                    </div>
+
+                                    <div class="col-lg-2 align-self-center">
+                                        <small>${programmazione.time}</small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+
+
+                </div>
+            </div>
+            </#list>
+            </#if>
         </div>
 
     </div>
