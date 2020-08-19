@@ -90,6 +90,10 @@
         <servlet-class>com.mycompany.guida.tv.admin.Dashboard</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>UtentiAdmin</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Utenti</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Programma</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.DettagliProgramma</servlet-class>
     </servlet>
@@ -140,6 +144,10 @@
     <servlet-mapping>
         <servlet-name>Dashboard</servlet-name>
         <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UtentiAdmin</servlet-name>
+        <url-pattern>/utenti</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Programma</servlet-name>

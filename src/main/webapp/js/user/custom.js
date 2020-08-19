@@ -12,19 +12,19 @@ function getFormattedDate(d) {
 function setDateTimeCheck() {
     var d1 = new Date();
     var d2 = new Date();
-    if(d1.getMonth() === 0) {
+    if (d1.getMonth() === 0) {
         d1.setMonth(12);
         d1.setFullYear(d1.getFullYear() - 1);
-    }
-    else d1.setMonth(d1.getMonth() - 1);
-    
-    if(d2.getMonth() === 12) {
+    } else
+        d1.setMonth(d1.getMonth() - 1);
+
+    if (d2.getMonth() === 12) {
         d2.setMonth(0);
         d2.setFullYear(d2.getFullYear() + 1);
-    }
-    else d2.setMonth(d2.getMonth() + 1);
-    
-    $(".dateTime").each( function( index, element) {
+    } else
+        d2.setMonth(d2.getMonth() + 1);
+
+    $(".dateTime").each(function (index, element) {
         $(element).dateTimePicker({
             mode: 'date',
             format: 'yyyy-MM-dd',
@@ -32,22 +32,27 @@ function setDateTimeCheck() {
             limitMax: getFormattedDate(d2)
         });
     });
-    
-    
+
+
     //console.log('listening');
 }
 
 setDateTimeCheck();
 
-if($('#cerca').length){
+if ($('#cerca').length) {
     let search_container = $('.search-container.nojs');
     search_container.removeClass('nojs');
     search_container.addClass('js');
     $('.search-container').addClass('d-none');
 }
 
-$(document).on('click','#cerca',function(event){
+$(document).on('click', '#cerca', function (event) {
     $('.search-container.js').toggleClass('d-none');
+});
+
+
+$(document).ready(function () {
+    $('#series-slider').slick();
 });
 
 
