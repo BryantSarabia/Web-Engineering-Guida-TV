@@ -13,6 +13,8 @@ import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
+import com.mycompany.guida.tv.shared.Methods;
+import com.mycompany.guida.tv.shared.Validator;
 
 
 import java.io.IOException;
@@ -24,10 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Federico Di Menna
- */
+
 public class Utenti extends BaseController {
 
     /**
@@ -45,7 +44,6 @@ public class Utenti extends BaseController {
 
         try {
             boolean is_admin = true;//SecurityLayer.checkAdminSession(request);
-
             if (is_admin) {
                 if (request.getParameter("draw") != null) {
                     action_paginate_results(request, response);
@@ -89,24 +87,22 @@ public class Utenti extends BaseController {
 
         List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(start, length);
 
-
-        JSONResult results = new JSONResult(getServletContext());
         request.setAttribute("draw", draw);
         request.setAttribute("total", String.valueOf(total));
         request.setAttribute("utenti", utenti);
-        results.activate("/admin/json/dt_utenti.ftl.json", request, response);
 
     }
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
-        List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
         TemplateResult results = new TemplateResult(getServletContext());
-        UtenteProxy me = (UtenteProxy) UtilityMethods.getMe(request);
-        request.setAttribute("me", me);
-        request.setAttribute("utenti_admin", utenti);
-        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin_template"));
-        results.activate("/admin/pages/edit_utenti.ftl.html", request, response);
+
+        List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+      /*  UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);*/
+        request.setAttribute("utenti", utenti);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/users/index.ftl.html", request, response);
 
     }
 
@@ -138,7 +134,6 @@ public class Utenti extends BaseController {
 
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         // Controllo se l'id è reale
-        JSONResult results = new JSONResult(getServletContext());
         try {
             Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
@@ -152,23 +147,19 @@ public class Utenti extends BaseController {
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().deleteUtente(key);
             request.setAttribute("errors", "");
             request.setAttribute("success", "true");
-            results.activate("/admin/json/store_response.ftl.json", request, response);
         } catch (DataException ex) {
             // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("success", "false");
-            results.activate("/admin/json/store_response.ftl.json", request, response);
         }
     }
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        JSONResult results = new JSONResult(getServletContext());
-        // CHECK SU TUTTI I CAMPI
         try {
             Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
-            String username = (String) Validator.validate(request.getParameter("username"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)), "nome");
+            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)), "nome");
             String email = (String) Validator.validate(request.getParameter("email"), new ArrayList<>(Arrays.asList(Validator.STRING_NOT_EMPTY, Validator.STRING_EMAIL)), "email");
-            LocalDate data_nascita = (LocalDate) Validator.validate(request.getParameter("dataNascita"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATE)) , "data di nascita");
+            String cognome = (String) Validator.validate(request.getParameter("cognome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)) , "cognome");
             Boolean sendEmail = (Boolean) Validator.validate(request.getParameter("sendEmail"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.BOOLEAN)), "send email" );
             String password = (String) Validator.validate(request.getParameter("password"), new ArrayList<>(Arrays.asList(Validator.PASSWORD)), "password" );
             LocalDate emailVerifiedAt = (LocalDate) Validator.validate(request.getParameter("verified"), new ArrayList<>(Arrays.asList(Validator.DATE)) , "data di nascita");
@@ -189,9 +180,9 @@ public class Utenti extends BaseController {
             Ruolo user_role = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(id_ruolo);
             if(user_role == null) throw new DataException("Invalid role");
 
-            target.setUsername(username);
+            target.setNome(nome);
+            target.setCognome(cognome);
             target.setEmailVerifiedAt(emailVerifiedAt);
-            target.setDataNascita(data_nascita);
             target.setSendEmail(sendEmail);
             target.setRuolo(user_role);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(target);
@@ -199,12 +190,12 @@ public class Utenti extends BaseController {
 
             request.setAttribute("errors", "");
             request.setAttribute("success", "true");
-            results.activate("/admin/json/store_response.ftl.json", request, response);
+
         } catch (DataException ex) {
             // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("success", "false");
-            results.activate("/admin/json/store_response.ftl.json", request, response);
+
         }
     }
 
