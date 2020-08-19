@@ -9,6 +9,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -71,7 +72,13 @@ public class DettagliProgramma extends BaseController {
             
             if(p == null) throw new DataException("Programma non esistente");
             
-           // List<Programmazione> programmazioneSerie;
+            List<Programmazione> serie;
+           
+            if(p instanceof Serie){
+                serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSerie(p.getKey());
+            } else {
+                serie = new ArrayList<>();
+            }
 
             request.setAttribute("programma", p);
             results.activate("programma.ftl.html", request, response);
