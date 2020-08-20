@@ -106,7 +106,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
      * @return
      * @throws DataException 
      */
-    public Programmazione createProgrammazione(ResultSet rs) throws DataException {
+    public ProgrammazioneProxy createProgrammazione(ResultSet rs) throws DataException {
         ProgrammazioneProxy p = createProgrammazione();
         try {
             p.setKey(rs.getInt("id"));

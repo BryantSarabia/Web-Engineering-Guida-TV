@@ -11,7 +11,7 @@ public interface InteressaDAO {
     
     Interessa getInteresse(int id_interesse) throws DataException;
     
-    List<InteressaProxy> getInteressiUtente(Utente utente) throws DataException;
+    List<Interessa> getInteressiUtente(Utente utente) throws DataException;
     
     void storeInteresse(Interessa interesse) throws DataException;
     

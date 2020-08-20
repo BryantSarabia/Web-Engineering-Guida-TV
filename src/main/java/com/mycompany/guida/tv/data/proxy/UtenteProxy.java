@@ -9,7 +9,7 @@ import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Ricerca;
 import com.mycompany.guida.tv.data.model.Ruolo;
-
+import org.apache.hc.client5.http.utils.URLEncodedUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;

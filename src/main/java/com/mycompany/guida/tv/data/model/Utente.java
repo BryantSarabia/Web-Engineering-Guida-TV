@@ -36,9 +36,9 @@ public interface Utente extends DataItem<Integer> {
 
     public void setRicerche(List<Ricerca> ricerche);
 
-    public List<InteressaProxy> getInteressi();
+    public List<Interessa> getInteressi();
 
-    public void setInteressi(List<InteressaProxy> interessi);
+    public void setInteressi(List<Interessa> interessi);
 
     Boolean getSendEmail();
 
