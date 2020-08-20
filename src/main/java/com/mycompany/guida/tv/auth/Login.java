@@ -75,10 +75,10 @@ public class Login extends BaseController {
         if (s != null) {
             response.sendRedirect("profile");
         } else {
-            
+            if(request.getParameter("referrer") != null && !request.getParameter("referrer").isBlank()){
             String request_uri = URLDecoder.decode(request.getParameter("referrer"), "UTF-8");
             request.setAttribute("request_uri",request_uri);
-            
+            }
             TemplateResult results = new TemplateResult(getServletContext());
             results.activate("login.ftl.html", request, response);
         }

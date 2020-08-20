@@ -2,6 +2,7 @@ package com.mycompany.guida.tv.data.impl;
 
 import com.mycompany.guida.tv.data.model.*;
 import com.mycompany.guida.tv.data.DataItemImpl;
+import com.mycompany.guida.tv.data.proxy.InteressaProxy;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +19,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private LocalDate exp_date;
     private Ruolo ruolo;
     private List<Ricerca> ricerche;
-    private List<Interessa> interessi;
+    private List<InteressaProxy> interessi;
 
     public UtenteImpl() {
         super();
@@ -131,12 +132,12 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
-    public List<Interessa> getInteressi() {
+    public List<InteressaProxy> getInteressi() {
         return interessi;
     }
 
     @Override
-    public void setInteressi(List<Interessa> interessi) {
+    public void setInteressi(List<InteressaProxy> interessi) {
         this.interessi = interessi;
     }
 

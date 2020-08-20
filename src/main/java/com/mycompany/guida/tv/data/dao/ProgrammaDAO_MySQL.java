@@ -6,6 +6,7 @@ import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.OptimisticLockException;
 import com.mycompany.guida.tv.data.model.Programma;
+import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.proxy.ProgrammaProxy;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -70,7 +71,7 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
     @Override
     public Integer getNumeroProgrammi() throws DataException {
-        
+
         Integer returnValue = -1;
 
         try {
@@ -109,7 +110,9 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
     public Programma createProgramma(ResultSet rs) throws DataException {
         ProgrammaProxy p = createProgramma();
+
         try {
+
             p.setKey(rs.getInt("id"));
             p.setTitolo(rs.getString("titolo"));
             p.setDescrizione(rs.getString("descrizione"));
@@ -184,7 +187,7 @@ public class ProgrammaDAO_MySQL extends DAO implements ProgrammaDAO {
 
             try {
                 getProgrammiByTitolo.setString(1, "%" + nome + "%");
-                
+
                 try (ResultSet rs = getProgrammiByTitolo.executeQuery()) {
 
                     while (rs.next()) {

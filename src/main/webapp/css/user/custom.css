@@ -83,6 +83,10 @@ small{
     border-bottom: 1px solid #ccc;
 }
 
+.canale.slider{
+    border: 1px solid #ccc;
+}
+
 
 .canale_head{
     background: transparent;
