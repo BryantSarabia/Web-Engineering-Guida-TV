@@ -45,7 +45,7 @@ public class Programmazioni extends BaseController {
 
         //Methods.debugConsole(this.getClass(), "processRequest", "Sono in PR");
         try {
-            boolean is_admin = SecurityLayer.checkAdminSession(request);
+            boolean is_admin = true;// SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 //Methods.debugConsole(this.getClass(), "action_sendEmail", "default");
@@ -122,11 +122,12 @@ public class Programmazioni extends BaseController {
 
         List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 3);
         TemplateResult results = new TemplateResult(getServletContext());
-        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);
-        request.setAttribute("programmazioni_admin", programmazioni);
-        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin_template"));
-        results.activate("/admin/pages/edit_programmazioni.ftl.html", request, response);
+       /* UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);*/
+        request.setAttribute("programmazioni", programmazioni);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+
+        results.activate("/admin/programmazioni/index.ftl.html", request, response);
 
     }
 

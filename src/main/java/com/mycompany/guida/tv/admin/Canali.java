@@ -51,7 +51,7 @@ public class Canali extends BaseController {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {

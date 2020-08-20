@@ -118,10 +118,11 @@ public class Programmi extends BaseController {
 
         // Edit Programmi default Attributes
         request.setAttribute("me", me);*/
-        request.setAttribute("programmi_admin", programmi);
-        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin_template"));
+        request.setAttribute("programmi", programmi);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
-        results.activate("/admin/pages/edit_programmi.ftl.html", request, response);
+
+        results.activate("/admin/programmi/index.ftl.html", request, response);
 
     }
 
