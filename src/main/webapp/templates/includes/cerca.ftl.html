@@ -19,10 +19,10 @@
 
                     <button id="cerca" class="text-center">CERCA</button>
 
-                    <div class="col-lg-10 offset-1 search-container nojs">
+                    <div class="col-lg-10 offset-lg-1 col-md-12 search-container nojs">
                         <div class="row justify-content-center">
 
-                            <div class="col-lg-12 text-center mt-4 mb-4">
+                            <div class="col-12 col-lg-12 text-center mt-4 mb-4">
                                 <h2>
                                     <i class="fa fa-search"></i>
                                     Cerca i tuoi programmi favoriti
@@ -32,15 +32,15 @@
                             <form action="cerca" method="GET" class="col-lg-12">
 
                                 <div class="form-group row justify-content-center">
-                                    <label for="titolo" class="col-lg-2 col-form-label">Titolo</label>
-                                    <div class="col-lg-8">
+                                    <label for="titolo" class="col-12 col-sm-2 col-md-2 col-lg-2 col-form-label">Titolo</label>
+                                    <div class="col-12 col-sm-8 col-md-8 col-lg-8 ">
                                         <input type="text" class="form-control" id="titolo" name="titolo" placeholder="Titolo del programma"/> 
                                     </div>
                                 </div>
 
                                 <div class="form-group row justify-content-center">
-                                    <label for="generi" class="col-lg-2 col-form-label">Generi</label>
-                                    <div class="col-lg-8">
+                                    <label for="generi" class="col-12 col-sm-2 col-md-2 col-lg-2 col-form-label">Generi</label>
+                                    <div class="col-12 col-sm-8 col-md-8 col-lg-8">
                                         <select id="generi" class="form-control" name="generi" multiple="multiple">
 
                                             <#if (generi?size > 0)>
@@ -58,8 +58,8 @@
                                 </div>
 
                                 <div class="form-group row justify-content-center">
-                                    <label for="canali" class="col-lg-2 col-form-label">Canali</label>
-                                    <div class="col-lg-8">
+                                    <label for="canali" class="col-12 col-sm-2 col-md-2 col-lg-2 col-form-label">Canali</label>
+                                    <div class="col-12 col-sm-8 col-md-8 col-lg-8 ">
                                         <select id="canali" class="form-control" name="canali" multiple="multiple">
 
                                             <#if (canali?size > 0)>
@@ -71,34 +71,36 @@
                                             <#else>
                                             <option selected="selected">Non ci sono canali sul DB</option>
                                             </#list>
-                                            
+
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="form-group row justify-content-center">
-                                    <label for="min_ora" class="col-lg-2 col-form-label">Ora di inizio minima</label>
-                                    <div class="col-lg-3">
+                                <div class="form-group row mt-md-2 justify-content-center">
+
+                                    <label for="min_ora" class="col-12 col-sm-2 col-md-2 col-lg-2  col-form-label">Ora di inizio</label>
+                                    <div class="col-5 col-sm-3 col-md-3 col-lg-3">
                                         <input class="form-control" type="time" id="min_ora" name="min_ora"/>
                                     </div>
+                              
 
-
-
-                                    <label for="max_ora" class="col-lg-2 col-form-label">Ora di fine</label>
-                                    <div class="col-lg-3">
+                                
+                                    <label for="max_ora" class="col-12 col-sm-2 col-md-2 col-lg-2 col-form-label">Ora di fine</label>
+                                    <div class="col-5 col-sm-3 col-md-3 col-lg-3">
                                         <input class="form-control" type="time" id="max_ora" name="max_ora"/>
                                     </div>
+
                                 </div>
 
 
                                 <div class="form-group row justify-content-center">
-                                    <label for="date_min" class="col-lg-2 col-form-label">Dal</label>
-                                    <div class="col-lg-3">
+                                    <label for="date_min" class="col-12 col-sm-1 col-md-1 col-lg-2 col-form-label">Dal</label>
+                                    <div class="col-8 col-sm-4 col-md-4 col-lg-3">
                                         <input class="form-control dateTime" type="date" id="date_min" min="${min_date}" max="${max_date}" name="date_min" placeholder=""/>
                                     </div>
 
-                                    <label for="date_max" class="col-lg-2 col-form-label">Al</label>
-                                    <div class="col-lg-3">
+                                    <label for="date_max" class="col-12 col-sm-1 col-md-1 col-lg-2 col-form-label">Al</label>
+                                    <div class="col-8 col-sm-4 col-md-4 col-lg-3">
                                         <input class="form-control dateTime" type="date" min="${min_date}" max="${max_date}" id="date_max" name="date_max"/>
                                     </div>
                                 </div>

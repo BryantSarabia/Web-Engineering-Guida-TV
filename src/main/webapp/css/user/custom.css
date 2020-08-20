@@ -63,7 +63,7 @@ a:hover, a:hover div div div > *{
     min-width: 150px;
     min-height: 150px;
     height:150px;
-    
+
     max-height: 150px;
     max-width: 150px;
 }
@@ -114,6 +114,8 @@ small{
     width:100%;
     right:100%;
 }
+
+
 
 .days li a{
     color: #f03250;
@@ -318,4 +320,79 @@ small{
     background: #f03250;
     color: #ffffff !important; 
     border-color: #f03250;
+}
+
+.blog__pagination a.page_active {
+    background: #f03250;
+    color: #ffffff;
+    border-color: #f03250;
+}
+
+@media (max-width:767px){
+    #cerca{
+        width: 25%;
+    }
+}
+
+
+
+@media (max-width:767px){
+    #cerca{
+        width: 25%;
+    }
+
+    .palinsesto_programma_img{
+        min-height: 50px;
+        min-width: 50px;
+        width: auto;
+        height: auto;
+    }
+
+    .canale-logo div a img{
+        min-height: 35px;
+        min-width: 35px;
+        width: auto;
+        height: auto;
+    }
+    .programma_img{
+        min-height: 40px;
+        min-width: 40px;
+    }
+}
+
+
+@media (max-width:575px){
+
+    .programma{
+        height: 6em;
+    }
+
+    .fascia.canale{
+        height: 5em;
+    }
+
+    .card, h5{
+        font-size: 14px;
+    }
+    h5 + p{
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 476px){
+    #cerca{
+        width: 30%;
+    }
+}
+
+
+@media (max-width:370px){
+
+    .card, h5, p{
+        font-size: 12px;
+    }
+    
+    .canale{
+        font-size: 12px;
+    }
 }

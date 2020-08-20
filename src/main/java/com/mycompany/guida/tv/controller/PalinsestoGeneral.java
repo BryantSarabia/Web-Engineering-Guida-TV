@@ -148,8 +148,10 @@ public class PalinsestoGeneral extends BaseController {
             
             for(Canale c : ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, elements)) {
                 List<Programmazione> programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(c.getKey(), start, end);
+               System.out.println(programmazione);
                 palinsesto.put(c, programmazione);
             }
+            
             
             
             // PAGINATION INFO
