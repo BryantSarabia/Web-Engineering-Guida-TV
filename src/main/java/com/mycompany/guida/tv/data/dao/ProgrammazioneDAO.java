@@ -2,7 +2,6 @@ package com.mycompany.guida.tv.data.dao;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.model.Programmazione;
-import com.mycompany.guida.tv.data.proxy.ProgrammazioneProxy;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,7 +19,7 @@ public interface ProgrammazioneDAO {
 
     List<Programmazione> getProgrammazione(LocalDateTime start, LocalDateTime end) throws DataException;
     
-    List<ProgrammazioneProxy> getProgrammazione(int canale_key, LocalDateTime start, LocalDateTime end) throws DataException;
+    List<Programmazione> getProgrammazione(int canale_key, LocalDateTime start, LocalDateTime end) throws DataException;
     
     List<Programmazione> getProgrammazioneSpecifica(int programma_key, LocalDate start, LocalDate end, LocalTime start_min, LocalTime start_max) throws DataException;
     

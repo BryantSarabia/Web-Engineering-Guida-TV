@@ -19,7 +19,7 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     private LocalDate exp_date;
     private Ruolo ruolo;
     private List<Ricerca> ricerche;
-    private List<InteressaProxy> interessi;
+    private List<Interessa> interessi;
 
     public UtenteImpl() {
         super();
@@ -132,12 +132,12 @@ public class UtenteImpl extends DataItemImpl<Integer> implements Utente {
     }
 
     @Override
-    public List<InteressaProxy> getInteressi() {
+    public List<Interessa> getInteressi() {
         return interessi;
     }
 
     @Override
-    public void setInteressi(List<InteressaProxy> interessi) {
+    public void setInteressi(List<Interessa> interessi) {
         this.interessi = interessi;
     }
 

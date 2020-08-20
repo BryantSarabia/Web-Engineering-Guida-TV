@@ -64,7 +64,7 @@ public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
     }
 
     
-    public InteressaProxy createInteresse(ResultSet rs) throws DataException {
+    public Interessa createInteresse(ResultSet rs) throws DataException {
         InteressaProxy interesse = createInteresse();
         try {
             interesse.setKey(rs.getInt("id"));
@@ -84,8 +84,8 @@ public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
     }
 
     @Override
-    public List<InteressaProxy> getInteressiUtente(Utente utente) throws DataException{
-        List<InteressaProxy> ints = null;
+    public List<Interessa> getInteressiUtente(Utente utente) throws DataException{
+        List<Interessa> ints = null;
         
         try {
             getInteressiUtente.setInt(1, utente.getKey());
@@ -104,8 +104,8 @@ public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
     }
 
     @Override
-    public InteressaProxy getInteresse(int key) throws DataException {
-        InteressaProxy interesse = null;
+    public Interessa getInteresse(int key) throws DataException {
+        Interessa interesse = null;
         
         if (dataLayer.getCache().has(Interessa.class, key)) {
             interesse = dataLayer.getCache().get(InteressaProxy.class, key);
@@ -115,7 +115,7 @@ public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
                 try (ResultSet rs = getInteresseByID.executeQuery()) {
                     if (rs.next()) {
                         interesse = createInteresse(rs);
-                        dataLayer.getCache().add(InteressaProxy.class, interesse);
+                        dataLayer.getCache().add(Interessa.class, interesse);
                     }
                 }
             } catch (SQLException ex) {

@@ -9,18 +9,23 @@ import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Ricerca;
 import com.mycompany.guida.tv.data.model.Ruolo;
-import org.apache.hc.client5.http.utils.URLEncodedUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.mycompany.guida.tv.data.dao.InteressaDAO;
+import com.mycompany.guida.tv.data.dao.ProgrammaDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammazioneDAO;
 import com.mycompany.guida.tv.data.model.Interessa;
+import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.security.SecurityLayer;
+import com.mycompany.guida.tv.shared.Methods;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
@@ -95,7 +100,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setInteressi(List<InteressaProxy> interessi) {
+    public void setInteressi(List<Interessa> interessi) {
         this.modified = true;
         super.setInteressi(interessi);
     }
@@ -133,7 +138,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public List<InteressaProxy> getInteressi() {
+    public List<Interessa> getInteressi() {
         if (super.getInteressi() == null) {
             try {
                 super.setInteressi(((InteressaDAO) dataLayer.getDAO(Interessa.class)).getInteressiUtente(this));
@@ -159,25 +164,34 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         super.cleanInteressi();
     }
     
-    public void sendDailyMail(){
+    public void sendDailyMail() throws Exception{
         if(this.getSendEmail()){
+            String mail_text = "";
             
-            List<InteressaProxy> interessi = this.getInteressi();
-            List<Ricerca> ricerca = this.getRicerche();
+            List<Interessa> interessi = this.getInteressi();   //Prendo tutti i canali per cui l'utente ha espresso interesse
+            List<Ricerca> ricerche = this.getRicerche();             //Prendo tutte le ricerche per cui l'utente vuole essere avvisato
+            
             List<Programmazione> prog = new ArrayList<Programmazione>();
             List<Canale> canali = new ArrayList<Canale>();
             
-            LocalDateTime inizio = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-            LocalDateTime fine = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-            for (InteressaProxy interesse : interessi) {
+            Map<String, String> map = new HashMap<>();
+            LocalDateTime inizio;
+            LocalDateTime fine;
+            
+            
+            //Per ogni interesse (o canale) prendo la sua programmazione del giorno nella fascia oraria specificata dall'utente
+            for (Interessa interesse : interessi) {            
                 try {
-                     prog = ((ProgrammazioneDAO) dataLayer.getDAO(Programmazione.class)).getProgrammazione(interesse.getCanale().getKey(), inizio, fine);
+                     inizio = LocalDateTime.of(LocalDate.now(), interesse.getStartTime());
+                     fine = LocalDateTime.of(LocalDate.now(), interesse.getEndTime());
+                     prog.addAll(((ProgrammazioneDAO) dataLayer.getDAO(Programmazione.class)).getProgrammazione(interesse.getCanale().getKey(), inizio, fine));
                 } catch (DataException ex) {
                     Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                Canale canale = interesse.getCanale();
-                canale.setProgrammazioneGiornaliera(prog);
-                canali.add(canale);
+            }
+            
+            for(Programmazione programmazione : prog){
+                mail_text += programmazione.getCanale().getNome() + ": dalle " + programmazione.getStartTime() + " alle " + programmazione.getEndTime() + " - " + programmazione.getProgramma().getTitolo() + "\n";
             }
             
             //1) Prendere tutti programmi del giorno per ogni canale negli interessi
