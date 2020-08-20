@@ -184,7 +184,7 @@ public class Profile extends BaseController {
                         }
                     }
                 }
-             //   me.setInteressi(update_interessi);
+                me.setInteressi(update_interessi);
                 ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
             } else {
                 if (send) {
