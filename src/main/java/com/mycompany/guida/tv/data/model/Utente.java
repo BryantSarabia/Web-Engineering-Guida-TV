@@ -1,6 +1,7 @@
 package com.mycompany.guida.tv.data.model;
 
 import com.mycompany.guida.tv.data.DataItem;
+import com.mycompany.guida.tv.data.proxy.InteressaProxy;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,9 +36,9 @@ public interface Utente extends DataItem<Integer> {
 
     public void setRicerche(List<Ricerca> ricerche);
 
-    public List<Interessa> getInteressi();
+    public List<InteressaProxy> getInteressi();
 
-    public void setInteressi(List<Interessa> interessi);
+    public void setInteressi(List<InteressaProxy> interessi);
 
     Boolean getSendEmail();
 

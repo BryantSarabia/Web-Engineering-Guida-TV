@@ -3,6 +3,7 @@ package com.mycompany.guida.tv.data.impl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import java.util.List;
 
 public class CanaleImpl extends DataItemImpl<Integer> implements Canale {
 
@@ -10,6 +11,7 @@ public class CanaleImpl extends DataItemImpl<Integer> implements Canale {
     private int numero;
     private String logo;
     private Programmazione programmazioneCorrente;
+    private List<Programmazione> programmazioneGiornaliera;
 
     public CanaleImpl() {
         super();
@@ -69,6 +71,16 @@ public class CanaleImpl extends DataItemImpl<Integer> implements Canale {
             else return 0;
         }
         else return super.compareTo(o);
+    }
+    
+    @Override
+    public List<Programmazione> getProgrammazioneGiornaliera() {
+        return programmazioneGiornaliera;
+    }
+    
+    @Override
+    public void setProgrammazioneGiornaliera(List<Programmazione> programmazioneGiornaliera) {
+        this.programmazioneGiornaliera = programmazioneGiornaliera;
     }
 
 }

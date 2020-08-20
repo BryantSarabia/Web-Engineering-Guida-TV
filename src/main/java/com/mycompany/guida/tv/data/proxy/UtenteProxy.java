@@ -3,7 +3,7 @@ package com.mycompany.guida.tv.data.proxy;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
-import com.mycompany.guida.tv.data.dao.RicercaDAO;
+import com.mycompany.guida.tv.data.dao.*;
 import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Ricerca;
@@ -13,13 +13,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.mycompany.guida.tv.data.dao.InteressaDAO;
+
 import com.mycompany.guida.tv.data.model.Interessa;
+import com.mycompany.guida.tv.data.model.Programmazione;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
     private boolean modified;
-
+    private int id_ruolo;
     protected final DataLayer dataLayer;
 
     public UtenteProxy(DataLayer dataLayer) {
@@ -89,7 +93,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public void setInteressi(List<Interessa> interessi) {
+    public void setInteressi(List<InteressaProxy> interessi) {
         this.modified = true;
         super.setInteressi(interessi);
     }
@@ -127,7 +131,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     }
 
     @Override
-    public List<Interessa> getInteressi() {
+    public List<InteressaProxy> getInteressi() {
         if (super.getInteressi() == null) {
             try {
                 super.setInteressi(((InteressaDAO) dataLayer.getDAO(Interessa.class)).getInteressiUtente(this));
@@ -151,5 +155,45 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
             }
         }
         super.cleanInteressi();
+    }
+    @Override
+    public Ruolo getRuolo() {
+        if (super.getRuolo() == null && id_ruolo > 0) {
+            try {
+                super.setRuolo(((RuoloDAO) dataLayer.getDAO(Ruolo.class)).getRuolo(id_ruolo));
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammazioneProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return super.getRuolo();
+    }
+    
+    public void sendDailyMail(){
+        if(this.getSendEmail()){
+            
+            List<InteressaProxy> interessi = this.getInteressi();
+            List<Ricerca> ricerca = this.getRicerche();
+            List<Programmazione> prog = new ArrayList<Programmazione>();
+            List<Canale> canali = new ArrayList<Canale>();
+            
+            LocalDateTime inizio = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+            LocalDateTime fine = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+            for (InteressaProxy interesse : interessi) {
+                try {
+                     prog = ((ProgrammazioneDAO) dataLayer.getDAO(Programmazione.class)).getProgrammazione(interesse.getCanale().getKey(), inizio, fine);
+                } catch (DataException ex) {
+                    Logger.getLogger(UtenteProxy.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Canale canale = interesse.getCanale();
+                canale.setProgrammazioneGiornaliera(prog);
+                canali.add(canale);
+            }
+            
+            //1) Prendere tutti programmi del giorno per ogni canale negli interessi
+            //2) Prendere tutti i programmi risultanti dalle ricerche
+            //3) Unire le due liste e stampare tutto su file
+            
+        }
     }
 }

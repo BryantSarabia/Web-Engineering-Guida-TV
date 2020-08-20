@@ -73,7 +73,7 @@ public class Home extends BaseController {
     private void action_paginated(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException {
 
         int numero_canali = 0;
-        int canali_per_pagina = 5;
+        int canali_per_pagina = 6;
 
         try {
             TemplateResult results = new TemplateResult(getServletContext());
