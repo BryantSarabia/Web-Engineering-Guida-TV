@@ -94,6 +94,18 @@
         <servlet-class>com.mycompany.guida.tv.admin.Utenti</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>CanaliAdmin</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Canali</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProgrammiAdmin</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Programmi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProgrammazioniAdmin</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.admin.Programmazioni</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Programma</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.DettagliProgramma</servlet-class>
     </servlet>
@@ -148,6 +160,18 @@
     <servlet-mapping>
         <servlet-name>UtentiAdmin</servlet-name>
         <url-pattern>/utenti</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CanaliAdmin</servlet-name>
+        <url-pattern>/canali</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProgrammiAdmin</servlet-name>
+        <url-pattern>/programmi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProgrammazioniAdmin</servlet-name>
+        <url-pattern>/programmazioni</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Programma</servlet-name>

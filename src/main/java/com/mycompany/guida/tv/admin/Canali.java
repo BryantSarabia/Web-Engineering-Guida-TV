@@ -55,7 +55,7 @@ public class Canali extends BaseController {
         }
 
         try {
-            boolean is_admin = SecurityLayer.checkAdminSession(request);
+            boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 //UtilityMethods.debugConsole(this.getClass(), "action_sendEmail", "default");
@@ -115,8 +115,8 @@ public class Canali extends BaseController {
         TemplateResult results = new TemplateResult(getServletContext());
         /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);*/
-        request.setAttribute("canali_admin", canali);
-        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin_template"));
+        request.setAttribute("canali", canali);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/canali/index.ftl.html", request, response);
 
     }
