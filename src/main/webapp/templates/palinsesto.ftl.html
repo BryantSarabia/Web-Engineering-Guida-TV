@@ -2,23 +2,23 @@
 <section class="most-search spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
                 <div class="section-title">
                     <h2>PALINSESTO</h2>
                 </div>
             </div>
         </div>
 
-        <div class="row palinsesto-date ">
+        <div class="row  palinsesto-date ">
 
-            <div class="row col-lg-12 m-2 justify-content-between">
+            <div class="row col-12 m-2 justify-content-between">
                 <#list settimana as giorno>
-                <a href="palinsesto?day=${giorno.toString()}" class="col-lg-1 p-1"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
+                <a href="palinsesto?day=${giorno.toString()}" class="col-1 col-lg-1 p-1"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
                 </#list>
             </div>
             <div class="row col-lg-12 m-2 justify-content-between">
                 <#list settimana as giorno>
-                <div class="col-lg-1 day-name text-center"><small>
+                <div class="col-1 col-lg-1 day-name text-center"><small>
                         <#if giorno.getDayOfWeek()  == 'MONDAY' >Luned&igrave;
                         <#elseif giorno.getDayOfWeek()  == 'TUESDAY'>Marted&igrave;
                         <#elseif giorno.getDayOfWeek()  == 'WEDNESDAY'>Mercoled&igrave;
@@ -32,10 +32,10 @@
 
             </div>
 
-            <div class="row col-lg-12 m-2 fascie align-items-center">
+            <div class="row col-12 m-2 fascie align-items-center">
 
 
-                <div class="col-lg-3 fascia <#if (fascia==1)>active</#if>">
+                <div class="col-3 col-lg-3 fascia <#if (fascia==1)>active</#if>">
                     <a href="palinsesto?fascia=1<#if day?? >&day=${day}</#if>">
                         <div class="fascia-icon-mattina col-lg-12 text-center">
                             <i class="fa fa-coffee fa-2x" aria-hidden="true"></i>
@@ -48,7 +48,7 @@
 
 
 
-                <div class="col-lg-3 fascia <#if (fascia==2)>active</#if>">
+                <div class="col-3 col-lg-3 fascia <#if (fascia==2)>active</#if>">
                     <a href="palinsesto?fascia=2<#if day?? >&day=${day}</#if>">
                         <div class="fascia-icon-pomeriggio col-lg-12 text-center">
                             <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
@@ -59,7 +59,7 @@
                     </a>
                 </div>
 
-                <div class="col-lg-3  fascia <#if (fascia==3)>active</#if>">
+                <div class="col-3 col-lg-3  fascia <#if (fascia==3)>active</#if>">
                     <a href="palinsesto?fascia=3<#if day?? >&day=${day}</#if>">
                         <div class="fascia-icon col-lg-12 text-center">
                             <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
@@ -70,7 +70,7 @@
                     </a>
                 </div>
 
-                <div class="col-lg-3 fascia <#if (fascia==4)>active</#if>">
+                <div class="col-3 col-lg-3 fascia <#if (fascia==4)>active</#if>">
                     <a href="palinsesto?fascia=4<#if day?? >&day=${day}</#if>">
                         <div class="fascia-icon-notte col-lg-12 text-center">
                             <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
@@ -84,14 +84,17 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="container-fluid">
         <div class="row col-lg-12 canali">
 
             <#list palinsesto as canale,programmazioni>
-            <div class="row col-lg-12  canale  justify-content-center ">
+            <div class="row col-12  canale  justify-content-center align-items-center">
 
-                <div class="canale-logo col-lg-3 col-md-6">
+                <div class="canale-logo col-3 col-lg-3">
 
-                    <div class="col-lg-12">
+                    <div class="col-12 col-lg-12">
                         <#if canale.logo??>
                         <a href="canale?c_key=${canale.key}"><img src="${canale.logo}"  alt="${canale.nome}"></a>
                         <#else>
@@ -99,50 +102,55 @@
                         </#if>
                     </div>
 
-                    <div class="col-lg-12 mt-2">
+                    <div class="col-12 col-lg-12 mt-2">
                         <a href="canale?c_key=${canale.key}"><h5>${canale.nome}</h5></a>
                     </div>
 
-                    <div class="col-lg-12">
-                        <small>${start} - ${end}</small>
+                    <div class="col-12 col-lg-12">
+                        <small class="d-none d-md-block">${start} - ${end}</small>
+                        <small class="d-md-none">${start}</small>
+                        <small class="d-md-none">${end}</small>
                     </div>
 
                 </div>
 
 
-                <div class="col-lg-9 col-md-6">
+                <div class="col-9 col-lg-9">
                     <#if (programmazioni?size > 0)>
                     <ul class="lista_programmi">
                         <#list programmazioni as programmazione>
                         <li>
                             <a href="programma?p_key=${programmazione.programma.key}">
                                 <div class="row programma">
-                                    <div class="col-lg-3 col-md-2">
-                                        <#if programmazione.programma.img??><img class="programma_img" src="${programmazione.programma.img}">
+                                    <div class="col-3 col-lg-3 align-self-center">
+                                        <#if programmazione.programma.img??><img class="palinsesto_programma_img" src="${programmazione.programma.img}">
                                         <#else>
                                         <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
                                         </#if>
                                     </div>
 
-                                    <div class="row col-lg-9">
+                                    <div class=" col-9 col-lg-9 align-self-center">
 
-                                        <div class="col-lg-10 col-md-10 align-self-center">
-                                            <h5>${programmazione.programma.titolo}</h5>
-                                        </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(${programmazione.programma.durata} min)</small>
-                                        </div>   
+                                        <div class="row">
+                                            <div class="col-9 col-lg-10 align-self-center">
+                                                <h5>${programmazione.programma.titolo}</h5>
+                                            </div>
+                                            <div class="col-3 col-lg-2 align-self-center">
+                                                <small>(${programmazione.programma.durata} min)</small>
+                                            </div>   
 
-                                        <div class="col-lg-10 align-self-center">
-                                            <#list programmazione.programma.generi as genere>
-                                            <small>${genere.nome} <#sep>, </#sep></small>
-                                            <#else>
-                                            <small>Questo programma non ha generi></small>
-                                            </#list>
-                                        </div>
+                                            <div class="col-9 col-lg-10 align-self-center">
+                                                <#list programmazione.programma.generi as genere>
+                                                <small>${genere.nome} <#sep>, </#sep></small>
+                                                <#else>
+                                                <small>Questo programma non ha generi></small>
+                                                </#list>
+                                            </div>
 
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>${programmazione.time}</small>
+                                            <div class="col-3 col-lg-2 align-self-center">
+                                                <small>${programmazione.time}</small>
+                                            </div>
+
                                         </div>
 
                                     </div>
@@ -164,12 +172,13 @@
 
             <#else>
 
+            <div class="col-12 align-self-center">
             <p>Nessuna programmazione</p>
-
+            </div>
             </#list>
 
-            <div class="row col-lg-12">
-                <div class="col-lg-12 text-center">
+            <div class="row col-12">
+                <div class="col-12 text-center">
                     <div class="blog__pagination">
                         <#list 1..(numero_pagine+1) as p>
                         <a <#if (p-1) == pagina>class="page_active"</#if> href="?page=${p-1}">${p}</a>
@@ -180,7 +189,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </section>

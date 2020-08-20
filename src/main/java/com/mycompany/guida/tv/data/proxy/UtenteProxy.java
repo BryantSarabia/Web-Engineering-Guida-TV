@@ -3,8 +3,7 @@ package com.mycompany.guida.tv.data.proxy;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
-import com.mycompany.guida.tv.data.dao.CanaleDAO;
-import com.mycompany.guida.tv.data.dao.RicercaDAO;
+import com.mycompany.guida.tv.data.dao.*;
 import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Ricerca;
@@ -30,7 +29,7 @@ import java.util.Map;
 public class UtenteProxy extends UtenteImpl implements DataItemProxy {
 
     private boolean modified;
-
+    private int id_ruolo;
     protected final DataLayer dataLayer;
 
     public UtenteProxy(DataLayer dataLayer) {
@@ -162,6 +161,18 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
             }
         }
         super.cleanInteressi();
+    }
+    @Override
+    public Ruolo getRuolo() {
+        if (super.getRuolo() == null && id_ruolo > 0) {
+            try {
+                super.setRuolo(((RuoloDAO) dataLayer.getDAO(Ruolo.class)).getRuolo(id_ruolo));
+            } catch (DataException ex) {
+                Logger.getLogger(ProgrammazioneProxy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return super.getRuolo();
     }
     
     public void sendDailyMail() throws Exception{

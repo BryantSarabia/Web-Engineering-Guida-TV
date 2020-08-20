@@ -1,8 +1,8 @@
 <!-- Most Search Section Begin -->
 <section class="most-search spad">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
                 <div class="section-title">
                     <h2>PALINSESTO CANALE</h2>
                 </div>
@@ -12,19 +12,19 @@
         <div class="card text-center">
 
             <div class="card-header row align-items-center canale_head">
-                <div class="col-lg-3 col-md-6 text-center">
+                <div class="col-2 col-md-2 col-lg-3 text-center">
                     <span><img src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>"  alt=""></span>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-3 col-md-3 col-lg-3">
                     <h5 class="card-title">${canale.nome}</h5>
                     <p class="card-text">Canale disponibile sul numero ${canale.numero}</p>
                 </div>
-                <div class="col-lg-6 col-md-6">
+                <div class="col-7 col-md-7 col-lg-6">
                     <form action="canale" method="GET">
-                        <div class="form-group d-flex justify-content-between">
-                            <input type="date" class="form-control dateTime flex-fill w-auto mr-2" required="required" name="day" placeholder="yyyy-mm-dd" value="${day}"/>
+                        <div class="form-group d-flex flex-column flex-md-row  justify-content-md-end justify-content-lg-between">
+                            <input type="date" class="form-control dateTime flex-md-shrink-1 flex-lg-fill w-auto mr-2 mb-3 mb-md-auto" required="required" name="day" placeholder="yyyy-mm-dd" value="${day}"/>
                             <input type="hidden" name="c_key" value="${canale.key}"/>
-                            <button type="submit" class="btn primary-btn align-self-center flex-fill p-2">
+                            <button type="submit" class="btn primary-btn align-self-center flex-sm-fill  flex-md-shrink-1 flex-lg-fill pd-2">
                                 <i class="fa fa-search"></i>
                                 cerca giorno
                             </button>
@@ -37,16 +37,16 @@
 
             <div class="row palinsesto-date m-0 ">
 
-                <div class="row col-lg-12 m-0 p-0 fascie align-items-center">
+                <div class="fascie row col-12 m-0 p-0 justify-content-center align-items-center">
 
-                    <div class="col-lg m-0 fascia canale <#if (fascia==0)>active</#if>">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg m-0 fascia canale <#if (fascia==0)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=0<#if day?? >&day=${day}</#if>">
 
 
-                            <div class="fascia-icon-mattina col-lg-12 text-center ">
+                            <div class="fascia-icon-mattina col-12 text-center ">
                                 <i class="fa fa-hourglass fa-2x" aria-hidden="true"></i>
                             </div>
-                            <div class="col-lg-12 text-center">
+                            <div class="col-12 col-lg-12 text-center">
                                 <h5>Tutto il giorno</h5>
                             </div>
                         </a>
@@ -54,12 +54,12 @@
 
 
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==1)>active</#if>">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg  m-0 fascia canale <#if (fascia==1)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=1<#if day?? >&day=${day}</#if>">
-                            <div class="fascia-icon-mattina col-lg-12 text-center">
+                            <div class="fascia-icon-mattina col-12 text-center">
                                 <i class="fa fa-coffee fa-2x" aria-hidden="true"></i>
                             </div>
-                            <div class="col-lg-12 text-center">
+                            <div class="col col-lg-12 text-center">
                                 <h5>Mattina</h5>
                             </div>
                         </a>
@@ -67,9 +67,9 @@
 
 
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==2)>active</#if>">
+                    <div class="col-6 col-sm-4 col-md-3  col-lg  m-0 fascia canale <#if (fascia==2)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=2<#if day?? >&day=${day}</#if>">
-                            <div class="fascia-icon-pomeriggio col-lg-12 text-center">
+                            <div class="fascia-icon-pomeriggio col-12 text-center">
                                 <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
                             </div>
                             <div class="col-lg-12 text-center">
@@ -78,23 +78,23 @@
                         </a>
                     </div>
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==3)>active</#if>">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg  m-0 fascia canale <#if (fascia==3)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=3<#if day?? >&day=${day}</#if>">
-                            <div class="fascia-icon col-lg-12 text-center">
+                            <div class="fascia-icon col-12 text-center">
                                 <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
                             </div>
-                            <div class="col-lg-12 text-center">
+                            <div class="col col-lg-12 text-center">
                                 <h5>Sera</h5>
                             </div>
                         </a>
                     </div>
 
-                    <div class="col-lg  m-0 fascia canale <#if (fascia==4)>active</#if>">
+                    <div class="col-6 col-sm-4 col-lg  m-0 fascia canale <#if (fascia==4)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=4<#if day?? >&day=${day}</#if>">
                             <div class="fascia-icon-notte col-lg-12 text-center">
                                 <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
                             </div>
-                            <div class="col-lg-12 text-center">
+                            <div class="col col-lg-12 text-center">
                                 <h5>Notte</h5>
                             </div>
                         </a>
@@ -108,7 +108,7 @@
 
                 <div class="row  canale  justify-content-center ">
 
-                    <div class="col-lg-12 col-md-6">
+                    <div class="col-12">
                         <#if (programmazioni?size > 0)>
                         <ul class="lista_programmi ">
                             <#list programmazioni as programmazione>
@@ -116,16 +116,16 @@
                                 <a href="programma?p_key=${programmazione.programma.key}">
                                     <div class="row programma">
 
-                                        <div class="col-lg-2 align-self-center">
+                                        <div class="col-2 col-lg-2 align-self-center">
                                             <small>${programmazione.time} - ${programmazione.endTime}</small>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 p-1">
+                                        <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
                                             <img src="${programmazione.programma.img}" class="rounded">
                                         </div>
 
-                                        <div class="row col-lg-8">
+                                        <div class="row col-7 col-sm-8 col-lg-8">
 
-                                            <div class="col-lg-10 col-md-10 align-self-center">
+                                            <div class="col-8 col-sm-10 col-lg-10 align-self-center">
                                                 <h5>${programmazione.programma.titolo}</h5>
                                                 <#if programmazione.programma.generi??>
 
@@ -137,7 +137,7 @@
                                                 <h6>Questo programma non ha generi</h6>
                                                 </#if>
                                             </div>
-                                            <div class="col-lg-2 col-md-10 align-self-center">
+                                            <div class="col-4 col-sm-2 col-lg-2 align-self-center">
                                                 <small>(${programmazione.durata} min)</small>
                                             </div>   
 
