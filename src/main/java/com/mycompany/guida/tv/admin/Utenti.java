@@ -114,9 +114,9 @@ public class Utenti extends BaseController {
         List<Ruolo> ruoli = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuoli();
 
         TemplateResult results = new TemplateResult(getServletContext());
-        request.setAttribute("outline_tpl", "");
-        request.setAttribute("ruoli", ruoli);
-        results.activate("/admin/partials/utente_form.ftl.html", request, response);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+       request.setAttribute("ruoli", ruoli);
+        results.activate("/admin/users/new.ftl.html", request, response);
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
