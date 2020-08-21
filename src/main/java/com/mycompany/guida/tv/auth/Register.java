@@ -123,7 +123,7 @@ public class Register extends BaseController {
                 newUser.setCognome(cognome);
                 System.out.println(newUser.getPassword());
                 
-               // me.setRuolo(((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(2));
+                newUser.setRuolo(((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(1));
                 newUser.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));     
                 newUser.setExpirationDate(LocalDate.now().plusDays(1));
                 ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(newUser);

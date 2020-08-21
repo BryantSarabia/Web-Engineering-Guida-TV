@@ -16,7 +16,7 @@
 
         <div class="panel panel-container" style="background-color: #F1F4F7">
             <div class="row">
-                <div class="col-xs-6 col-md-3 col-lg-4 no-padding">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
                         Titolo
                     </div>
@@ -38,6 +38,11 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
+                        Serie/Film
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
                         Edit
                     </div>
                 </div>
@@ -54,7 +59,7 @@
             <#list programmi as programma>
 
             <div class="row">
-                <div class="col-xs-6 col-md-3 col-lg-4 no-padding">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
                         ${programma.titolo}
                     </div>
@@ -69,8 +74,24 @@
                         ${programma.durata}
                     </div>
                 </div>
+
                 <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
-                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;"></div>
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <select class="form-control">
+                            <#list programma.generi as genere>
+                            <#if genere.nome??>
+                            <option>${genere.nome}</option>
+                            <#else>
+                            <p style="color: red">nessun genere</p>
+                        </#if>
+                        </#list>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <p style="color: red">sconosciuto</p>  <!-- vedere se è una serie o un film -->
+                    </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">

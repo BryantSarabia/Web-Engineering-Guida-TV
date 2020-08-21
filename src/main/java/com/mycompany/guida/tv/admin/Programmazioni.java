@@ -141,8 +141,9 @@ public class Programmazioni extends BaseController {
 
         // Canali ce l'ho in BaseController;
         request.setAttribute("programmi", programmi);
-        request.setAttribute("outline_tpl", "");
-        results.activate("/admin/partials/programmazione_form.ftl.html", request, response);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+
+        results.activate("/admin/programmazioni/new.ftl.html", request, response);
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {

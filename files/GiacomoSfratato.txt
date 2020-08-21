@@ -1,0 +1,16 @@
+Ciao Giacomo,
+ecco la tua programmazione di oggi 21/08/2020
+
+Rai 1: dalle 20:00 alle 22:00 - Reazione a Catena
+Rai 2: dalle 22:00 alle 00:00 - L'occhio del ciclone
+
+Aggiornamenti sulle tue ricerche
+
+Ecco i parametri di ricerca che hai specificato:
+Canali: Rai 1, Rai 2
+Titolo: "reazione"
+Generi: Animazione, Avventura
+
+Clicca qui per vedere aggiornamenti sulla tua ricerca:
+localhost:8080/guida-tv/cerca?titolo=reazione&generi=1&generi=2&canale=1&canale=2&min_ora=&max_ora=&date_min=&date_max=
+

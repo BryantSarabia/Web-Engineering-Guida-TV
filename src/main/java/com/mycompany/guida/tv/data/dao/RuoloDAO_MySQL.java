@@ -28,9 +28,12 @@ public class RuoloDAO_MySQL extends DAO implements RuoloDAO {
         try {
             
             // INIT STATEMENTS
-            getRuoloUtente = connection.prepareStatement("SELECT r.* FROM Ruolo R INNER JOIN Utente u ON r.id = u.id_ruolo WHERE u.id = ?");
-            getRuolo = connection.prepareStatement("SELECT * FROM Ruolo WHERE id = ?");
-            getRuoli = connection.prepareStatement("SELECT * FROM Ruolo");
+            getRuoloUtente = connection.prepareStatement("SELECT r.* FROM ruoli R INNER JOIN utenti u ON r.id = u.id_ruolo WHERE u.id = ?");
+            getRuolo = connection.prepareStatement("SELECT * FROM ruoli WHERE id = ?");
+            getRuoli = connection.prepareStatement("SELECT * FROM ruoli");
+            getRuoloUtente = connection.prepareStatement("SELECT r.* FROM Ruoli R INNER JOIN Utente u ON r.id = u.id_ruolo WHERE u.id = ?");
+            getRuolo = connection.prepareStatement("SELECT * FROM Ruoli WHERE id = ?");
+            getRuoli = connection.prepareStatement("SELECT * FROM Ruoli");
             
         } catch (SQLException ex) {
             Logger.getLogger("Errore nell'inizializzazione del DAO Genere");
@@ -81,7 +84,6 @@ public class RuoloDAO_MySQL extends DAO implements RuoloDAO {
         try {
             r.setKey(rs.getInt("id"));
             r.setNome(rs.getString("nome"));
-            r.setDescrizione(rs.getString("descrizione"));
         } catch(SQLException ex) {
             throw new DataException("Unable to create ruolo object form ResultSet", ex);
         }
