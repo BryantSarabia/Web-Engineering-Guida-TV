@@ -15,13 +15,19 @@ import java.util.logging.Logger;
 import com.mycompany.guida.tv.data.dao.InteressaDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammaDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammazioneDAO;
+import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Interessa;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +129,11 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     public void setModified(boolean modified) {
         this.modified = modified;
     }
-
+    
+    public void setIdRuolo(int key){
+        this.id_ruolo = key;
+    }
+    
     @Override
     public List<Ricerca> getRicerche() {
         if (super.getRicerche() == null) {
@@ -177,7 +187,9 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
     
     public void sendDailyMail() throws Exception{
         if(this.getSendEmail()){
-            String mail_text = "";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+            String mail_text = "Ciao " + this.getNome() + ",\n";
+            mail_text += "ecco la tua programmazione di oggi " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n\n";
             
             List<Interessa> interessi = this.getInteressi();   //Prendo tutti i canali per cui l'utente ha espresso interesse
             
@@ -200,30 +212,92 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
                 }
             }
             
-            //Stampo la programmazione di ogni canale
+            //Stampo la programmazione di ogni canale in mail_text
             for(Programmazione programmazione : prog){
-                mail_text += programmazione.getCanale().getNome() + ": dalle " + programmazione.getStartTime() + " alle " + programmazione.getEndTime() + " - " + programmazione.getProgramma().getTitolo() + "\n";
+                mail_text += programmazione.getCanale().getNome() + ": dalle " + programmazione.getTime() + " alle " + programmazione.getEndTime() + " - " + programmazione.getProgramma().getTitolo() + "\n";
             }
             
             //Prendo tutte le ricerche per cui l'utente vuole essere avvisato
             List<Ricerca> ricerche = this.getRicerche();             
             if(ricerche != null){
-                mail_text += "\n Notifiche ricerche\n";
+                mail_text += "\nAggiornamenti sulle tue ricerche\n\n";
                 if(ricerche.isEmpty()) mail_text = "Non hai salvato nessuna ricerca\n";
                 for(Ricerca ricerca : ricerche){
                     Map<String, String> params = Methods.getQueryMap(ricerca.getQuery());
                     mail_text += "Ecco i parametri di ricerca che hai specificato:\n";
                     for(String param : params.keySet()){
-                        mail_text += param + ": " + params.get(param) + "\n";
+                        
+                        //Se il parametro sono gli id dei canali, prendo i canali e ne stampo i nomi
+                        if(param.equals("Canali")){
+                        String[] chiavi = params.get(param).split(",");
+                        List<Canale> canaliToPrint = new ArrayList<Canale>();
+                        mail_text += "Canali: ";
+                            
+                            for(String chiave : chiavi){
+                                canaliToPrint.add(((CanaleDAO) dataLayer.getDAO(Canale.class)).getCanale(SecurityLayer.checkNumeric(chiave)));
+                            }
+                        
+                            for(Canale canale : canaliToPrint){
+                                mail_text += canale.getNome() + ", "; 
+                            }
+                            
+                        //Rimuovo l'ultima virgola
+                        mail_text = mail_text.substring(0, mail_text.length() - 2);
+                        mail_text += "\n";
+                        }
+                        
+                        //Se il parametro sono gli id dei generi, prendo i generi e ne stampo i nomi
+                        if(param.equals("Generi")){
+                        String[] chiavi = params.get(param).split(",");
+                        List<Genere> generiToPrint = new ArrayList<Genere>();
+                        mail_text += "Generi: ";
+                        
+                            for(String chiave : chiavi){
+                                generiToPrint.add(((GenereDAO) dataLayer.getDAO(Genere.class)).getGenere(SecurityLayer.checkNumeric(chiave)));
+                            }
+                        
+                            for(Genere genere : generiToPrint){
+                                mail_text += genere.getNome() + ", "; 
+                            }
+                            
+                        //Rimuovo l'ultima virgola
+                        mail_text = mail_text.substring(0, mail_text.length() - 2);
+                        mail_text += "\n";
+                        }
+                        
+                        if(param.equals("min_ora")){
+                            mail_text += "Orario minimo: " + params.get(param) + "\n"; 
+                        }
+                        
+                        if(param.equals("max_ora")){
+                            mail_text += "Orario massimo: " + params.get(param) + "\n"; 
+                        }
+                        
+                        if(param.equals("date_min")){
+                            mail_text += "Dal: " + params.get(param) + "\n"; 
+                        }
+                        
+                        if(param.equals("date_max")){
+                            mail_text += "Al: " + params.get(param) + "\n";
+                        }
+                        
+                        if(param.equals("titolo")){
+                            mail_text += "Titolo: \"" + params.get(param) + "\"\n";
+                        }
+                       
                     }
-                    mail_text += "Clicca qui per vedere aggiornamenti sulla tua ricerca:\nlocalhost:8080/guida-tv/cerca?" + ricerca.getQuery();
+                    mail_text += "\nClicca qui per vedere aggiornamenti sulla tua ricerca:\nlocalhost:8080/guida-tv/cerca?" + ricerca.getQuery() + "\n\n";
                 }
             }
             
-            //1) Prendere tutti programmi del giorno per ogni canale negli interessi
-            //2) Prendere tutti i programmi risultanti dalle ricerche
-            //3) Unire le due liste e stampare tutto su file
+            String path = "E:/Desktop/Desktop/Progetti/Web-Engineering-Guida-TV/files/" + this.getNome()+this.getCognome()+".txt";
+            File file = new File(path);
+            if(file.createNewFile()) System.out.println("Daily mail created"); else System.out.println("Failed creating new file or file already exists");
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+                writer.write(mail_text);
+                System.out.println("File successfully written");
+            }
             
-        }
+        } else System.out.println("Send-mail set to false: " + this.getSendEmail());
     }
-}
+    }

@@ -86,6 +86,11 @@ public class Profile extends BaseController {
 
         TemplateResult results = new TemplateResult(getServletContext());
         UtenteProxy me = (UtenteProxy) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
+        try {
+            me.sendDailyMail();
+        } catch (Exception ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
         request.setAttribute("me", me);
         results.activate("profile.ftl.html", request, response);
 

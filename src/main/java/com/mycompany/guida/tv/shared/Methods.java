@@ -113,6 +113,8 @@ public class Methods {
 
     public static Map<String, String> getQueryMap(String query) throws UnsupportedEncodingException {
         String[] params = query.split("&");
+        String canali_list = "";
+        String generi_list = "";
         Map<String, String> map = new HashMap<>();
         for (String param : params) {
             String[] p = param.split("=");
@@ -120,6 +122,14 @@ public class Methods {
             if (p.length > 1) {
                 String value = p[1];
                 map.put(name, URLDecoder.decode(value, "UTF-8"));
+                if(name.equals("canale")) canali_list += URLDecoder.decode(value, "UTF-8") + ",";
+                if(name.equals("generi")) generi_list += URLDecoder.decode(value, "UTF-8") + ",";
+            }
+            if(!canali_list.isBlank()){
+                map.put("Canali", canali_list);
+            }
+            if(!generi_list.isBlank()){
+                map.put("Generi", generi_list);
             }
         }
         return map;

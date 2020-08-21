@@ -1,3 +1,5 @@
 Hi Giacomo
 Click the link below to confirm your email
-localhost:8080/guida-tv/verifyemail?token=$2a$10$8UahWPDYurEmbhmSSfvQbuGeG8qICRAnn9SiSU70PLLZ/XdQZxeYu&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264
+localhost:8080/guida-tv/verifyemail?token=$2a$10$8UahWPDYurEmbhmSSfvQbuGeG8qICRAnn9SiSU70PLLZ/XdQZxeYu&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264Hi Giacomo
+Click the link below to confirm your email
+localhost:8080/guida-tv/verifyemail?token=$2a$10$1XOgQ57JmwxF8v.uadHCaeFj.IbU4v3X1njb4bURzRSoBRGl.ScSG&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264
