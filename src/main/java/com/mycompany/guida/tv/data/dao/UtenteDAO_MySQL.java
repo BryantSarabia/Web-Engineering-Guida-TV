@@ -35,7 +35,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             // PREPARE STATEMENTS
             countUsers = connection.prepareStatement("SELECT COUNT(*) AS NumeroUtenti FROM utenti");
             getUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
-            insertUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, email, password, id_ruolo,token, exp_date) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            insertUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, email, password, id_ruolo, token, exp_date) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             updateUtente = connection.prepareStatement("UPDATE utenti SET nome=?, cognome=?, email=?,password=?, id_ruolo=?, send_email=?, email_verified_at=?, token=?, exp_date=?, version=? WHERE ID=? and version=?");
             loginUtente = connection.prepareStatement("SELECT id, password FROM utenti WHERE email = ?");
             getUtenteByEmail = connection.prepareStatement("SELECT id FROM utenti WHERE email = ?");
@@ -102,7 +102,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             u.setEmail(rs.getString("email"));
             // u.setSendEmail(rs.getBoolean("send_email"));
             u.setPassword(rs.getString("password"));
-              u.setIdRuolo(rs.getInt("id_ruolo"));
+            //  u.setIdRuolo(rs.getInt("id_ruolo"));
             u.setEmailVerifiedAt(rs.getObject("email_verified_at", LocalDate.class));
             u.setExpirationDate(rs.getObject("exp_date", LocalDate.class));
             u.setToken(rs.getString("token"));
