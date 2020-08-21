@@ -65,7 +65,11 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <#if canale.programmazioneCorrente.programma.titolo ??>
                         ${canale.programmazioneCorrente.programma.titolo}
+                        <#else>
+                        <p style="color: red">niente in onda</p>
+                    </#if>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-2 no-padding">

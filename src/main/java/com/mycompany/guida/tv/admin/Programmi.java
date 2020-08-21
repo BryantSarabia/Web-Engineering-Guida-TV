@@ -235,8 +235,8 @@ public class Programmi extends BaseController {
      //   List<Programma> series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getIdSerie();
         request.setAttribute("generi", generi);
       //  request.setAttribute("series", series);
-        request.setAttribute("outline_tpl", "");
-        results.activate("/admin/partials/programma_form.ftl.html", request, response);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/programmi/new.ftl.html", request, response);
     }
 
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
