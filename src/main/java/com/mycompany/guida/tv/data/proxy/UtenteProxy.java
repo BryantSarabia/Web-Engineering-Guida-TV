@@ -172,6 +172,10 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         }
         super.cleanInteressi();
     }
+    public int getIdRuolo() {
+        return id_ruolo;
+    }
+
     @Override
     public Ruolo getRuolo() {
         if (super.getRuolo() == null && id_ruolo > 0) {

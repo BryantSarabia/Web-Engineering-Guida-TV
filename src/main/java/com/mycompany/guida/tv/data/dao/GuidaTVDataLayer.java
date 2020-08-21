@@ -61,15 +61,6 @@ public class GuidaTVDataLayer extends DataLayer {
         return (GenereDAO) getDAO(Genere.class);
     }
 
-    /*
-    public GenereDAO getGenereDAO() {
-        return (GenereDAO) getDAO(Genere.class);
-    }
-    /*
-    public ClassificazioneDAO getClassificazioneDAO() {
-        return (ClassificazioneDAO) getDAO(Classificazione.class);
-    }
-     */
     public RicercaDAO getRicercaDAO() {
         return (RicercaDAO) getDAO(Ricerca.class);
     }

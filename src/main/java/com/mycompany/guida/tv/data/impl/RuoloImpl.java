@@ -4,8 +4,8 @@ import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Ruolo;
 
 public class RuoloImpl  extends DataItemImpl<Integer> implements Ruolo {
-    private String nome="";
-    private String descrizione="";
+    private String nome;
+    private String descrizione;
 
     public RuoloImpl() {
         super();

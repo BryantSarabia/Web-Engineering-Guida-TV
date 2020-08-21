@@ -11,12 +11,13 @@
 
         <div class="row  palinsesto-date ">
 
-            <div class="row col-12 m-2 justify-content-between">
+            <div class="row col-12 m-md-2 justify-content-around align-items-center">
                 <#list settimana as giorno>
-                <a href="palinsesto?day=${giorno.toString()}" class="col-1 col-lg-1 p-1"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
+                <a href="palinsesto?day=${giorno.toString()}" class="col-1 col-lg-1 p-1 text-center"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
                 </#list>
             </div>
-            <div class="row col-lg-12 m-2 justify-content-between">
+
+            <div class="row col-12 col-lg-12 m-md-2  justify-content-around">
                 <#list settimana as giorno>
                 <div class="col-1 col-lg-1 day-name text-center"><small>
                         <#if giorno.getDayOfWeek()  == 'MONDAY' >Luned&igrave;
@@ -32,15 +33,15 @@
 
             </div>
 
-            <div class="row col-12 m-2 fascie align-items-center">
+            <div class="row col-12 m-md-2 fascie justify-content-center align-items-center">
 
 
-                <div class="col-3 col-lg-3 fascia <#if (fascia==1)>active</#if>">
+                <div class="col-6 col-sm-6 col-md-3 col-lg-3 fascia <#if (fascia==1)>active</#if>">
                     <a href="palinsesto?fascia=1<#if day?? >&day=${day}</#if>">
-                        <div class="fascia-icon-mattina col-lg-12 text-center">
+                        <div class="fascia-icon-mattina col-12 col-lg-12 text-center">
                             <i class="fa fa-coffee fa-2x" aria-hidden="true"></i>
                         </div>
-                        <div class="col-lg-12 text-center">
+                        <div class="col-12 col-lg-12 text-center">
                             <h5>Mattina</h5>
                         </div>
                     </a>
@@ -48,34 +49,34 @@
 
 
 
-                <div class="col-3 col-lg-3 fascia <#if (fascia==2)>active</#if>">
+                <div class="col-6 col-sm-6 col-md-3 col-lg-3 fascia <#if (fascia==2)>active</#if>">
                     <a href="palinsesto?fascia=2<#if day?? >&day=${day}</#if>">
-                        <div class="fascia-icon-pomeriggio col-lg-12 text-center">
+                        <div class="fascia-icon-pomeriggio col-12 col-lg-12 text-center">
                             <i class="fa fa-sun-o fa-2x" aria-hidden="true"></i>
                         </div>
-                        <div class="col-lg-12 text-center">
+                        <div class="col-12 col-lg-12 text-center">
                             <h5>Pomeriggio</h5>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-3 col-lg-3  fascia <#if (fascia==3)>active</#if>">
+                <div class="col-6 col-sm-6 col-md-3 col-lg-3  fascia <#if (fascia==3)>active</#if>">
                     <a href="palinsesto?fascia=3<#if day?? >&day=${day}</#if>">
-                        <div class="fascia-icon col-lg-12 text-center">
+                        <div class="fascia-icon col-12 col-lg-12 text-center">
                             <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
                         </div>
-                        <div class="col-lg-12 text-center">
+                        <div class="col-12 col-lg-12 text-center">
                             <h5>Sera</h5>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-3 col-lg-3 fascia <#if (fascia==4)>active</#if>">
+                <div class="col-6 col-sm-6 col-md-3 col-lg-3 fascia <#if (fascia==4)>active</#if>">
                     <a href="palinsesto?fascia=4<#if day?? >&day=${day}</#if>">
-                        <div class="fascia-icon-notte col-lg-12 text-center">
+                        <div class="fascia-icon-notte col-12 col-lg-12 text-center">
                             <i class="fa fa-moon-o fa-2x" aria-hidden="true"></i>
                         </div>
-                        <div class="col-lg-12 text-center">
+                        <div class="col-12 col-lg-12 text-center">
                             <h5>Notte</h5>
                         </div>
                     </a>
@@ -85,14 +86,14 @@
         </div>
 
     </div>
-
+    <hr>
     <div class="container-fluid">
         <div class="row col-lg-12 canali">
 
             <#list palinsesto as canale,programmazioni>
             <div class="row col-12  canale  justify-content-center align-items-center">
 
-                <div class="canale-logo col-3 col-lg-3">
+                <div class="canale-logo col-3 col-lg-3 text-center">
 
                     <div class="col-12 col-lg-12">
                         <#if canale.logo??>
@@ -173,7 +174,7 @@
             <#else>
 
             <div class="col-12 align-self-center">
-            <p>Nessuna programmazione</p>
+                <p>Nessuna programmazione</p>
             </div>
             </#list>
 
