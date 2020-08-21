@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label>Ruolo</label>
-                <select class="custom-select text-uppercase" name="ruolo" id="editRuolo">
+                <select class="form-control form-control-sm" name="ruolo" id="editRuolo">
                     <#list ruoli as ruolo>
                     <option class="text-uppercase" value="${ruolo.key}"<#if item??><#if item.ruolo?? && (item.ruolo.key == ruolo.key)>selected="selected"</#if></#if> >
                     ${ruolo.nome}
@@ -35,7 +35,7 @@
                     </#list>
                 </select>
             </div>
-            @if ($errors->any())
+        <#if error??>
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
@@ -43,9 +43,8 @@
                     @endforeach
                 </ul>
             </div>
-            @endif
+        </#if>
             <button type="submit" class="btn btn-primary">Create now</button>
         </form>
     </div>
-</div>
 </div>
