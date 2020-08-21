@@ -180,7 +180,6 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
             String mail_text = "";
             
             List<Interessa> interessi = this.getInteressi();   //Prendo tutti i canali per cui l'utente ha espresso interesse
-            List<Ricerca> ricerche = this.getRicerche();             //Prendo tutte le ricerche per cui l'utente vuole essere avvisato
             
             List<Programmazione> prog = new ArrayList<Programmazione>();
             List<Canale> canali = new ArrayList<Canale>();
@@ -201,8 +200,24 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
                 }
             }
             
+            //Stampo la programmazione di ogni canale
             for(Programmazione programmazione : prog){
                 mail_text += programmazione.getCanale().getNome() + ": dalle " + programmazione.getStartTime() + " alle " + programmazione.getEndTime() + " - " + programmazione.getProgramma().getTitolo() + "\n";
+            }
+            
+            //Prendo tutte le ricerche per cui l'utente vuole essere avvisato
+            List<Ricerca> ricerche = this.getRicerche();             
+            if(ricerche != null){
+                mail_text += "\n Notifiche ricerche\n";
+                if(ricerche.isEmpty()) mail_text = "Non hai salvato nessuna ricerca\n";
+                for(Ricerca ricerca : ricerche){
+                    Map<String, String> params = Methods.getQueryMap(ricerca.getQuery());
+                    mail_text += "Ecco i parametri di ricerca che hai specificato:\n";
+                    for(String param : params.keySet()){
+                        mail_text += param + ": " + params.get(param) + "\n";
+                    }
+                    mail_text += "Clicca qui per vedere aggiornamenti sulla tua ricerca:\nlocalhost:8080/guida-tv/cerca?" + ricerca.getQuery();
+                }
             }
             
             //1) Prendere tutti programmi del giorno per ogni canale negli interessi
