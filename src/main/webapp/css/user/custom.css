@@ -115,6 +115,11 @@ small{
     right:100%;
 }
 
+.canale-logo, .canale-logo div{
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
 
 
 .days li a{
@@ -328,10 +333,58 @@ small{
     border-color: #f03250;
 }
 
+@media (min-width:1600px){
+    .palinsesto_programma_img{
+        width: 70%;
+    }
+
+    .card, h5, p{
+        font-size: 28px;
+    }
+
+    .canale{
+        font-size: 28px;
+    }
+}
+
+@media (min-width:1300px){
+    .palinsesto_programma_img{
+        width: 80%;
+    }
+
+    .card, h5, p{
+        font-size: 18px;
+    }
+
+    .canale{
+        font-size: 18px;
+    }
+}
+
 @media (max-width:767px){
     #cerca{
         width: 25%;
     }
+
+
+    .day-number{
+        height: 3em;
+        width: 3em;
+        border-radius: 35%;
+        padding: 1em;
+        line-height: 1em;
+    }
+
+    .day-number.active{
+        height: 3em;
+        width: 3em;
+        border-radius: 35%;
+        line-height: 1em;
+        padding: 1em;
+    }
+
+
+
 }
 
 
@@ -348,6 +401,10 @@ small{
         height: auto;
     }
 
+    .canali{
+        margin-top: 1.5em;
+    }
+
     .canale-logo div a img{
         min-height: 35px;
         min-width: 35px;
@@ -357,6 +414,15 @@ small{
     .programma_img{
         min-height: 40px;
         min-width: 40px;
+    }
+
+    .fascia {
+        height: 5em;
+        padding: 1em;
+    }
+
+    .fascie{
+        margin-top: 1em;
     }
 }
 
@@ -377,6 +443,13 @@ small{
     h5 + p{
         font-size: 8px;
     }
+    .day-name small {
+        font-size: 60%;
+    }
+
+    .palinsesto-date div{
+        margin: auto;
+    }
 }
 
 @media (max-width: 476px){
@@ -385,14 +458,80 @@ small{
     }
 }
 
+@media (max-width:446px){
+    .day-number {
+        height: 2em;
+        width: 2em;
+        border-radius: 35%;
+        line-height: 2em;
+        padding: 0;
+    }
 
-@media (max-width:370px){
+    .day-number.active {
+        height: 2em;
+        width: 2em;
+        border-radius: 35%;
+        line-height: 2em;
+        padding: 0;
+    }
+
+    .fascia {
+        height: 3.5em;
+        padding: 0.1em;
+    }
+
+}
+
+
+
+@media (max-width:416px){
 
     .card, h5, p{
         font-size: 12px;
     }
-    
+
+    .palinsesto_programma_img{
+        min-width: 45px;
+        width: auto;
+        height: auto;
+    }
+
+    .day-name small {
+        font-size: 50%;
+    }
+
     .canale{
         font-size: 12px;
+    }
+}
+
+@media (max-width:330px){
+
+    .palinsesto_programma_img{
+        min-width: 40px;
+        width: auto;
+        height: auto;
+    }
+
+    .canali {
+        margin-top: 1.5em;
+        padding-right: 2px;
+        margin-right: 0px;
+        margin-left: 15px;
+        padding-left: 0em;
+    }
+
+    .canale{
+        font-size: 10px;
+    }
+
+    .canale-logo, .canale-logo div, .canale-logo + div{
+        padding-right: 10px;
+        padding-left: 0px;
+    }
+
+
+    small{
+        font-size: 60%;
     }
 }
