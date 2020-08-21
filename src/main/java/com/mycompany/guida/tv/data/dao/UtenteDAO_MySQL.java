@@ -102,7 +102,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             u.setEmail(rs.getString("email"));
             // u.setSendEmail(rs.getBoolean("send_email"));
             u.setPassword(rs.getString("password"));
-            //  u.setIdRuolo(rs.getInt("id_ruolo"));
+              u.setIdRuolo(rs.getInt("id_ruolo"));
             u.setEmailVerifiedAt(rs.getObject("email_verified_at", LocalDate.class));
             u.setExpirationDate(rs.getObject("exp_date", LocalDate.class));
             u.setToken(rs.getString("token"));
