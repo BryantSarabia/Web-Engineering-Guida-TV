@@ -60,7 +60,7 @@ public class Profile extends BaseController {
             HttpSession s = SecurityLayer.checkSession(request);
             if (s != null) {
                 if (Methods.getMe(request).getEmailVerifiedAt() == null) {
-                    // action_redirectConfirm(request, response);
+                     action_redirect(request, response);
                 } else {
                     if (request.getParameter("update_password") != null) {
                         action_update_password(request, response);
@@ -226,6 +226,10 @@ public class Profile extends BaseController {
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect("login");
+    }
+    
+        private void action_redirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("verifyemail");
     }
 
 }

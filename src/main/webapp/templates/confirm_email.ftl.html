@@ -1,45 +1,21 @@
-<!-- Sign In Section Begin -->
-    <div class="signin">
-        <div class="signin__warp">
-            <div class="signin__content">
-                <div class="signin__logo">
-                    <a href="${base_path}/"><img src="${base_path}/img/logo.png" alt=""></a>
-                </div>
-                <p>Registrati al sito per restare aggiornato sui tuoi contenuti preferiti!</p>
-                <div class="signin__form">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="${base_path}/login">
-                                Log In
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${base_path}/register">
-                                Register
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tabs-2" role="tabpanel">
-                            <div class="signin__form__text">
-                                <form action="login" method="POST">
-                                    <input type="email" name="email" placeholder="your.email@host.it">
-                                    <input type="password" name="password" placeholder="Password">
-                                    <input type="hidden" name="submit" value="submit">
-                                    <#if error??><div class="alert alert-danger" role="alert"><p>${error}</p></div></#if>
-                                    <#if message??><div class="alert alert-success" role="alert"><p>${message}</p></div></#if>
-                                    <button type="submit" class="site-btn">Log In</button>
-                                    <div class="container mt-2">
-                                        <a href="forgot">Forgot Password?</a>
-                                    </div>
-                                </form>
-                                
-                            </div>
-                        </div>
+
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-8 col-sm-7 col-md-5 col-lg-4">
+                <div class="contact__widget">
+                    <div class="contact__widget__address dettagli_titolo">
+                        <h3 class="text-center">Verifica la tua email</h3>
                     </div>
                 </div>
             </div>
+            <div class="col-12 text-center">
+                <p>Controlla la tua posta elettronica per verificare la tua email</p>
+                <p>Se non hai ricevuto nessuna mail clicca <a href="verifyemail?resend=true">qui</a></p>
+            </div>
         </div>
     </div>
-    <!-- Sign In Section End -->
+</section>
+<!-- Contact Section End -->
