@@ -112,7 +112,6 @@ public class Utenti extends BaseController {
 
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         List<Ruolo> ruoli = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuoli();
-
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
        request.setAttribute("ruoli", ruoli);
@@ -120,22 +119,22 @@ public class Utenti extends BaseController {
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        int id_element = SecurityLayer.checkNumeric(request.getParameter("data_id"));
-        Utente item = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(id_element);
+        int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
+        Utente utente = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(id);
         List<Ruolo> ruoli = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuoli();
 
 
         TemplateResult results = new TemplateResult(getServletContext());
-        request.setAttribute("item", item);
+        request.setAttribute("utente", utente);
+
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         request.setAttribute("ruoli", ruoli);
-        request.setAttribute("outline_tpl", "");
-        results.activate("/admin/partials/utente_form.ftl.html", request, response);
+        results.activate("/admin/users/edit.ftl.html", request, response);
     }
 
-    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        // Controllo se l'id è reale
+    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -143,26 +142,31 @@ public class Utenti extends BaseController {
             if (u == null) {
                 throw new DataException("Invalid Key");
             }
-
+            TemplateResult results = new TemplateResult(getServletContext());
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().deleteUtente(key);
-            request.setAttribute("errors", "");
-            request.setAttribute("success", "true");
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            request.setAttribute("utenti", utenti);
+            request.setAttribute("success", "Utente eliminato con successo!");
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/users/index.ftl.html", request, response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
+            TemplateResult results = new TemplateResult(getServletContext());
+
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            request.setAttribute("utenti", utenti);
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/users/index.ftl.html", request, response);
         }
     }
 
-    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
             Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
             String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)), "nome");
             String email = (String) Validator.validate(request.getParameter("email"), new ArrayList<>(Arrays.asList(Validator.STRING_NOT_EMPTY, Validator.STRING_EMAIL)), "email");
             String cognome = (String) Validator.validate(request.getParameter("cognome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)) , "cognome");
-            Boolean sendEmail = (Boolean) Validator.validate(request.getParameter("sendEmail"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.BOOLEAN)), "send email" );
             String password = (String) Validator.validate(request.getParameter("password"), new ArrayList<>(Arrays.asList(Validator.PASSWORD)), "password" );
-            LocalDate emailVerifiedAt = (LocalDate) Validator.validate(request.getParameter("verified"), new ArrayList<>(Arrays.asList(Validator.DATE)) , "data di nascita");
             Integer id_ruolo = (Integer) Validator.validate(request.getParameter("ruolo"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Ruolo");
             Utente target;
 
@@ -182,20 +186,23 @@ public class Utenti extends BaseController {
 
             target.setNome(nome);
             target.setCognome(cognome);
-            target.setEmailVerifiedAt(emailVerifiedAt);
-            target.setSendEmail(sendEmail);
+            target.setEmailVerifiedAt(LocalDate.now());
             target.setRuolo(user_role);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(target);
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            request.setAttribute("utenti", utenti);
 
-
-            request.setAttribute("errors", "");
-            request.setAttribute("success", "true");
-
+            request.setAttribute("success", "utente creato con successo!");
+            results.activate("/admin/users/index.ftl.html", request, response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            List<Ruolo> ruoli = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuoli();
+            request.setAttribute("ruoli", ruoli);
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
-
+            results.activate("/admin/users/new.ftl.html", request, response);
         }
     }
 

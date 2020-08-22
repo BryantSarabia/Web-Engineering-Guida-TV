@@ -2,15 +2,19 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Tutte le programmazioni</h1>
-            <!--
-                    <div class="alert alert-success">
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </div>
-                </div> -->
+            <#if success??>
+            <div class="alert alert-success">
+                ${success}
+            </div>
+        </#if>
+        <#if errors??>
+        <div class="alert alert-danger">
+            ${errors}
+        </div>
+    </#if>
+</div>
             <div class="col-lg-12">
-                <a class="page-header"  style="color: green; cursor: pointer;" >Aggiungi una programmazione <em class="fa fa-user-plus color-green"></em></a>
+                <a class="page-header" href="programmazioni?insert" style="color: green; cursor: pointer;" >Aggiungi una programmazione <em class="fa fa-plus color-green"></em></a>
             </div>
         </div>
 
@@ -75,21 +79,22 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <a href="/admin/user/{{$id}}/edit"> <i class="fa fa-xl fa-edit"></i> </a>
+                        <a href="programmazioni?edit=${programmazione.key}"> <i class="fa fa-xl fa-edit"></i> </a>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-{{$id}}"method="POST" action="/admin/totalban/delete">
+                        <form id="delete-form-${programmazione.key}"method="POST" action="programmazioni">
                             <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc()" ></em>
                             <script>
                                 function deleteFunc() {
-                                    var x = confirm('Do you really want to delete this ban ?')
+                                    var x = confirm('Vuoi veramente cancellare questa programmazione?')
                                     if(x == true){
-                                        document.getElementById('delete-form-{{$id}}').submit(); }
+                                        document.getElementById('delete-form-${programmazione.key}').submit(); }
                                 }
                             </script>
-                            <input name="id" value="{{$id}}" hidden >
+                            <input name="id" value="${programmazione.key}" hidden >
+                            <input name="delete" value="delete" hidden >
                         </form>
                     </div>
                 </div>
@@ -97,4 +102,3 @@
         </#list>
         </div>
     </div>
-</div>

@@ -8,18 +8,18 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <form method="POST" action="/admin/user/store">
+        <form method="POST" action="utenti">
             <div class="form-group">
                 <label>Email</label>
-                <input class="form-control" placeholder="Email" name="email">
+                <input type="email" class="form-control" placeholder="Email" name="email">
             </div>
             <div class="form-group">
                 <label>Nome</label>
-                <input class="form-control" placeholder="Nome" name="nome">
+                <input type="text" class="form-control" placeholder="Nome" name="nome">
             </div>
             <div class="form-group">
                 <label>Cognome</label>
-                <input class="form-control" placeholder="Cognome" name="cognome">
+                <input type="text" class="form-control" placeholder="Cognome" name="cognome">
             </div>
             <div class="form-group">
                 <label>Password</label>
@@ -29,22 +29,23 @@
                 <label>Ruolo</label>
                 <select class="form-control form-control-sm" name="ruolo" id="editRuolo">
                     <#list ruoli as ruolo>
-                    <option class="text-uppercase" value="${ruolo.key}"<#if item??><#if item.ruolo?? && (item.ruolo.key == ruolo.key)>selected="selected"</#if></#if> >
+                    <option class="text-uppercase" value="${ruolo.key}" >
                     ${ruolo.nome}
                     </option>
                     </#list>
                 </select>
             </div>
-        <#if error??>
+        <#if errors??>
             <div class="alert alert-danger">
                 <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
+                    <p> something goes wrong!</p>
+                    <li>${errors}</li>
                 </ul>
             </div>
         </#if>
+            <input type="hidden" value="store" name="store"/>
             <button type="submit" class="btn btn-primary">Create now</button>
         </form>
     </div>
+</div>
 </div>

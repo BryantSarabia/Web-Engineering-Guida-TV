@@ -2,15 +2,19 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Tutti i canali</h1>
-            <!--
-                    <div class="alert alert-success">
-                        <ul>
-                            <li></li>
-                        </ul>
-                    </div>
-                </div> -->
+            <#if success??>
+            <div class="alert alert-success">
+                ${success}
+            </div>
+        </#if>
+        <#if errors??>
+        <div class="alert alert-danger">
+            ${errors}
+        </div>
+    </#if>
+</div>
             <div class="col-lg-12">
-                <a class="page-header"  style="color: green; cursor: pointer;" >Aggiungi un canale <em class="fa fa-plus color-green"></em></a>
+                <a href="canali?insert" class="page-header"  style="color: green; cursor: pointer;" >Aggiungi un canale <em class="fa fa-plus color-green"></em></a>
             </div>
         </div>
 
@@ -65,7 +69,7 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <#if canale.programmazioneCorrente.programma.titolo ??>
+                        <#if canale.programmazioneCorrente??>
                         ${canale.programmazioneCorrente.programma.titolo}
                         <#else>
                         <p style="color: red">niente in onda</p>
@@ -79,21 +83,22 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <a href="/admin/user/{{$id}}/edit"> <i class="fa fa-xl fa-edit"></i> </a>
+                        <a href="canale?edit=${canale.key}"> <i class="fa fa-xl fa-edit"></i> </a>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-{{$id}}"method="POST" action="/admin/totalban/delete">
+                        <form id="delete-form-${canale.key}"method="POST" action="canali">
                             <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc()" ></em>
                             <script>
                                 function deleteFunc() {
-                                    var x = confirm('Do you really want to delete this ban ?')
+                                    var x = confirm('Vuoi veramente cancellare questo canale?')
                                     if(x == true){
-                                        document.getElementById('delete-form-{{$id}}').submit(); }
+                                        document.getElementById('delete-form-${canale.key}').submit(); }
                                 }
                             </script>
-                            <input name="id" value="{{$id}}" hidden >
+                            <input name="id" value="${canale.key}" hidden >
+                            <input name="delete" value="delete" hidden >
                         </form>
                     </div>
                 </div>
