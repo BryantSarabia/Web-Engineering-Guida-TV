@@ -101,7 +101,6 @@ public class DataCache {
     public <C extends DataItem> C get(Class<C> c, Object key) {
         if (has(c, key)) {
             //Logger.getLogger("DataCache").log(Level.INFO, "Cache hit: object of class {0} with key {1}", new Object[]{c.getName(), key});
-            System.out.println("existe");
             return (C) cache.get(c).get(key);
 
         } else {
