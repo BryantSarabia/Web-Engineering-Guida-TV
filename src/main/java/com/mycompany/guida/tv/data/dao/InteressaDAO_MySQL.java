@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.mycompany.guida.tv.data.model.Interessa;
+import com.mycompany.guida.tv.shared.Methods;
 
 public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
     PreparedStatement getInteresseByID, getInteressiUtente, insertInteresse, deleteInteresse;
@@ -108,8 +109,8 @@ public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
         Interessa interesse = null;
         
         if (dataLayer.getCache().has(Interessa.class, key)) {
-            interesse = dataLayer.getCache().get(InteressaProxy.class, key);
-        } else {
+            interesse = dataLayer.getCache().get(Interessa.class, key);      
+        } else  {
             try {
                 getInteresseByID.setInt(1, key);
                 try (ResultSet rs = getInteresseByID.executeQuery()) {

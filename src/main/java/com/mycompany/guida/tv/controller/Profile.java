@@ -163,7 +163,6 @@ public class Profile extends BaseController {
             if (id_canali != null && id_fasce != null) {
                 UtenteProxy me = (UtenteProxy) Methods.getMe(request);
                 me.setSendEmail(send);
-
                 me.cleanInteressi();
                 List<Interessa> update_interessi = new ArrayList<>();
                 for (Integer c_id : id_canali) {
