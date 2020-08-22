@@ -1,45 +1,45 @@
-  <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3">
-                    <div class="header__logo">
-                        <a href="./home"><img src="img/Logo.png" alt=""></a>
-                    </div>
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__logo">
+                    <a href="./home"><img src="img/Logo.png" alt=""></a>
                 </div>
-                <div class="col-lg-9 col-md-9">
-                    <div class="row header__nav justify-content-center">
-                        <nav class="header__menu mobile-menu ">
-                            <ul>
-                                <li><a href="./">Home</a></li>
-                                <li><a href="palinsesto">Palinsesto</a></li>
-                                <li><a href="canale">Canale</a></li>
-                                <#if logged>
-                                <li><a href="#">Me</a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Admin Panel</a></li>
-                                        <li><a href="profile">Profile</a></li>
-                                        <li><a href="logout">Logout</a></li>
-                                    </ul>
-                                </li>
-                                </#if>
-                                <li><a href="#">Blog</a></li>
-                                <#if !logged>
-                                <li><a href="register">Register</a></li>
-                                </#if>
-                            </ul>
-                        </nav>
-                        <#if !logged>
-                        <div class="header__menu__right">
-                            <a href="login?referrer=${request_uri}" class="login-btn"><i class="fa fa-user"></i></a>
-                        </div>
-                        </#if>
-                    </div>
-                </div>
-
-
             </div>
-            <div id="mobile-menu-wrap"></div>
+            <div class="col-lg-9 col-md-9">
+                <div class="row header__nav justify-content-center">
+                    <nav class="header__menu mobile-menu ">
+                        <ul>
+                            <li><a href="./">Home</a></li>
+                            <li><a href="palinsesto">Palinsesto</a></li>
+                            <li><a href="canale">Canale</a></li>
+                            <#if logged>
+                            <li><a href="#">Me</a>
+                                <ul class="dropdown">
+                                    <li><a href="dashboard">Admin Panel</a></li>
+                                    <li><a href="profile">Profile</a></li>
+                                    <li><a href="logout">Logout</a></li>
+                                </ul>
+                            </li>
+                            </#if>
+
+                            <#if !logged>
+                            <li><a href="register">Register</a></li>
+                            </#if>
+                        </ul>
+                    </nav>
+                    <#if !logged>
+                    <div class="header__menu__right">
+                        <a href="login?referrer=${request_uri}" class="login-btn"><i class="fa fa-user"></i></a>
+                    </div>
+                    </#if>
+                </div>
+            </div>
+
+
         </div>
-    </header>
-    <!-- Header Section End -->
+        <div id="mobile-menu-wrap"></div>
+    </div>
+</header>
+<!-- Header Section End -->
