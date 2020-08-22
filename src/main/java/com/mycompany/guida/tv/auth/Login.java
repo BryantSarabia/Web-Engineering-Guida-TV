@@ -109,9 +109,9 @@ public class Login extends BaseController {
                 // Credenziali corrette
                 Utente me = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(email);
                 SecurityLayer.createSession(request, me.getEmail(), me.getKey());
-                /* if (me.getEmailVerifiedAt() == null) {
-                    response.sendRedirect("confirmEmail");
-                } /* else */ if (request.getParameter("referrer") != null) {
+                 if (me.getEmailVerifiedAt() == null) {
+                    response.sendRedirect("verifyemail");
+                }  else if (request.getParameter("referrer") != null) {
                     response.sendRedirect(request.getParameter("referrer"));
 
                 } else {

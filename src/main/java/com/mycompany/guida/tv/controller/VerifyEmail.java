@@ -11,8 +11,11 @@ import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
+import com.mycompany.guida.tv.result.TemplateManagerException;
+import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
+import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -22,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -40,46 +44,54 @@ public class VerifyEmail extends BaseController {
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException{
+            throws ServletException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println( (GuidaTVDataLayer) request.getAttribute("datalayer"));
-        try ( PrintWriter out = response.getWriter()) {
-            action_verify(request, response, out);
-        } catch (IOException ex){
-            Logger.getLogger(VerifyEmail.class.getName()).log(Level.SEVERE, null, ex);
+        System.out.println((GuidaTVDataLayer) request.getAttribute("datalayer"));
+        try (PrintWriter out = response.getWriter()) {
+
+            if (request.getParameter("token") != null && request.getParameter("code") != null) {
+                action_verify(request, response, out);
+            }  else if (request.getParameter("resend") != null) {
+              /*  action_resend(request, response); */
+            } else {
+                action_default(request, response);
+            }
+        } catch (DataException |TemplateManagerException |IOException ex) {
+             request.setAttribute("exception", ex);
+            action_error(request, response);
         }
     }
 
     private void action_verify(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
-        try{
+        try {
             Utente user = null;
             //Controllo che i parametri della request non siano vuoti
-            if(request.getParameter("token") != null && request.getParameter("code") != null){
-                
+            if (request.getParameter("token") != null && request.getParameter("code") != null) {
+
                 String decrypted_email = SecurityLayer.decrypt(request.getParameter("code"), SecurityLayer.getStaticKey());
                 user = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtenteByEmail(decrypted_email);
-                
+
                 //Controllo che il codice (la mail criptata) corrisponda ad un utente presente nel database
-                if(user == null){
-                   throw new Exception("Something went wrong");
-               }
-               
-            } else { 
+                if (user == null) {
+                    throw new Exception("Something went wrong");
+                }
+
+            } else {
                 throw new Exception("Something went wrong");
             }
             //Controllo che il token dell'utente sia giusto
-            if(BCrypt.checkpw(user.getToken(), request.getParameter("token"))){
-                
+            if (BCrypt.checkpw(user.getToken(), request.getParameter("token"))) {
+
                 //Controllo che il token dell'utente non sia scaduto
-                if(LocalDate.now().isBefore(user.getExp_date())){
-                    
+                if (LocalDate.now().isBefore(user.getExp_date())) {
+
                     //Se il token va bene memorizzo la data di conferma e faccio il redirect a /login
-                    if(user.getEmailVerifiedAt() == null){  //Se la mail è stata già verificata non faccio nulla
-                    
-                    user.setEmailVerifiedAt(LocalDate.now());
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(user);
+                    if (user.getEmailVerifiedAt() == null) {  //Se la mail è stata già verificata non faccio nulla
+
+                        user.setEmailVerifiedAt(LocalDate.now());
+                        ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(user);
                     }
-                    
+
                     response.sendRedirect("login");
                 } else {
                     throw new Exception("Link expired");
@@ -87,12 +99,12 @@ public class VerifyEmail extends BaseController {
             } else {
                 throw new Exception("Something went wrong");
             }
-        } catch (Exception ex){
-           request.setAttribute("exception", ex);
-           action_error(request, response);
-       }
+        } catch (Exception ex) {
+            request.setAttribute("exception", ex);
+            action_error(request, response);
+        }
     }
-    
+
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
             (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
@@ -101,5 +113,35 @@ public class VerifyEmail extends BaseController {
         }
         return;
     }
+
+    private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException, IOException {
+
+        HttpSession s = SecurityLayer.checkSession(request);
+        if (s != null) {
+            // Se l'utente è loggato gli mostro la pagina di conferma
+            TemplateResult results = new TemplateResult(getServletContext());
+            results.activate("confirm_email.ftl.html", request, response);
+        } else {
+            // Altrimenti lo redireziono verso la pagina di login
+            response.sendRedirect("login");
+        }
+
+    }
+
+  /*  private void action_resend_email(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession s = SecurityLayer.checkSession(request);
+
+        if (s != null) {
+            UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+            me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));
+            me.setExpirationDate(LocalDate.now().plusDays(1));
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
+            Methods.sendEmailWithCodes(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me, "Conferma la tua email cliccando sul link in basso", EmailTypes.CONFIRM_EMAIL);
+            response.sendRedirect("confirmEmail");
+        } else {
+            action_default(request, response);
+        }
+
+    } */
 
 }
