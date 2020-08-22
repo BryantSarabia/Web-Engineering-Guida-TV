@@ -3,7 +3,7 @@
 <section class="contact spad">
     <div class="container">
 
-        <div class="row">
+        <div class="row m-2">
             <div class="col-12 mb-5">
                 <div class="contact__widget">
                     <div class="contact__widget__address">
@@ -13,10 +13,10 @@
                 </div>
             </div>
 
-            <div class="col-6 mr-1">
+            <div class="col-12 col-lg-6 mr-lg-1">
 
-                <div class="row p-1 justify-content-center profile_daily_email">
-                    <form action="profile" method="POST">
+                <div class="row p-1 m-lg-0 justify-content-center profile_daily_email">
+                    <form action="profile" method="POST" class="col-12">
                         <div class="row mt-2 mb-4">
                             <div class="col-12 text-center">
                                 <h3>Email giornalera</h3>
@@ -26,7 +26,7 @@
 
                         <div class="form-group row col-12">
                             <label for="canali_profile" class="col-form-label">Seleziona i tuoi canali preferiti</label>
-                            <select class="form-control" name="canali" id="canali_profile" multiple="multiple">
+                            <select class="form-control col-12 col-sm-10" name="canali" id="canali_profile" multiple="multiple">
                                 <#list canali as canale>
                                 <option value="${canale.key}" >${canale.nome}</option>
                                 <#else>
@@ -37,7 +37,7 @@
 
                         <div class="form-group row col-12">
                             <label for="fasce" class="col-form-label">Seleziona la fascia oraria</label>
-                            <select class="form-control" name="fasce" id="fasce" multiple="multiple">
+                            <select class="form-control col-12 col-sm-10" name="fasce" id="fasce" multiple="multiple">
                                 <option value="0">Tutto il giorno</option>
                                 <option value="1">Mattina</option>
                                 <option value="2">Pomeriggio</option>
@@ -83,36 +83,36 @@
                 </div>
             </div>
 
-            <div class="col-5  profile_info ml-4">
+            <div class="col-12 col-lg-5  profile_info mt-2 mt-lg-0">
 
                 <div class="col-12 text-center mt-3 mb-2">
                     <h3>Modifica la tua password</h3>
                 </div>
                 <#if error??><p class="alert alert-danger" role="alert">${error}</p></#if>
 
-                <form action="profile" class="contact__form profile_info_form " method="POST">
+                <form action="profile" class="contact__form profile_info_form pt-2 pt-sm-5" method="POST">
 
 
                     <div class="form-group row justify-content-center mt-2">
-                        <div class="col-1 align-self-center pr-0">  <i class="fa fa-user"></i>  </div>
-                        <div class="col-6 pl-0">
+                        <div class="col-1 align-self-center mr-2">  <i class="fa fa-user"></i>  </div>
+                        <div class="col-10 col-sm-8 pl-0">
                             <input type="text" placeholder="Email" name="email" class="form-control" value="${me.email}" readonly>
                         </div>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <div class="col-1 align-self-center pr-0"> <i class="fa fa-key" aria-hidden="true"></i> </div>
-                        <div class="col-6 col-6 pl-0">
+                        <div class="col-1 align-self-center mr-2"> <i class="fa fa-key" aria-hidden="true"></i> </div>
+                        <div class="col-10 col-sm-8 pl-0">
                             <input type="password" placeholder="Password" name="password" class="form-control" >
                         </div>
                     </div>
                     <div class="form-group row justify-content-center">
-                        <div class="col-1 align-self-center pr-0"> <i class="fa fa-key" aria-hidden="true"></i> </div>
-                        <div class="col-6 pl-0">
+                        <div class="col-1 align-self-center mr-2"> <i class="fa fa-key" aria-hidden="true"></i> </div>
+                        <div class="col-10 col-sm-8 pl-0">
                             <input type="password" placeholder="Confirm password" name="password_confirm" class="form-control" >
                         </div>
                     </div>
                     <div class="form-group row justify-content-center mt-2">
-                        <div class="col-6 col-6 text-center">
+                        <div class="col-4 col-sm-8 text-center">
                             <button type="submit" class="btn primary-btn">INVIA</button>
                         </div>
                     </div>
