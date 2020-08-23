@@ -173,7 +173,7 @@ public class Profile extends BaseController {
                         to_add.setUtente(me);
                         to_add.setStartTime(Methods.getOrarioInizioFascia(0));
                         to_add.setEndTime(Methods.getOrarioFineFascia(0));
-                        Methods.debugConsole(this.getClass(), "update", Methods.getOrarioInizioFascia(0).toString());
+                        //Methods.debugConsole(this.getClass(), "update", Methods.getOrarioInizioFascia(0).toString());
                         update_interessi.add(to_add);
                         ((GuidaTVDataLayer) request.getAttribute("datalayer")).getInteressaDAO().storeInteresse(to_add);
                     } else {
