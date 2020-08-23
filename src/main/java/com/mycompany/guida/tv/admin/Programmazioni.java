@@ -138,8 +138,8 @@ public class Programmazioni extends BaseController {
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
         List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
+        List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali();
 
-        // Canali ce l'ho in BaseController;
         request.setAttribute("programmi", programmi);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 

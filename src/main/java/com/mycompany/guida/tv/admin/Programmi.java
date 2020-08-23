@@ -2,8 +2,10 @@ package com.mycompany.guida.tv.admin;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
+import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
+import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
@@ -112,13 +114,17 @@ public class Programmi extends BaseController {
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
      //   UtilityMethods.debugConsole(this.getClass(), "action_default", "me called");
-        List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammiPaginated(0, 15);
+       // List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammiPaginated(0, 15);
+        List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
+        List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+
         TemplateResult results = new TemplateResult(getServletContext());
      /*   UtenteProxy me = (UtenteProxy) Methods.getMe(request);
 
         // Edit Programmi default Attributes
         request.setAttribute("me", me);*/
-        request.setAttribute("programmi", programmi);
+        request.setAttribute("serie", serie);
+        request.setAttribute("film",film);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
 
