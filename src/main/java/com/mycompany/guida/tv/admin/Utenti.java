@@ -55,6 +55,8 @@ public class Utenti extends BaseController {
                     action_delete(request, response);
                 } else if (request.getParameter("store") != null) {
                     action_store(request, response);
+                } else if (request.getParameter("update") != null) {
+                    action_update(request, response);
                 } else {
                     action_default(request, response);
                 }
@@ -162,7 +164,6 @@ public class Utenti extends BaseController {
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
             String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)), "nome");
             String email = (String) Validator.validate(request.getParameter("email"), new ArrayList<>(Arrays.asList(Validator.STRING_NOT_EMPTY, Validator.STRING_EMAIL)), "email");
             String cognome = (String) Validator.validate(request.getParameter("cognome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)) , "cognome");
@@ -170,16 +171,11 @@ public class Utenti extends BaseController {
             Integer id_ruolo = (Integer) Validator.validate(request.getParameter("ruolo"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Ruolo");
             Utente target;
 
-            if (key == null) {
                 target = new UtenteImpl();
                 if(password == null) throw new DataException("Password required on insert");
                 if(email == null) throw new DataException("Email required on insert");
                 target.setEmail(email);
                 target.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-            } else {
-                target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(key);
-                if(target == null) throw new DataException("INVALID ID");
-            }
 
             Ruolo user_role = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(id_ruolo);
             if(user_role == null) throw new DataException("Invalid role");
@@ -203,6 +199,45 @@ public class Utenti extends BaseController {
             request.setAttribute("ruoli", ruoli);
             request.setAttribute("errors", ex.getMessage());
             results.activate("/admin/users/new.ftl.html", request, response);
+        }
+    }
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        try {
+            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
+            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)), "nome");
+            String email = (String) Validator.validate(request.getParameter("email"), new ArrayList<>(Arrays.asList(Validator.STRING_NOT_EMPTY, Validator.STRING_EMAIL)), "email");
+            String cognome = (String) Validator.validate(request.getParameter("cognome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_WITHOUT_SPECIAL)) , "cognome");
+            String password = (String) Validator.validate(request.getParameter("password"), new ArrayList<>(Arrays.asList(Validator.PASSWORD)), "password" );
+            Integer id_ruolo = (Integer) Validator.validate(request.getParameter("ruolo"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Ruolo");
+            Utente target;
+
+                target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente(key);
+                if(target == null) throw new DataException("INVALID ID");
+
+            Ruolo user_role = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(id_ruolo);
+            if(user_role == null) throw new DataException("Invalid role");
+            if(password != "noncambiata"){
+                target.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+            }
+            target.setEmail(email);
+            target.setNome(nome);
+            target.setCognome(cognome);
+            target.setRuolo(user_role);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(target);
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            request.setAttribute("utenti", utenti);
+
+            request.setAttribute("success", "utente aggiornato con successo!");
+            results.activate("/admin/users/index.ftl.html", request, response);
+        } catch (DataException ex) {
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            List<Ruolo> ruoli = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuoli();
+            request.setAttribute("ruoli", ruoli);
+            request.setAttribute("errors", ex.getMessage());
+            results.activate("/admin/users/edit.ftl.html", request, response);
         }
     }
 

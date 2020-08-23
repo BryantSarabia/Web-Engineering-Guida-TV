@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Tutti i programmi</h1>
+            <h1 class="page-header">Tutte le serie</h1>
             <#if success??>
             <div class="alert alert-success">
                 ${success}
@@ -14,7 +14,7 @@
     </#if>
 </div>
             <div class="col-lg-12">
-                <a class="page-header" href="programmi?insert" style="color: green; cursor: pointer;" >Aggiungi un programma <em class="fa fa-plus color-green"></em></a>
+                <a class="page-header" href="serie?insert" style="color: green; cursor: pointer;" >Aggiungi un programma <em class="fa fa-plus color-green"></em></a>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        Serie/Film
+                        Stagione / Episodio
                     </div>
                 </div>
 
@@ -103,13 +103,13 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <a href="programmi?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
+                        <a href="serie?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
 
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-${programma.key}"method="POST" action="programmi">
+                        <form id="delete-form-${programma.key}"method="POST" action="serie">
                             <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc()" ></em>
                             <script>
                                 function deleteFunc() {
@@ -125,68 +125,6 @@
                 </div>
             </div>
         </#list>
-    <#list film as programma>
-
-    <div class="row">
-        <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-            <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                ${programma.titolo}
-            </div>
-        </div>
-        <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-            <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                ${programma.link_ref}
-            </div>
-        </div>
-
-
-        <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
-            <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                <select class="form-control">
-                    <#list programma.generi as genere>
-                    <#if genere??>
-                    <option>${genere.nome}</option>
-                    <#else>
-                    <p style="color: red">nessun genere</p>
-                </#if>
-            </#list>
-            </select>
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
-        <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-            ${programma.durata}
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
-        <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-            <p style="color: black">Film</p>  <!-- vedere se è una serie o un film -->
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
-        <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-            <a href="programmi?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
-
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
-        <div class="panel panel-teal panel-widget border-right">
-            <form id="delete-form-${programma.key}"method="POST" action="programmi">
-                <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc()" ></em>
-                <script>
-                    function deleteFunc() {
-                        var x = confirm('Vuoi veramente cancellare questo programma?')
-                        if(x == true){
-                            document.getElementById('delete-form-${programma.key}').submit(); }
-                    }
-                </script>
-                <input name="id" value="${programma.key}" hidden >
-                <input name="delete" value="delete" hidden >
-            </form>
-        </div>
-    </div>
-</div>
-</#list>
 </div>
     </div>
 </div>

@@ -1,25 +1,26 @@
 package com.mycompany.guida.tv.admin;
 
+import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.DataException;
-import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
-import com.mycompany.guida.tv.data.model.Film;
+import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
+import com.mycompany.guida.tv.data.impl.SerieImpl;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Serie;
-import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
-import com.mycompany.guida.tv.shared.Methods;
 import com.mycompany.guida.tv.shared.Validator;
-import com.mycompany.guida.tv.controller.BaseController;
-import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -27,16 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import javax.swing.*;
 
 @MultipartConfig
-public class Programmi extends BaseController {
+public class Series extends BaseController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -113,22 +107,13 @@ public class Programmi extends BaseController {
     }
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-     //   UtilityMethods.debugConsole(this.getClass(), "action_default", "me called");
-       // List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammiPaginated(0, 15);
-        List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
         List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
-
         TemplateResult results = new TemplateResult(getServletContext());
      /*   UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-
-        // Edit Programmi default Attributes
         request.setAttribute("me", me);*/
         request.setAttribute("serie", serie);
-        request.setAttribute("film",film);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-
-
-        results.activate("/admin/programmi/index.ftl.html", request, response);
+        results.activate("/admin/serie/index.ftl.html", request, response);
 
     }
 
@@ -143,95 +128,63 @@ public class Programmi extends BaseController {
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("item", item);
         request.setAttribute("outline_tpl", "");
-        results.activate("/admin/programmi/index.ftl.html", request, response);
+        results.activate("/admin/serie/index.ftl.html", request, response);
     }
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
-    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
-/*
-        JSONResult results = new JSONResult(getServletContext());
-        UtilityMethods.debugConsole(this.getClass(), "store", "sono in store");*/
-        // CHECK SU TUTTI I CAMPI
+    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
 
-            boolean serie_update = false;
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
-            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
-            //UtilityMethods.debugConsole(this.getClass(), "default", request.getCharacterEncoding() + " - " + URLDecoder.decode(request.getParameter("nome"), "UTF-8"));
+            String titolo = (String) Validator.validate(request.getParameter("titolo"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
             String descrizione = (String) Validator.validate(request.getParameter("descrizione"), new ArrayList<>(Arrays.asList(Validator.STRING_QUERY_PARAMETER)), "descrizione");
-            String linkRefDetails = (String) Validator.validate(request.getParameter("linkExt"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY)), "Link Details");
+            String linkRefDetails = (String) Validator.validate(request.getParameter("link_ref"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY)), "Link Details");
             String durata = (String) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
-            Integer id_serie = (Integer) Validator.validate(request.getParameter("idSerie"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "idSerie");
             Integer stagione = (Integer) Validator.validate(request.getParameter("stagione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Stagione");
             Integer episodio = (Integer) Validator.validate(request.getParameter("episodio"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Episodio");
-            Integer id_classificazione = (Integer) Validator.validate(request.getParameter("classificazione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Classificazione");
             Integer id_genere = (Integer) Validator.validate(request.getParameter("genere"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Genere");
+            Serie target = new SerieImpl();
 
-
-
-            Programma target;
-            if (key == null) {
-                target = new ProgrammaImpl();
-            } else {
-                target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(key);
-            }
-            target.setTitolo(nome);
-            if(descrizione != null) target.setDescrizione(descrizione);
-           /* if(id_serie != 0) {
-                if(id_serie > 0) target.setIdSerie(id_serie);
-                else serie_update = true;
-            }
-            else target.setIdSerie(null);
+            target.setTitolo(titolo);
+            if(descrizione != null) {
+                target.setDescrizione(descrizione);}
             target.setStagione(stagione);
-            target.setEpisodio(episodio);*/
+            target.setEpisodio(episodio);
             target.setDurata(durata);
             target.setLink_ref(linkRefDetails);
-           // target.setGeneri(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+           target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+            target.setImg("null");
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-
-          /*  if(serie_update) {
-                target.setIdSerie(target.getKey());
-                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-            }*/
-
-            // GESTIONE DELL'IMMAGINE
-            if(request.getParameter("serie_image") != null && ((String) request.getParameter("serie_image")).equals("sel")) {
-                // UTILIZZO L'immagine della serie
-               /* if(target.getIdSerie() > 0) {
-                    target.setLink_ref(((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(target.getIdSerie()).getLinkRefImg());
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-                }*/
-            }
-            else {
-                Part image = request.getPart("image");
+                Part image = request.getPart("immagine");
                 if (image != null) {
                     String name = "prog_" + target.getKey() + ".jpg";
-                    String path = getServletContext().getRealPath("/img/progs") + File.separatorChar + name;
+                    String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
                     String contentType = image.getContentType();
                     long size = image.getSize();
                     if (size > 0 && name != null && !name.isEmpty()) {
                         File new_file = new File(path);
                         Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        target.setLink_ref("/img/progs/" + name);
-                        ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
+                        target.setLink_ref("img_tv/progs" + name);
+                        ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
                     }
                 }
-            }
-
-
-
-            request.setAttribute("errors", "");
-            request.setAttribute("success", "true");
-         //   results.activate("/admin/json/store_response.ftl.json", request, response);
+            request.setAttribute("success", "Serie creata");
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+              request.setAttribute("serie", serie);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
         } catch (IOException | ServletException | DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
-       //     results.activate("/admin/json/store_response.ftl.json", request, response);
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
+            request.setAttribute("generi", generi);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/new.ftl.html", request, response);
+
         }
     }
 
@@ -242,7 +195,7 @@ public class Programmi extends BaseController {
         request.setAttribute("generi", generi);
       //  request.setAttribute("series", series);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-        results.activate("/admin/programmi/new.ftl.html", request, response);
+        results.activate("/admin/serie/new.ftl.html", request, response);
     }
 
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
