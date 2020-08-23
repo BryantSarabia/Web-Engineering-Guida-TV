@@ -52,13 +52,15 @@ public class VerifyEmail extends BaseController {
             if (request.getParameter("token") != null && request.getParameter("code") != null) {
                 action_verify(request, response, out);
             }  else if (request.getParameter("resend") != null) {
-              /*  action_resend(request, response); */
+                action_resend(request, response);
             } else {
                 action_default(request, response);
             }
         } catch (DataException |TemplateManagerException |IOException ex) {
              request.setAttribute("exception", ex);
             action_error(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(VerifyEmail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -128,20 +130,18 @@ public class VerifyEmail extends BaseController {
 
     }
 
-  /*  private void action_resend_email(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void action_resend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("request received");
         HttpSession s = SecurityLayer.checkSession(request);
-
-        if (s != null) {
+        if (Methods.getMe(request) != null) {
             UtenteProxy me = (UtenteProxy) Methods.getMe(request);
             me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));
             me.setExpirationDate(LocalDate.now().plusDays(1));
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
-            Methods.sendEmailWithCodes(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me, "Conferma la tua email cliccando sul link in basso", EmailTypes.CONFIRM_EMAIL);
-            response.sendRedirect("confirmEmail");
+            SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me);
+            response.sendRedirect("verifyemail");
         } else {
             action_default(request, response);
         }
-
-    } */
-
+    }
 }

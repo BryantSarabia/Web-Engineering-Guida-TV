@@ -1,5 +1,4 @@
-Hi Giacomo
-Click the link below to confirm your email
-localhost:8080/guida-tv/verifyemail?token=$2a$10$8UahWPDYurEmbhmSSfvQbuGeG8qICRAnn9SiSU70PLLZ/XdQZxeYu&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264Hi Giacomo
-Click the link below to confirm your email
-localhost:8080/guida-tv/verifyemail?token=$2a$10$1XOgQ57JmwxF8v.uadHCaeFj.IbU4v3X1njb4bURzRSoBRGl.ScSG&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264
+[2020-08-23T21:20:09.324583300] Email per Giacomo Sfratato
+Ciao Giacomo
+Clicca il link qui sotto per confermare la tua email:
+localhost:8080/guida-tv/verifyemail?token=$2a$10$779Hx3UhwKCLWjQ36JmVruhRnGy7W8BrrpSBx7G2gHAC6KiYxJAL.&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264

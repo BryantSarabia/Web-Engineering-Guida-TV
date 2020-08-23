@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -272,20 +273,20 @@ public class SecurityLayer {
 }
     
     public static void generateVerificationLink(String file_path, Utente utente){      
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_path, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file_path))) {
             String link = "localhost:8080/guida-tv/verifyemail";
         
             String encrypted_token = BCrypt.hashpw(utente.getToken(), BCrypt.gensalt());
             String encrypted_email = SecurityLayer.encrypt(utente.getEmail(), STATIC_KEY);
-            
+            String text = "";
             link += "?token=" + encrypted_token + "&code=" + encrypted_email;
             
             System.out.println("Writing link");
-            writer.write("Hi " + utente.getNome());
-            writer.newLine();
-            writer.write("Click the link below to confirm your email");
-            writer.newLine();
-            writer.write(link);
+            text += "[" + LocalDateTime.now() + "] ";
+            text += "Email per " + utente.getNome() + " " + utente.getCognome() +"\n";
+            text += "Ciao " + utente.getNome() + "\n";
+            text += "Clicca il link qui sotto per confermare la tua email:\n";
+            writer.write(text + link);
             System.out.println("Link successfully written");
             
         } catch (IOException ex) {
