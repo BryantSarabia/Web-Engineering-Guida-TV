@@ -49,19 +49,20 @@ public class Dashboard extends BaseController {
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
         TemplateResult results = new TemplateResult(getServletContext());
-     /*  int numero_utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getNumeroUtenti();
+       int numero_utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getNumeroUtenti();
         int numero_programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getNumeroProgrammi();
         int numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
         int numero_programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni();
 
-
+/*
         UtenteProxy me = (UtenteProxy) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
-        request.setAttribute("numero_utenti", numero_utenti);
-        request.setAttribute("numero_programmi", numero_programmi);
-        request.setAttribute("numero_canali", numero_canali);
-       request.setAttribute("numero_programmazioni", numero_programmazioni);
-        request.setAttribute("me", me);
-     */
+        request.setAttribute("me", me);*/
+        request.setAttribute("utenti", numero_utenti);
+        request.setAttribute("programmi", numero_programmi);
+        request.setAttribute("canali", numero_canali);
+       request.setAttribute("programmazioni", numero_programmazioni);
+
+
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/index.ftl.html", request, response);
 

@@ -2,15 +2,19 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Tutti gli utenti</h1>
-<!--
+        <#if success??>
         <div class="alert alert-success">
-            <ul>
-                <li></li>
-            </ul>
+               ${success}
         </div>
-    </div> -->
+    </#if>
+    <#if errors??>
+    <div class="alert alert-danger">
+            ${errors}
+    </div>
+</#if>
+    </div>
     <div class="col-lg-12">
-            <a class="page-header"  style="color: green; cursor: pointer;" >Aggiungi un utente <em class="fa fa-user-plus color-green"></em></a>
+            <a href="utenti?insert" class="page-header"  style="color: green; cursor: pointer;" >Aggiungi un utente <em class="fa fa-user-plus color-green"></em></a>
     </div>
 </div>
 
@@ -67,21 +71,22 @@
         </div>
         <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
             <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                <a href="/admin/user/{{$id}}/edit"> <i class="fa fa-xl fa-edit"></i> </a>
+                <a href="utenti?edit=${utente.key}"> <i class="fa fa-xl fa-edit"></i> </a>
             </div>
         </div>
         <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
             <div class="panel panel-teal panel-widget border-right">
-                <form id="delete-form-{{$id}}"method="POST" action="/admin/totalban/delete">
+                <form id="delete-form-${utente.key}"method="POST" action="utenti">
                     <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc()" ></em>
                     <script>
                         function deleteFunc() {
-                            var x = confirm('Do you really want to delete this ban ?')
+                            var x = confirm('Vuoi veramente cancellare questo utente?')
                             if(x == true){
-                                document.getElementById('delete-form-{{$id}}').submit(); }
+                                document.getElementById('delete-form-${utente.key}').submit(); }
                         }
                     </script>
-                    <input name="id" value="{{$id}}" hidden >
+                    <input id="id" name="id" value="${utente.key}" hidden >
+                    <input id="delete" name="delete" value="delete" hidden >
                 </form>
             </div>
         </div>

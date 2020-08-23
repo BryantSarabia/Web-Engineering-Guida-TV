@@ -1,10 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Aggiungi un nuovo canale</h1>
+        </div>
+    </div>
+    <hr/>
 
-</body>
-</html>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form method="POST" action="utenti">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" class="form-control" placeholder="Rai 1" name="nome">
+                </div>
+                <div class="form-group">
+                    <label>Numero</label>
+                    <input type="number" class="form-control" placeholder="36" name="numero">
+                </div>
+                <div class="form-group">
+                    <label>Logo</label>
+                    <input type="url" class="form-control" placeholder="https://www.example.it/logo.png" name="logo">
+                </div>
+                <#if errors??>
+                <div class="alert alert-danger">
+                    <ul>
+                        <p> something goes wrong!</p>
+                        <li>${errors}</li>
+                    </ul>
+                </div>
+            </#if>
+            <input type="hidden" value="store" name="store"/>
+            <button type="submit" class="btn btn-primary">Create now</button>
+            </form>
+        </div>
+    </div>
+</div>
