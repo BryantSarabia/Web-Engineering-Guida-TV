@@ -491,7 +491,7 @@ small{
 @media (max-width:575px){
 
     .programma{
-        height: 6em;
+        height: 7em;
     }
 
     .fascia.canale{
@@ -547,6 +547,14 @@ small{
 
 @media (max-width:416px){
 
+    .section-title h2{
+        font-size: 26px;
+    }
+    
+    #cerca_giorno{
+        padding: 5px 0px 5px 1px;
+    }
+
     .card, h5, p{
         font-size: 12px;
     }
@@ -566,16 +574,21 @@ small{
     }
 
     .dettaglio_series_img{
-        min-height: 72px;
+        min-height: 63px;
         min-width: 50px;
         width: auto;
         height: auto;
-        max-height: 72px;
+        max-height: 63px;
     }
 
 }
 
 @media (max-width:330px){
+    
+    
+    .card, h5, p{
+        font-size: 10px;
+    }
 
     .palinsesto_programma_img{
         min-width: 40px;
@@ -625,12 +638,17 @@ small{
         font-size: 17px;
     }
     .contact__form button {
-       padding: 10px 19px 8px 15px;
+        padding: 10px 19px 8px 15px;
     }
 
     .primary-btn {
         padding: 10px 19px 8px 15px;
     }
+
+    .blog__pagination a {
+        padding: 7px 12px 3px;
+    }
+
 
 }
 

@@ -95,7 +95,7 @@
 
                 <div class="canale-logo col-3 col-lg-3 text-center">
 
-                    <div class="col-12 col-lg-12">
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
                         <#if canale.logo??>
                         <a href="canale?c_key=${canale.key}"><img src="${canale.logo}"  alt="${canale.nome}"></a>
                         <#else>
@@ -103,11 +103,11 @@
                         </#if>
                     </div>
 
-                    <div class="col-12 col-lg-12 mt-2">
+                    <div class="col-12 col-sm-8 col-md-8 col-lg-6 mt-2">
                         <a href="canale?c_key=${canale.key}"><h5>${canale.nome}</h5></a>
                     </div>
 
-                    <div class="col-12 col-lg-12">
+                    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
                         <small class="d-none d-md-block">${start} - ${end}</small>
                         <small class="d-md-none">${start}</small>
                         <small class="d-md-none">${end}</small>
@@ -144,7 +144,7 @@
                                                 <#list programmazione.programma.generi as genere>
                                                 <small>${genere.nome} <#sep>, </#sep></small>
                                                 <#else>
-                                                <small>Questo programma non ha generi></small>
+                                                <small>Questo programma non ha generi</small>
                                                 </#list>
                                             </div>
 

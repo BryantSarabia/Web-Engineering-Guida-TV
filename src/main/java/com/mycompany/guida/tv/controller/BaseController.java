@@ -45,29 +45,28 @@ public abstract class BaseController extends HttpServlet {
              */
             boolean logged = (SecurityLayer.checkSession(request) != null && request.isRequestedSessionIdValid() && !request.getSession(false).isNew());
             request.setAttribute("logged", logged);
-            
+            request.setAttribute("is_admin", SecurityLayer.checkAdminSession(request));
+
             /* Referrer link quando si fa login */
             String request_uri;
-            
+
             if (request.getQueryString() == null) {
-                 request_uri = URLEncoder.encode(request.getRequestURI(), "UTF-8");
+                request_uri = URLEncoder.encode(request.getRequestURI(), "UTF-8");
 
             } else {
-                 request_uri = URLEncoder.encode(request.getRequestURI() + "?" + request.getQueryString(), "UTF-8");
+                request_uri = URLEncoder.encode(request.getRequestURI() + "?" + request.getQueryString(), "UTF-8");
             }
 
             request.setAttribute("request_uri", request_uri);
-            
+
             /* Ricerca */
-            
-             /**
+            /**
              * Parametri per la ricerca
              */
             request.setAttribute("canali", datalayer.getCanaleDAO().getListaCanali());
             request.setAttribute("generi", datalayer.getGenereDAO().getGeneri());
             request.setAttribute("min_date", LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             request.setAttribute("max_date", LocalDate.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            
 
             // GIORNI DELLA SETTIMANA
             List<LocalDate> settimana = new ArrayList();
@@ -75,6 +74,9 @@ public abstract class BaseController extends HttpServlet {
                 settimana.add(LocalDate.now().plusDays(i));
             }
             request.setAttribute("settimana", settimana);
+
+            // Last programmazioni per il Footer
+            request.setAttribute("footer", datalayer.getProgrammazioneDAO().getLatest(3));
 
             processRequest(request, response);
         } catch (Exception ex) {
