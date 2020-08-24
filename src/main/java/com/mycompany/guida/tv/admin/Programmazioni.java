@@ -4,6 +4,7 @@ package com.mycompany.guida.tv.admin;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
 import com.mycompany.guida.tv.data.model.Canale;
+import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
@@ -42,16 +43,11 @@ public class Programmazioni extends BaseController {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
         response.setContentType("text/html;charset=UTF-8");
-
-        //Methods.debugConsole(this.getClass(), "processRequest", "Sono in PR");
         try {
             boolean is_admin = true;// SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
-                //Methods.debugConsole(this.getClass(), "action_sendEmail", "default");
-                if (request.getParameter("draw") != null) {
-                    action_paginate_results(request, response);
-                } else if (request.getParameter("insert") != null) {
+                if (request.getParameter("insert") != null) {
                     action_create(request, response);
                 } else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
@@ -81,50 +77,25 @@ public class Programmazioni extends BaseController {
         }
         return;
     }
-
-    private void action_paginate_results(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        //Methods.debugConsole(this.getClass(), "paginated", "draw content: " + request.getParameter("draw"));
-        //Methods.debugConsole(this.getClass(), "paginated", "start content: " + request.getParameter("start"));
-        //Methods.debugConsole(this.getClass(), "paginated", "length content: " + request.getParameter("length"));
-        Methods.debugConsole(this.getClass(), "paginated", "day: " + request.getParameter("day"));
-
-        // Sanitizzazione parametri vs XSS
-        int draw = SecurityLayer.checkNumeric(request.getParameter("draw"));
-        int start = SecurityLayer.checkNumeric(request.getParameter("start"));
-        int length = SecurityLayer.checkNumeric(request.getParameter("length"));
-        int total = 0;
-        List<Programmazione> programmazioni;
-
-        LocalDate day = null;
-        if(request.getParameter("day") != null) day = (LocalDate) Validator.validate(request.getParameter("day"), new ArrayList<>(Arrays.asList(Validator.DATE)), "Selected day");
-        if(day == null) {
-            programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(start, length);
-            total = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni();
-        }
-        else {
-            programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(day, day, start, length);
-            total = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni(day, day);
-        }
-
-        if(day != null) Methods.debugConsole(this.getClass(), "paginated", "target day " + day.toString());
-        //Methods.debugConsole(this.getClass(), "paginated", "total " + total);
-
-      //  JSONResult results = new JSONResult(getServletContext());
-        request.setAttribute("draw", draw);
-        request.setAttribute("total", String.valueOf(total));
-        request.setAttribute("programmazioni", programmazioni);
-        request.setAttribute("day", day);
-      //  results.activate("/admin/json/dt_programmazioni.ftl.json", request, response);
-
-    }
-
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
-        List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 3);
+        List<Programmazione> programmazioni;
+        if(request.getParameter("page") == null){
+            programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+        }
+        else {
+            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            int start=(numero-1)*10;
+            int elements=10;
+            programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(start, elements);
+        }
+        int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+
         TemplateResult results = new TemplateResult(getServletContext());
        /* UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);*/
         request.setAttribute("programmazioni", programmazioni);
+        request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
         results.activate("/admin/programmazioni/index.ftl.html", request, response);
@@ -189,19 +160,18 @@ public class Programmazioni extends BaseController {
             target.setStartTime(start);
             target.setDurata(durata);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
-
-            request.setAttribute("errors", "");
+            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+            request.setAttribute("programmazioni", programmazioni);
+            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("success", "true");
-           // results.activate("/admin/json/store_response.ftl.json", request, response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
-           // results.activate("/admin/json/store_response.ftl.json", request, response);
+
         }
     }
 
-    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         // Controllo se l'id è reale
         //JSONResult results = new JSONResult(getServletContext());
         try {
@@ -215,13 +185,19 @@ public class Programmazioni extends BaseController {
             }
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().deleteProgrammazione(key);
-            request.setAttribute("errors", "");
+            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+            request.setAttribute("programmazioni", programmazioni);
+            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("success", "true");
           //  results.activate("/admin/json/store_response.ftl.json", request, response);
         } catch (DataException ex) {
             // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
+            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+            request.setAttribute("programmazioni", programmazioni);
+            request.setAttribute("numero_pagine", numero_pagine);
             //results.activate("/admin/json/store_response.ftl.json", request, response);
         }
 
