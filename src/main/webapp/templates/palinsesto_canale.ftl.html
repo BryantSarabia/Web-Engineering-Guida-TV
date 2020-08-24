@@ -13,7 +13,7 @@
 
             <div class="card-header row align-items-center canale_head">
                 <div class="col-2 col-md-2 col-lg-3 text-center">
-                    <span><img src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>"  alt=""></span>
+                    <span><img class="palinsesto_programma_img" src="<#if canale.logo??>${canale.logo}<#else>img_tv/static/no-image.png</#if>"  alt=""></span>
                 </div>
                 <div class="col-3 col-md-3 col-lg-3">
                     <h5 class="card-title">${canale.nome}</h5>
@@ -24,7 +24,7 @@
                         <div class="form-group d-flex flex-column flex-md-row  justify-content-md-end justify-content-lg-between">
                             <input type="date" class="form-control dateTime flex-md-shrink-1 flex-lg-fill w-auto mr-2 mb-3 mb-md-auto" required="required" name="day" placeholder="yyyy-mm-dd" value="${day}"/>
                             <input type="hidden" name="c_key" value="${canale.key}"/>
-                            <button type="submit" class="btn primary-btn align-self-center flex-sm-fill  flex-md-shrink-1 flex-lg-fill pd-2">
+                            <button type="submit" id="cerca_giorno" class="btn primary-btn align-self-center flex-sm-fill  flex-md-shrink-1 flex-lg-fill pd-2">
                                 <i class="fa fa-search"></i>
                                 cerca giorno
                             </button>
@@ -120,7 +120,7 @@
                                             <small>${programmazione.time} - ${programmazione.endTime}</small>
                                         </div>
                                         <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
-                                            <img src="${programmazione.programma.img}" class="rounded">
+                                            <img class="dettaglio_series_img" src="${programmazione.programma.img}" class="rounded">
                                         </div>
 
                                         <div class="row col-7 col-sm-8 col-lg-8">
