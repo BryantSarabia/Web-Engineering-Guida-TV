@@ -55,4 +55,24 @@ $(document).ready(function () {
     $('#series-slider').slick();
 });
 
+/* Homepage pagination AJAX */
+
+$(document).on('click','.blog__pagination a', function(event){
+ //  event.preventDefault()
+   console.log(window.location + $(this).attr("href") + "&json=true")
+  $.ajax({
+       url: window.location.pathname + $(this).attr("href") + "&json=true",
+       method: "GET",
+       cache: false,
+       success: function(data){
+           var res = JSON.parse(data)
+           console.log(res)
+       },
+       error: function(e){
+           console.log(e)
+       }
+   });
+});
+
+
 
