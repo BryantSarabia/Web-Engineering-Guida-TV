@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label>Genere</label>
-                    <select class="form-control form-control-sm" name="genere">
+                    <select class="form-control form-control-sm" name="genere" multiple>
                         <#list generi as genere>
                         <option class="text-uppercase" value="${genere.key}" <#if  (serie.key == genere.key)>selected="selected"</#if>>
                     ${genere.nome}
@@ -63,7 +63,7 @@
                 </div>
             </#if>
             <input type="hidden" value="store" name="store"/>
-            <button type="submit" class="btn btn-primary">Create now</button>
+            <button type="submit" class="btn btn-primary">Aggiorna</button>
             </form>
         </div>
     </div>

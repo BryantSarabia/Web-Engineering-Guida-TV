@@ -6,6 +6,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Ruolo;
+import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
@@ -45,9 +46,7 @@ public class Utenti extends BaseController {
         try {
             boolean is_admin = true;//SecurityLayer.checkAdminSession(request);
             if (is_admin) {
-                if (request.getParameter("draw") != null) {
-                    action_paginate_results(request, response);
-                } else if (request.getParameter("insert") != null) {
+                if (request.getParameter("insert") != null) {
                     action_create(request, response);
                 } else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
@@ -80,28 +79,25 @@ public class Utenti extends BaseController {
         return;
     }
 
-    private void action_paginate_results(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        // Sanitizzazione parametri vs XSS
-        int draw = SecurityLayer.checkNumeric(request.getParameter("draw"));
-        int start = SecurityLayer.checkNumeric(request.getParameter("start"));
-        int length = SecurityLayer.checkNumeric(request.getParameter("length"));
-        int total = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getNumeroUtenti();
-
-        List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(start, length);
-
-        request.setAttribute("draw", draw);
-        request.setAttribute("total", String.valueOf(total));
-        request.setAttribute("utenti", utenti);
-
-    }
-
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
         TemplateResult results = new TemplateResult(getServletContext());
 
-        List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
-      /*  UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        List<Utente> utenti;
+        if(request.getParameter("page") == null){
+            utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 10);
+        }
+        else {
+            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            int start=(numero-1)*10;
+            int elements=10;
+            utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(start, elements);
+        }
+        int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+
+        /*  UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);*/
+        request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("utenti", utenti);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/users/index.ftl.html", request, response);
@@ -146,7 +142,9 @@ public class Utenti extends BaseController {
             }
             TemplateResult results = new TemplateResult(getServletContext());
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().deleteUtente(key);
-            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("utenti", utenti);
             request.setAttribute("success", "Utente eliminato con successo!");
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -154,7 +152,9 @@ public class Utenti extends BaseController {
         } catch (DataException ex) {
             TemplateResult results = new TemplateResult(getServletContext());
 
-            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("utenti", utenti);
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -187,8 +187,9 @@ public class Utenti extends BaseController {
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(target);
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
-            request.setAttribute("utenti", utenti);
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);            request.setAttribute("utenti", utenti);
 
             request.setAttribute("success", "utente creato con successo!");
             results.activate("/admin/users/index.ftl.html", request, response);
@@ -226,7 +227,9 @@ public class Utenti extends BaseController {
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(target);
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 15);
+            List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("utenti", utenti);
 
             request.setAttribute("success", "utente aggiornato con successo!");
