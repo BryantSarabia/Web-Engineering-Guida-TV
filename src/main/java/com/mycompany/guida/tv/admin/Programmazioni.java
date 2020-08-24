@@ -121,18 +121,18 @@ public class Programmazioni extends BaseController {
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+        Integer key = (Integer) Validator.validate(request.getParameter("edit"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
         if (key == null) {
             throw new DataException("Invalid Key");
         }
-        Programmazione item = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
+        Programmazione programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
         List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
 
         request.setAttribute("programmi", programmi);
         TemplateResult results = new TemplateResult(getServletContext());
-        request.setAttribute("item", item);
+        request.setAttribute("programmazione", programmazione);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-        results.activate("/admin/programmazioni/index.ftl.html", request, response);
+        results.activate("/admin/programmazioni/edit.ftl.html", request, response);
     }
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
@@ -170,7 +170,7 @@ public class Programmazioni extends BaseController {
     }
     private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
             Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
             Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
             LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start_time"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");

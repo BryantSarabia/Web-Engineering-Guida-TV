@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Aggiungi una programmazione</h1>
+            <h1 class="page-header">Aggiorna la programmazione</h1>
         </div>
     </div>
     <hr/>
@@ -13,7 +13,7 @@
                     <label>Canale</label>
                     <select class="form-control form-control-sm" name="canale" >
                         <#list canali as canale>
-                        <option class="text-uppercase" value="${canale.key}" >
+                        <option class="text-uppercase" value="${canale.key}"  <#if  (programmazione.canale.key == canale.key)>selected="selected"</#if> >
                             ${canale.nome}
                         </option>
                     </#list>
@@ -23,7 +23,7 @@
                     <label>Programma</label>
                     <select class="form-control form-control-sm" name="programma" id="programma">
                         <#list programmi as programma>
-                        <option class="text-uppercase" value="${programma.key}" >
+                        <option class="text-uppercase" value="${programma.key}"  <#if  (programmazione.programma.key == programma.key)>selected="selected"</#if> >
                             ${programma.titolo}
                         </option>
                     </#list>
@@ -31,11 +31,12 @@
                 </div>
                 <div class="form-group">
                     <label>Orario d'inizio</label>
-                    <input type="datetime-local" class="form-control" placeholder="2020-08-21 15:00:00" name="start_time">
+                    <input type="datetime-local" class="form-control" placeholder="2020/08/21 15:00:00" name="start_time"
+                           value="${programmazione.startTime}">
                 </div>
                 <div class="form-group">
                     <label>Durata</label>
-                    <input type="number" class="form-control" placeholder="60" name="durata">
+                    <input type="number" class="form-control" placeholder="60" name="durata" value="${programmazione.durata}" >
                 </div>
 
                 <#if errors??>
@@ -46,8 +47,9 @@
                     </ul>
                 </div>
             </#if>
-            <input type="hidden" value="store" name="store"/>
-            <button type="submit" class="btn btn-primary">Create now</button>
+            <input type="hidden" value="update" name="update"/>
+            <input type="hidden" value="${programmazione.key}" name="id"/>
+            <button type="submit" class="btn btn-primary"> update</button>
             </form>
         </div>
     </div>
