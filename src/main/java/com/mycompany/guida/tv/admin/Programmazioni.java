@@ -18,6 +18,7 @@ import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 
 import com.mycompany.guida.tv.shared.Validator;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.Security;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +56,9 @@ public class Programmazioni extends BaseController {
                     action_delete(request, response);
                 } else if (request.getParameter("store") != null) {
                     action_store(request, response);
-                } else {
+                } else if (request.getParameter("update") != null) {
+                    action_update(request, response);
+                }else {
                     action_default(request, response);
                 }
 
@@ -128,33 +131,22 @@ public class Programmazioni extends BaseController {
         request.setAttribute("programmi", programmi);
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("item", item);
-        request.setAttribute("outline_tpl", "");
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/programmazioni/index.ftl.html", request, response);
     }
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-      // JSONResult results = new JSONResult(getServletContext());
-        // CHECK SU TUTTI I CAMPI
         try {
 
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
             Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
             Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
-            LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");
+            LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start_time"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");
             Integer durata = (Integer) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
 
-            Programmazione target;
-            if (key == null) {
-                // INSERT NEW PROGRAMMAZIONE
-                target = new ProgrammazioneImpl();
-            } else {
-                // UPDATE PROGRAMMAZIONE
-                target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
-            }
-
+            Programmazione target = new ProgrammazioneImpl();
             target.setProgramma(p);
             target.setCanale(c);
             target.setStartTime(start);
@@ -164,18 +156,53 @@ public class Programmazioni extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", "true");
+            request.setAttribute("success", "programmazione creata con successo!");
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/index.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("errors", ex.getMessage());
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/new.ftl.html", request, response);
 
         }
     }
-
-    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        // Controllo se l'id è reale
-        //JSONResult results = new JSONResult(getServletContext());
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
+            Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
+            Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
+            LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start_time"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");
+            Integer durata = (Integer) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
+
+            Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
+            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
+            Programmazione target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
+            target.setProgramma(p);
+            target.setCanale(c);
+            target.setStartTime(start);
+            target.setDurata(durata);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
+            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+            request.setAttribute("programmazioni", programmazioni);
+            request.setAttribute("numero_pagine", numero_pagine);
+            request.setAttribute("success", "programmazione aggiornata con successo!");
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+        } catch (DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/edit.ftl.html", request, response);
+
+        }
+    }
+    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        try {
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -183,22 +210,27 @@ public class Programmazioni extends BaseController {
             if (p == null) {
                 throw new DataException("Invalid Key");
             }
-
+            TemplateResult results = new TemplateResult(getServletContext());
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().deleteProgrammazione(key);
+
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", "true");
-          //  results.activate("/admin/json/store_response.ftl.json", request, response);
+            request.setAttribute("success", "programmazione cancellata con successo!");
+            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             request.setAttribute("errors", ex.getMessage());
             List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            //results.activate("/admin/json/store_response.ftl.json", request, response);
+            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+
         }
 
     }

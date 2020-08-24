@@ -63,14 +63,13 @@ public class Films extends BaseController {
                     action_create(request, response);
                 } else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
+                } else if (request.getParameter("store") != null) {
+                    action_store(request, response);
                 } else if (request.getParameter("update") != null) {
                     action_update(request, response);
-
                 } else if (request.getParameter("delete") != null) {
                     action_delete(request, response);
-                } else if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
-                    action_store(request, response);
-                } else {
+                }else {
                     action_default(request, response);
                 }
 
@@ -212,11 +211,9 @@ public class Films extends BaseController {
             request.setAttribute("film",film);
             request.setAttribute("numero_pagine",numero_pagine);
             request.setAttribute("success", "true");
-         //   results.activate("/admin/json/store_response.ftl.json", request, response);
+
         } catch (IOException | ServletException | DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-       //     results.activate("/admin/json/store_response.ftl.json", request, response);
         }
     }
 
@@ -229,10 +226,9 @@ public class Films extends BaseController {
     }
 
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
-        // Controllo se l'id è reale
-     //   JSONResult results = new JSONResult(getServletContext());
+
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -247,15 +243,22 @@ public class Films extends BaseController {
 
             request.setAttribute("film",film);
             request.setAttribute("numero_pagine",numero_pagine);
-            request.setAttribute("success", "true");
+            request.setAttribute("success", "Film cancellato con successo!");
+            TemplateResult results = new TemplateResult(getServletContext());
+
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
             List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
 
             request.setAttribute("film",film);
             request.setAttribute("numero_pagine",numero_pagine);
+            TemplateResult results = new TemplateResult(getServletContext());
+
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
 
         }
 

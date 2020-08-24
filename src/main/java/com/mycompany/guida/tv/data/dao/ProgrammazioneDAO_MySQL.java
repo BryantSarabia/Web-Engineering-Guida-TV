@@ -60,7 +60,8 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, version=? WHERE id = ? AND version = ?");
             getLatest = connection.prepareStatement("SELECT * FROM programmazioni ORDER BY id DESC LIMIT ?");
-            
+            dProgrammazione = connection.prepareStatement("DELETE FROM programmazioni WHERE id = ?");
+
         } catch (SQLException ex) {
             Logger.getLogger("Errore nell'inizializzazione del DAO Programmazione");
         }

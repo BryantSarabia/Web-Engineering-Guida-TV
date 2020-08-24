@@ -60,9 +60,11 @@ public class Series extends BaseController {
                     action_edit(request, response);
                 } else if (request.getParameter("delete") != null) {
                     action_delete(request, response);
-                } else if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+                } else if (request.getParameter("store") != null) {
                     action_store(request, response);
-                } else {
+                } else if (request.getParameter("update") != null) {
+                    action_update(request, response);
+                }else {
                     action_default(request, response);
                 }
 
@@ -127,10 +129,10 @@ public class Series extends BaseController {
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-
+            // non so perche non va forse centra qualcosa con i generi
             String titolo = (String) Validator.validate(request.getParameter("titolo"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
             String descrizione = (String) Validator.validate(request.getParameter("descrizione"), new ArrayList<>(Arrays.asList(Validator.STRING_QUERY_PARAMETER)), "descrizione");
-            String linkRefDetails = (String) Validator.validate(request.getParameter("link_ref"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY)), "Link Details");
+            String link_ref = (String) Validator.validate(request.getParameter("link_ref"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY)), "link_ref");
             String durata = (String) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
             Integer stagione = (Integer) Validator.validate(request.getParameter("stagione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Stagione");
             Integer episodio = (Integer) Validator.validate(request.getParameter("episodio"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Episodio");
@@ -143,7 +145,7 @@ public class Series extends BaseController {
             target.setStagione(stagione);
             target.setEpisodio(episodio);
             target.setDurata(durata);
-            target.setLink_ref(linkRefDetails);
+            target.setLink_ref(link_ref);
            target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
             target.setImg("null");
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
@@ -188,10 +190,11 @@ public class Series extends BaseController {
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/serie/new.ftl.html", request, response);
     }
-
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
+    }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -201,19 +204,25 @@ public class Series extends BaseController {
             }
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().deleteProgramma(key);
-            request.setAttribute("success", "true");
+            request.setAttribute("success", "Serie cancellata con successo!");
             List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
             request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("serie", serie);
+            TemplateResult results = new TemplateResult(getServletContext());
 
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("errors", ex.getMessage());
             List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
             request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("serie", serie);
+            TemplateResult results = new TemplateResult(getServletContext());
 
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
         }
 
     }

@@ -8,7 +8,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="POST" action="utenti">
+            <form method="POST" action="programmazioni">
                 <div class="form-group">
                     <label>Canale</label>
                     <select class="form-control form-control-sm" name="canale" >
@@ -21,9 +21,9 @@
                 </div>
                 <div class="form-group">
                     <label>Programma</label>
-                    <select class="form-control form-control-sm" name="ruolo" id="editRuolo">
+                    <select class="form-control form-control-sm" name="programma" id="programma">
                         <#list programmi as programma>
-                        <option class="text-uppercase" value="${ruolo.key}" >
+                        <option class="text-uppercase" value="${programma.key}" >
                             ${programma.titolo}
                         </option>
                     </#list>
@@ -47,7 +47,7 @@
                 </div>
             </#if>
             <input type="hidden" value="store" name="store"/>
-            <button type="submit" class="btn btn-primary">Create now</button>
+            <button type="submit" class="btn btn-primary">Crea</button>
             </form>
         </div>
     </div>

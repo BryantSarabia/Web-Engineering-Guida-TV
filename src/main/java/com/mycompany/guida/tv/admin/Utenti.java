@@ -46,9 +46,7 @@ public class Utenti extends BaseController {
         try {
             boolean is_admin = true;//SecurityLayer.checkAdminSession(request);
             if (is_admin) {
-                if (request.getParameter("draw") != null) {
-                    action_paginate_results(request, response);
-                } else if (request.getParameter("insert") != null) {
+                if (request.getParameter("insert") != null) {
                     action_create(request, response);
                 } else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
@@ -79,21 +77,6 @@ public class Utenti extends BaseController {
             (new FailureResult(getServletContext())).activate((String) request.getAttribute("message"), request, response);
         }
         return;
-    }
-
-    private void action_paginate_results(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        // Sanitizzazione parametri vs XSS
-        int draw = SecurityLayer.checkNumeric(request.getParameter("draw"));
-        int start = SecurityLayer.checkNumeric(request.getParameter("start"));
-        int length = SecurityLayer.checkNumeric(request.getParameter("length"));
-        int total = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getNumeroUtenti();
-
-        List<Utente> utenti = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtentiPaginated(start, length);
-
-        request.setAttribute("draw", draw);
-        request.setAttribute("total", String.valueOf(total));
-        request.setAttribute("utenti", utenti);
-
     }
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
