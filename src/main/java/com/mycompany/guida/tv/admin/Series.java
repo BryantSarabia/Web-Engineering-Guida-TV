@@ -136,8 +136,8 @@ public class Series extends BaseController {
             String durata = (String) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
             Integer stagione = (Integer) Validator.validate(request.getParameter("stagione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Stagione");
             Integer episodio = (Integer) Validator.validate(request.getParameter("episodio"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Episodio");
-            Integer id_genere = (Integer) Validator.validate(request.getParameter("genere"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Genere");
-            Serie target = new SerieImpl();
+        //  Integer id_genere = (Integer) Validator.validate(request.getParameter("genere"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Genere");
+           Serie target = new SerieImpl();
 
             target.setTitolo(titolo);
             if(descrizione != null) {
@@ -146,7 +146,7 @@ public class Series extends BaseController {
             target.setEpisodio(episodio);
             target.setDurata(durata);
             target.setLink_ref(link_ref);
-           target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+         //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
             target.setImg("null");
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 
@@ -154,7 +154,6 @@ public class Series extends BaseController {
                 if (image != null) {
                     String name = "prog_" + target.getKey() + ".jpg";
                     String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
-                    String contentType = image.getContentType();
                     long size = image.getSize();
                     if (size > 0 && name != null && !name.isEmpty()) {
                         File new_file = new File(path);

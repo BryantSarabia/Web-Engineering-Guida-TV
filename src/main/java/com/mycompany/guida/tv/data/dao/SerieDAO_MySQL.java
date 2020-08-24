@@ -245,7 +245,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO{
                 uSerie.setInt(5, serie.getKey());
                 uSerie.setLong(6, current_version);
             } else { //insert
-                if(true/*getProgramma(key).isNotEmpty()*/){         //se il programma esiste già e voglio solo aggiungere un episodio
+                if(false/*getProgramma(key).isNotEmpty()*/){         //se il programma esiste già e voglio solo aggiungere un episodio
                     //iSerie.setInt(1, key);
                     iSerie.setInt(2, serie.getStagione());
                     iSerie.setInt(3, serie.getEpisodio());
