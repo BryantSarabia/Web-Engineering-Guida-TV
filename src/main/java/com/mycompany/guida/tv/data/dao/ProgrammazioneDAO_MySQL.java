@@ -392,7 +392,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
 
     @Override
     public int getNumeroProgrammazioni() throws DataException {
-        return getNumeroProgrammazioni(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1));
+        return getNumeroProgrammazioni(LocalDate.now().minusMonths(100), LocalDate.now().plusMonths(100));
     }
     
     @Override
@@ -504,7 +504,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
     
     @Override
     public List<Programmazione> getProgrammazioniPaginated(int start_item, int elements) throws DataException {
-        return getProgrammazioniPaginated(LocalDate.now().minusMonths(1), LocalDate.now().plusMonths(1), start_item, elements);
+        return getProgrammazioniPaginated(LocalDate.now().minusMonths(100), LocalDate.now().plusMonths(100), start_item, elements);
     }
 
     
