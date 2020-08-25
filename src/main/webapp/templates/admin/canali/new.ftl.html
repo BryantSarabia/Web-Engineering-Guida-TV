@@ -8,7 +8,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="POST" action="utenti">
+            <form method="POST" action="canali" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nome</label>
                     <input type="text" class="form-control" placeholder="Rai 1" name="nome">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="form-group">
                     <label>Logo</label>
-                    <input type="url" class="form-control" placeholder="https://www.example.it/logo.png" name="logo">
+                    <input type="file" class="form-control" placeholder="https://www.example.it/logo.png" name="image">
                 </div>
                 <#if errors??>
                 <div class="alert alert-danger">

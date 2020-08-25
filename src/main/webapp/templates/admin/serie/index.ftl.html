@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Tutti i canali</h1>
+            <h1 class="page-header">Tutte le serie</h1>
             <#if success??>
             <div class="alert alert-success">
                 ${success}
@@ -14,32 +14,39 @@
     </#if>
 </div>
             <div class="col-lg-12">
-                <a href="canali?insert" class="page-header"  style="color: green; cursor: pointer;" >Aggiungi un canale <em class="fa fa-plus color-green"></em></a>
+                <a class="page-header" href="serie?insert" style="color: green; cursor: pointer;" >Aggiungi un programma <em class="fa fa-plus color-green"></em></a>
             </div>
         </div>
 
         <div class="panel panel-container" style="background-color: #F1F4F7">
             <div class="row">
-                <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        Logo
+                        Titolo
                     </div>
                 </div>
                 <div class="col-xs- col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        Nome
+                        Link di riferimento
                     </div>
                 </div>
-                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-                    <div class="panel panel-teal panel-widget border-right">
-                        In Onda
-                    </div>
-                </div>
+
                 <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        Numero
+                        Generi
                     </div>
                 </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Durata
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Stagione / Episodio
+                    </div>
+                </div>
+
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
                         Edit
@@ -55,54 +62,69 @@
 
 
         <div class="panel panel-container">
-            <#list canali as canale>
+            <#list serie as programma>
+
             <div class="row">
-                <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <img src="${canale.logo}" width="50" height="50"/>
+                        ${programma.titolo}
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        ${canale.nome}
+                        ${programma.link_ref}
                     </div>
                 </div>
-                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <#if canale.programmazioneCorrente??>
-                        ${canale.programmazioneCorrente.programma.titolo}
-                        <#else>
-                        <p style="color: red">niente in onda</p>
-                    </#if>
-                    </div>
-                </div>
+
+
                 <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        ${canale.numero}
+                        <select class="form-control">
+                            <#list programma.generi as genere>
+                            <#if genere??>
+                            <option>${genere.nome}</option>
+                            <#else>
+                            <p style="color: red">nessun genere</p>
+                        </#if>
+                        </#list>
+                        </select>
+                    </div>
+                </div>
+            <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                    ${programma.durata}
+                </div>
+            </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <p style="color: black">Episodio:${programma.episodio}
+                        Stagione:${programma.stagione}</p>  <!-- vedere se è una serie o un film -->
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <a href="canali?edit=${canale.key}"> <i class="fa fa-xl fa-edit"></i> </a>
+                        <a href="serie?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
+
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-${canale.key}"method="POST" action="canali">
-                            <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${canale.key}()" ></em>
+                        <form id="delete-form-${programma.key}"method="POST" action="serie">
+                            <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.key}()" ></em>
                             <script>
-                                function deleteFunc${canale.key}() {
-                                    var x = confirm('Vuoi veramente cancellare questo canale?')
+                                function deleteFunc${programma.key}() {
+                                    var x = confirm('Vuoi veramente cancellare questo programma?')
                                     if(x == true){
-                                        document.getElementById('delete-form-${canale.key}').submit(); }
+                                        document.getElementById('delete-form-${programma.key}').submit(); }
                                 }
                             </script>
-                            <input name="id" value="${canale.key}" hidden >
+                            <input name="id" value="${programma.key}" hidden >
                             <input name="delete" value="delete" hidden >
                         </form>
                     </div>
                 </div>
             </div>
-            </#list>
-        </div>
+        </#list>
+</div>
     </div>
+</div>

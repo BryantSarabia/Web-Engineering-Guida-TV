@@ -1,0 +1,61 @@
+
+{
+    "totpages": ${numero_pagine},
+    "curpage": ${pagina},
+    "data": [
+        <#list current_prog as canale,
+        programmazione>      
+        {
+        "canale": 
+                {
+                    "id": ${canale.key},
+                    "nome": "${canale.nome}",
+                    "numero": ${canale.numero},
+                    "logo": <#if canale.logo??>"${canale.logo}"<#else>"img_tv/static/no - image.png"</#if>
+                    
+                    <#if programmazione??>
+                    ,
+                            "programmazione": {
+                                "id": ${programmazione.key},
+                                "id_programma": ${programmazione.programma.key},
+                                "start_time": "${programmazione.time}",
+                                "end_time": "${programmazione.endTime}",
+                                "durata": ${
+                                    programmazione.durata
+                                },
+                                "programma": {
+                                    "id": ${
+                                        programmazione.programma.key
+                                    },
+                                    "titolo": "${programmazione.programma.titolo}",
+                                    "descrizione": "${programmazione.programma.descrizione}",
+                                    "img": "${programmazione.programma.img}",
+                                    "link_ref": "${programmazione.programma.link_ref}",
+                                    "durata": ${
+                                        programmazione.durata
+                                    },
+                                    <#if programmazione.programma.stagione??>
+                                            "stagione": ${
+                                                programmazione.programma.stagione
+                                            },
+                                            "episodio": ${programmazione.programma.episodio},
+                                            </#if>
+                                             "generi": {
+                                        <#list programmazione.programma.generi as genere>
+                                                "${genere?index}": "${genere.nome}"<#sep>,</#sep>
+                                                <#else>
+                                                "default": "Questo programma non ha generi"
+                                                </#list>
+                                    }
+                                    }
+                                    }
+                            </#if>
+                            }
+                    }
+
+                    <#sep>, </#sep>
+
+                            </#list>   
+                    
+                    ]
+                    }

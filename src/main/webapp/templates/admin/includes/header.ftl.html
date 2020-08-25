@@ -5,7 +5,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="#"><span>Lumino</span>Admin</a>
+            <a class="navbar-brand" href="#"><span>Guida-TV </span>Admin</a>
 
         </div>
     </div><!-- /.container-fluid -->
@@ -17,22 +17,33 @@
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTFFefqCb4z6H3XchBnyOV0itabnXX-EmyUXg&usqp=CAU" class="img-responsive" alt="">
         </div>
         <div class="profile-usertitle">
-            <div class="profile-usertitle-name">Username</div>
+            <div class="profile-usertitle-name">Admin</div>
             <div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
         </div>
         <div class="clear"></div>
     </div>
     <div class="divider"></div>
-    <form role="search">
+    <!-- <form role="search">
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Search">
         </div>
-    </form>
+    </form> -->
     <ul class="nav menu">
         <li><a href="dashboard"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
         <li ><a href="utenti"><em class="fa fa-user">&nbsp;</em> Utenti</a></li>
         <li><a href="canali"><em class="fa fa-exchange">&nbsp;</em> Canali</a></li>
-        <li><a href="programmi"><em class="fa fa-television">&nbsp;</em> Programmi</a></li>
+        <li ><a data-toggle="collapse" href="#sub-item-1">
+            <em class="fa fa-television">&nbsp;</em> Programmi<span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
+        </a>
+            <ul class="children collapse" id="sub-item-1">
+                <li><a class="" href="films">
+                    <span class="fa fa-arrow-right">&nbsp;</span> Film
+                </a></li>
+                <li><a class="" href="serie">
+                    <span class="fa fa-arrow-right">&nbsp;</span> Serie
+                </a></li>
+            </ul>
+        </li>
         <li><a href="programmazioni"><em class="fa fa-calendar">&nbsp;</em> Programmazioni</a></li>
         <li ><a href="logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
     </ul>

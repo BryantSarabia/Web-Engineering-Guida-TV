@@ -17,7 +17,7 @@
                             <#if logged>
                             <li><a href="#">Me</a>
                                 <ul class="dropdown">
-                                    <li><a href="dashboard">Admin Panel</a></li>
+                                    <#if is_admin><li><a href="dashboard">Admin Panel</a></li></#if>
                                     <li><a href="profile">Profile</a></li>
                                     <li><a href="logout">Logout</a></li>
                                 </ul>

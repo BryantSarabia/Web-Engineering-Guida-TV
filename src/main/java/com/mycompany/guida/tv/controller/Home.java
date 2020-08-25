@@ -11,6 +11,7 @@ import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.result.JSONResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
@@ -49,9 +50,12 @@ public class Home extends BaseController {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
+            if (request.getParameter("page") != null && !request.getParameter("page").isEmpty() && request.getParameter("json") == null) {
                 int page = SecurityLayer.checkNumeric(request.getParameter("page"));
                 action_paginated(request, response, page);
+            } else if (request.getParameter("page") != null && !request.getParameter("page").isEmpty() && request.getParameter("json") != null) {
+                int page = SecurityLayer.checkNumeric(request.getParameter("page"));
+                action_paginated_json(request, response, page);
             } else {
                 action_default(request, response);
 
@@ -96,6 +100,39 @@ public class Home extends BaseController {
             request.setAttribute("pagina", page);
             request.setAttribute("current_prog", current);
             results.activate("home.ftl.html", request, response);
+        } catch (DataException ex) {
+            request.setAttribute("message", "Data access exception: " + ex.getMessage());
+            action_error(request, response);
+        }
+
+    }
+
+    private void action_paginated_json(HttpServletRequest request, HttpServletResponse response, int page) throws DataException, TemplateManagerException {
+
+        int numero_canali = 0;
+        int canali_per_pagina = 6;
+
+        try {
+            JSONResult results = new JSONResult(getServletContext());
+            List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
+            numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
+            Map<Canale, Programmazione> current = new TreeMap();
+
+            for (Canale c : canali) {
+                // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
+                Programmazione programmazione = c.getProgrammazioneCorrente();
+
+                if (programmazione != null) {
+                    current.put(c, programmazione);
+                } else {
+                    current.put(c, null);
+                }
+            }
+
+            request.setAttribute("numero_pagine", (int) (Math.ceil(numero_canali / canali_per_pagina)));
+            request.setAttribute("pagina", page);
+            request.setAttribute("current_prog", current);
+            results.activate("/json/home_paginated.ftl.json", request, response);
         } catch (DataException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);

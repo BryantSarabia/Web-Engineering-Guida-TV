@@ -2,10 +2,10 @@ package com.mycompany.guida.tv.admin;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
+import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
-import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
@@ -36,7 +36,7 @@ import javax.servlet.http.Part;
 import javax.swing.*;
 
 @MultipartConfig
-public class Programmi extends BaseController {
+public class Films extends BaseController {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,18 +59,17 @@ public class Programmi extends BaseController {
             boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
-                //UtilityMethods.debugConsole(this.getClass(), "action_sendEmail", "default");
-                if (request.getParameter("draw") != null) {
-                    action_paginate_results(request, response);
-                } else if (request.getParameter("insert") != null) {
+                if (request.getParameter("insert") != null) {
                     action_create(request, response);
                 } else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
+                } else if (request.getParameter("store") != null) {
+                    action_store(request, response);
+                } else if (request.getParameter("update") != null) {
+                    action_update(request, response);
                 } else if (request.getParameter("delete") != null) {
                     action_delete(request, response);
-                } else if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
-                    action_store(request, response);
-                } else {
+                }else {
                     action_default(request, response);
                 }
 
@@ -92,43 +91,27 @@ public class Programmi extends BaseController {
         }
         return;
     }
-
-    private void action_paginate_results(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        // Sanitizzazione parametri vs XSS
-        int draw = SecurityLayer.checkNumeric(request.getParameter("draw"));
-        int start = SecurityLayer.checkNumeric(request.getParameter("start"));
-        int length = SecurityLayer.checkNumeric(request.getParameter("length"));
-        int total = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getNumeroProgrammi();
-
-        List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammiPaginated(start, length);
-
-      //  JSONResult results = new JSONResult(getServletContext());
-
-        // JSON Response Templating Attributes
-        request.setAttribute("draw", draw);
-        request.setAttribute("total", String.valueOf(total));
-        request.setAttribute("programmi", programmi);
-      //  results.activate("/admin/json/dt_programmi.ftl.json", request, response);
-
-    }
-
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-     //   UtilityMethods.debugConsole(this.getClass(), "action_default", "me called");
-       // List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammiPaginated(0, 15);
-        List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
-        List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+        List<Film> film;
+        if(request.getParameter("page") == null){
+            film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
+        }
+        else {
+            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            int start=(numero-1)*10;
+            int elements=10;
+            film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilmPaginated(start, elements);
+        }
+        int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
      /*   UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-
-        // Edit Programmi default Attributes
         request.setAttribute("me", me);*/
-        request.setAttribute("serie", serie);
         request.setAttribute("film",film);
+        request.setAttribute("numero_pagine",numero_pagine);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
-
-        results.activate("/admin/programmi/index.ftl.html", request, response);
+        results.activate("/admin/film/index.ftl.html", request, response);
 
     }
 
@@ -142,19 +125,18 @@ public class Programmi extends BaseController {
 
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("item", item);
+
         request.setAttribute("outline_tpl", "");
-        results.activate("/admin/programmi/index.ftl.html", request, response);
+        results.activate("/admin/serie/edit.ftl.html", request, response);
     }
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + "/login");
     }
-
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
+    }
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
-/*
-        JSONResult results = new JSONResult(getServletContext());
-        UtilityMethods.debugConsole(this.getClass(), "store", "sono in store");*/
-        // CHECK SU TUTTI I CAMPI
+
         try {
 
             boolean serie_update = false;
@@ -189,6 +171,7 @@ public class Programmi extends BaseController {
             target.setEpisodio(episodio);*/
             target.setDurata(durata);
             target.setLink_ref(linkRefDetails);
+
            // target.setGeneri(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
@@ -222,34 +205,30 @@ public class Programmi extends BaseController {
                 }
             }
 
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
 
-
-            request.setAttribute("errors", "");
+            request.setAttribute("film",film);
+            request.setAttribute("numero_pagine",numero_pagine);
             request.setAttribute("success", "true");
-         //   results.activate("/admin/json/store_response.ftl.json", request, response);
+
         } catch (IOException | ServletException | DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
-       //     results.activate("/admin/json/store_response.ftl.json", request, response);
         }
     }
 
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-     //   List<Programma> series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getIdSerie();
         request.setAttribute("generi", generi);
-      //  request.setAttribute("series", series);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-        results.activate("/admin/programmi/new.ftl.html", request, response);
+        results.activate("/admin/film/new.ftl.html", request, response);
     }
 
-    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
-        // Controllo se l'id è reale
-     //   JSONResult results = new JSONResult(getServletContext());
+    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("data_id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -259,14 +238,28 @@ public class Programmi extends BaseController {
             }
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().deleteProgramma(key);
-            request.setAttribute("errors", "");
-            request.setAttribute("success", "true");
-           // results.activate("/admin/json/store_response.ftl.json", request, response);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
+
+            request.setAttribute("film",film);
+            request.setAttribute("numero_pagine",numero_pagine);
+            request.setAttribute("success", "Film cancellato con successo!");
+            TemplateResult results = new TemplateResult(getServletContext());
+
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            request.setAttribute("success", "false");
-            //results.activate("/admin/json/store_response.ftl.json", request, response);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
+
+            request.setAttribute("film",film);
+            request.setAttribute("numero_pagine",numero_pagine);
+            TemplateResult results = new TemplateResult(getServletContext());
+
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/serie/index.ftl.html", request, response);
+
         }
 
     }
