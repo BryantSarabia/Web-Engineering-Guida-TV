@@ -40,7 +40,7 @@ public class UtenteDAO_MySQL extends DAO implements UtenteDAO {
             loginUtente = connection.prepareStatement("SELECT id, password FROM utenti WHERE email = ?");
             getUtenteByEmail = connection.prepareStatement("SELECT id FROM utenti WHERE email = ?");
             getUtenteByToken = connection.prepareStatement("SELECT * FROM utenti WHERE token = ?");
-            // getUtentiSendEmail = connection.prepareStatement("SELECT id FROM Utente WHERE send_email = 1");
+            getUtentiSendEmail = connection.prepareStatement("SELECT id FROM utenti WHERE send_email = 1");
             getUtentiPaginated = connection.prepareStatement("SELECT * FROM utenti LIMIT ? OFFSET ?");
             dUtente = connection.prepareStatement("DELETE FROM utenti WHERE id = ?");
             checkToken = connection.prepareStatement("SELECT id AS Token FROM utenti where token = ?");
