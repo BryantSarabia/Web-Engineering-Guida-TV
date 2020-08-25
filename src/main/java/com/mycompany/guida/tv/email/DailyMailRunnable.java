@@ -181,7 +181,7 @@ public class DailyMailRunnable implements Runnable{
                 }
             }
             mail_text += trademark;
-            String path = "E:/Desktop/Desktop/Progetti/Web-Engineering-Guida-TV/files/" + user.getNome()+user.getCognome()+".txt";
+            String path = "E:/Desktop/Desktop/Progetti/Web-Engineering-Guida-TV/files/DailyMails/" + user.getNome()+user.getCognome()+".txt";
             File file = new File(path);
             if(file.createNewFile()) System.out.println("Daily mail created"); else System.out.println("Failed creating new file or file already exists");
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {

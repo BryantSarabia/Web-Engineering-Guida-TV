@@ -141,7 +141,7 @@ public class VerifyEmail extends BaseController {
             me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));
             me.setExpirationDate(LocalDate.now().plusDays(1));
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
-            SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/links.txt", me);
+            SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + me.getNome() + me.getCognome() + "Verify.txt", me);
             response.sendRedirect("verifyemail");
         } else {
             action_default(request, response);

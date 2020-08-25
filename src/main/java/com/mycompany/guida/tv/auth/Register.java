@@ -134,7 +134,7 @@ public class Register extends BaseController {
                 }
                 else {
                     //Non invio mail ma stampo il link in un file .txt
-                    SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/links.txt", newUser);
+                    SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + newUser.getNome() + newUser.getCognome() + "Verify.txt", newUser);
                    
                     //Redirect
                     if (request.getParameter("referrer") != null) {

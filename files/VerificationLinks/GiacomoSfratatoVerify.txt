@@ -1,16 +1,11 @@
 ----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
 
-25/08/2020 - 14:31
-Newsletter per Giacomo Sfratato (xbit18@hotmail.it) dallo staff di GuidaTV
+25/08/2020 - 14:55
+Email per Giacomo Sfratato (xbit18@hotmail.it) dallo staff di GuidaTV
 
 Ciao Giacomo,
-ecco la tua programmazione di oggi 25 agosto 2020:
-
-Per oggi non c'è nulla in programma
-
-Aggiornamenti sulle tue ricerche:
-
-Non hai salvato nessuna ricerca
+clicca il link qui sotto per confermare la tua email:
+localhost:8080/guida-tv/verifyemail?token=%242a%2410%24nj.tHNtdMKYVRAA0Rxq54.7eW2ybtX1ASV.6AcjDfNm5RegA9QmvW&code=7w8mVom6T8eReIZbuP8k%2F3ScmI1Mb264
 
 ----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
 
