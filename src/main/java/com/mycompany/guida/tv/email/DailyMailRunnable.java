@@ -181,6 +181,9 @@ public class DailyMailRunnable implements Runnable{
                 }
             }
             mail_text += trademark;
+            
+            //Non uso il servlet parameter come in VerifyEmail perché questa classe non estende HttpServlet (quindi niente this.getServletContext().getInitParameter("files.directory"))
+            //e non posso usare request.getSession().getServletContext() perché non ho una request da cui prendere la sessione, quindi path "fisso"
             String path = "E:/Desktop/Desktop/Progetti/Web-Engineering-Guida-TV/files/DailyMails/" + user.getNome()+user.getCognome()+".txt";
             File file = new File(path);
             if(file.createNewFile()) System.out.println("Daily mail created"); else System.out.println("Failed creating new file or file already exists");
