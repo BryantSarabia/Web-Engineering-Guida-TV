@@ -193,7 +193,7 @@ public class UtenteProxy extends UtenteImpl implements DataItemProxy {
         if(this.getSendEmail()){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
             String mail_text = "Ciao " + this.getNome() + ",\n";
-            mail_text += "ecco la tua programmazione di oggi " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n\n";
+            mail_text += "ecco la tua programmazione di oggi " + LocalDate.now().format(formatter) + "\n\n";
             
             List<Interessa> interessi = this.getInteressi();   //Prendo tutti i canali per cui l'utente ha espresso interesse
             

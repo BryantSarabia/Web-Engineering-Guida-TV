@@ -1,4 +1,11 @@
-[2020-08-23T21:20:09.324583300] Email per Giacomo Sfratato
-Ciao Giacomo
-Clicca il link qui sotto per confermare la tua email:
-localhost:8080/guida-tv/verifyemail?token=$2a$10$779Hx3UhwKCLWjQ36JmVruhRnGy7W8BrrpSBx7G2gHAC6KiYxJAL.&code=7w8mVom6T8eReIZbuP8k/3ScmI1Mb264
+----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
+
+25/08/2020 - 12:52
+Email per Giacomo Sfratato (xbit18@hotmail.it) dallo staff di GuidaTV
+
+Ciao Giacomo,
+clicca il link qui sotto per confermare la tua email:
+localhost:8080/guida-tv/verifyemail?token=%242a%2410%24roj7dBSnRlT1v9S9fKEDN.FqEltJCzXurKb2VrdHo7PqimscXZWuS&code=7w8mVom6T8eReIZbuP8k%2F3ScmI1Mb264
+
+----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
+

@@ -18,6 +18,7 @@ import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,7 +71,7 @@ public class VerifyEmail extends BaseController {
             //Controllo che i parametri della request non siano vuoti
             if (request.getParameter("token") != null && request.getParameter("code") != null) {
 
-                String decrypted_email = SecurityLayer.decrypt(request.getParameter("code"), SecurityLayer.getStaticKey());
+                String decrypted_email = URLDecoder.decode(SecurityLayer.decrypt(request.getParameter("code"), SecurityLayer.getStaticKey()),"UTF-8");
                 user = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtenteByEmail(decrypted_email);
 
                 //Controllo che il codice (la mail criptata) corrisponda ad un utente presente nel database
@@ -82,14 +83,16 @@ public class VerifyEmail extends BaseController {
                 throw new Exception("Something went wrong");
             }
             //Controllo che il token dell'utente sia giusto
-            if (BCrypt.checkpw(user.getToken(), request.getParameter("token"))) {
+            if (BCrypt.checkpw(user.getToken(), URLDecoder.decode(request.getParameter("token"), "UTF-8"))) {
 
                 //Controllo che il token dell'utente non sia scaduto
                 if (LocalDate.now().isBefore(user.getExp_date())) {
 
                     //Se il token va bene memorizzo la data di conferma e faccio il redirect a /login
                     if (user.getEmailVerifiedAt() == null) {  //Se la mail è stata già verificata non faccio nulla
-
+                        
+                        user.setToken(null);
+                        user.setExpirationDate(null);
                         user.setEmailVerifiedAt(LocalDate.now());
                         ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(user);
                     }
