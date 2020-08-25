@@ -11,7 +11,7 @@
                     "id": ${canale.key},
                     "nome": "${canale.nome}",
                     "numero": ${canale.numero},
-                    "logo": <#if canale.logo??>"${canale.logo}"<#else>"img_tv/static/no - image.png"</#if>
+                    "logo": <#if canale.logo??>"${canale.logo}"<#else>"img_tv/static/no-image.png"</#if>
                     
                     <#if programmazione??>
                     ,
@@ -29,8 +29,8 @@
                                     },
                                     "titolo": "${programmazione.programma.titolo}",
                                     "descrizione": "${programmazione.programma.descrizione}",
-                                    "img": "${programmazione.programma.img}",
-                                    "link_ref": "${programmazione.programma.link_ref}",
+                                    "img": <#if programmazione.programma.img??>"${programmazione.programma.img}"<#else>"img_tv/static/no-image.png"</#if>,
+                                    "link_ref": <#if programmazione.programma.link_ref??>"${programmazione.programma.link_ref}"<#else>"#"</#if>,
                                     "durata": ${
                                         programmazione.durata
                                     },
@@ -40,13 +40,13 @@
                                             },
                                             "episodio": ${programmazione.programma.episodio},
                                             </#if>
-                                             "generi": {
+                                             "generi": [
                                         <#list programmazione.programma.generi as genere>
-                                                "${genere?index}": "${genere.nome}"<#sep>,</#sep>
+                                                {"nome": "${genere.nome}"}<#sep>,</#sep>
                                                 <#else>
-                                                "default": "Questo programma non ha generi"
+                                                {"default": "Questo programma non ha generi"}
                                                 </#list>
-                                    }
+                                    ]
                                     }
                                     }
                             </#if>
@@ -59,3 +59,4 @@
                     
                     ]
                     }
+                    

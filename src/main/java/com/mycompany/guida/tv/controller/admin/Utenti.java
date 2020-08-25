@@ -1,4 +1,4 @@
-package com.mycompany.guida.tv.admin;
+package com.mycompany.guida.tv.controller.admin;
 
 
 import com.mycompany.guida.tv.controller.BaseController;

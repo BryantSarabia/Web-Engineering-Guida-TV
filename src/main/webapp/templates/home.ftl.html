@@ -17,7 +17,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="listing__item">
                             <#if programmazione??>
-                            <div class="listing__item__pic set-bg" data-setbg="${programmazione.programma.img}" style="background-image: url(${programmazione.programma.img});">
+                            <div class="listing__item__pic set-bg" data-setbg="<#if programmazione.programma.img??>${programmazione.programma.img}<#else>img_tv/static/no-image.png</#if>" style="background-image: url(<#if programmazione.programma.img??>${programmazione.programma.img}<#else>img_tv/static/no-image.png</#if>);">
                                 <#else>
                                 <div class="listing__item__pic set-bg" data-setbg="img_tv/static/no-image.png" style="background-image: url(img_tv/static/no-image.png);">
                                     </#if>
@@ -68,9 +68,9 @@
                                     <div class="listing__item__text__info">
                                         <div class="listing__item__text__info__left">
                                             <#if programmazione.programma.stagione??>
-                                            <span>Stagione ${programmazione.programma.stagione}, Puntata ${programmazione.programma.episodio} &nbsp; <small>(${programmazione.programma.durata} min)</small></span>
+                                            <span>Stagione ${programmazione.programma.stagione}, Puntata ${programmazione.programma.episodio} &nbsp; <small>(${programmazione.durata} min)</small></span>
                                             <#else>
-                                            <span> <small>(${programmazione.programma.durata} min)</small> </span>
+                                            <span> <small>(${programmazione.durata} min)</small> </span>
                                             </#if>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
 
                 <div class="row col-12 justify-content-center">
                     <div class="col-lg-12 text-center">
-                        <div class="blog__pagination">
+                        <div id="home_pagination" class="blog__pagination">
                             <#list 1..(numero_pagine+1) as p>
                             <a <#if (p-1) == pagina>class="page_active"</#if> href="?page=${p-1}">${p}</a>
                             </#list>
@@ -105,5 +105,36 @@
 
             </div>
         </div>
+
+        <div id="home_programma_prototype" class="col-lg-4 col-md-6 d-none">
+            <div class="listing__item">
+                <div class="listing__item__pic set-bg" data-setbg="">
+                    <a href="canale.key"><img src="canale.logo" alt="canale.logo alt"></a>
+                    <a href="canale.key"><div class="listing__item__pic__tag">canale.nome</div></a>
+                    <div class="listing__item__pic__btns">
+                        <a href="programma.key"><span class="icon_zoom-in_alt"></span></a>
+                    </div>
+                </div>
+                <div class="listing__item__text">
+                    <div class="listing__item__text__inside">
+                        <a href="programma.key"><h5>programma.titolo</h5></a>
+                        <div class="listing__item__text__rating">
+                            <div class="listing__item__rating__star">
+                                <h6>10:00 - 12:00 | nessuna programmazione in onda</h6>
+                            </div>
+                        </div>
+                        <ul>
+
+                        </ul>
+                    </div>
+                    <div class="listing__item__text__info">
+                        <div class="listing__item__text__info__left">
+                            <span><small></small></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- Most Search Section End -->

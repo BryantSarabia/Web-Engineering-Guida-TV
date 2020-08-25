@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.guida.tv.auth;
+package com.mycompany.guida.tv.controller.auth;
 
 import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.result.FailureResult;
