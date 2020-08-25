@@ -87,7 +87,7 @@ public class Methods {
     public static String generateNewToken(GuidaTVDataLayer dl) throws DataException {
         String token;
         do {
-            token = getRandomString(16);
+            token = getRandomString(10);
         } while(dl.getUtenteDAO().tokenExists(token));
         return token;
     }
