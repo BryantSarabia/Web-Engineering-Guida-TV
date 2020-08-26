@@ -75,8 +75,8 @@ public abstract class BaseController extends HttpServlet {
             }
             request.setAttribute("settimana", settimana);
 
-            // Last programmazioni per il Footer
-            request.setAttribute("footer", datalayer.getProgrammazioneDAO().getLatest(3));
+            // Last programmazioni per la bottom bar
+            request.setAttribute("bottom_bar", datalayer.getProgrammazioneDAO().getLatest(3));
 
             processRequest(request, response);
         } catch (Exception ex) {
