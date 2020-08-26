@@ -115,22 +115,71 @@ public class Films extends BaseController {
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        int id_element = SecurityLayer.checkNumeric(request.getParameter("data_id"));
-        Programma item = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_element);
+        int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
+        Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
         request.setAttribute("generi", generi);
 
         TemplateResult results = new TemplateResult(getServletContext());
-        request.setAttribute("item", item);
+        request.setAttribute("film", film);
 
-        request.setAttribute("outline_tpl", "");
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/film/edit.ftl.html", request, response);
     }
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + "/login");
     }
-    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, UnsupportedEncodingException {
+        int id = SecurityLayer.checkNumeric(request.getParameter("id"));
+
+        try {
+
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            String link_ref = request.getParameter("link_ref");
+            String durata = request.getParameter("durata");
+            Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
+
+            target.setTitolo(titolo);
+            target.setDescrizione(descrizione);
+            target.setDurata(durata);
+            target.setLink_ref(link_ref);
+            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
+
+            Part image = request.getPart("immagine");
+            if (image != null) {
+                String name = "prog_" + target.getKey() + ".jpg";
+                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                long size = image.getSize();
+                if (size > 0 && name != null && !name.isEmpty()) {
+                    File new_file = new File(path);
+                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    target.setLink_ref("img_tv/progs" + name);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
+                }
+            }
+            request.setAttribute("success", "Serie creata");
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
+            request.setAttribute("film", film);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/index.ftl.html", request, response);
+        } catch (IOException | ServletException | DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("film", film);
+            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
+            request.setAttribute("generi", generi);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/edit.ftl.html", request, response);
+
+        }
     }
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException,DataException {
         try {
@@ -139,7 +188,7 @@ public class Films extends BaseController {
             String descrizione = request.getParameter("descrizione");
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
-          //  int generi = (int) request.getParameter("generi");
+
 
             Film target = new FilmImpl();
             target.setTitolo(titolo);

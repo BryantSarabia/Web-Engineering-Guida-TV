@@ -9,12 +9,12 @@ import java.util.List;
 
 public class ProgrammaImpl extends DataItemImpl<Integer> implements Programma {
 
-    private String titolo="";
-    private String descrizione="";
-    private String img="";
-    private String link_ref="";
-    private String durata="";
-    private List<Genere> generi = new ArrayList<Genere>();
+    private String titolo;
+    private String descrizione;
+    private String img;
+    private String link_ref;
+    private String durata;
+    private List<Genere> generi;
 
 
     public ProgrammaImpl() {
