@@ -33,8 +33,6 @@ function setDateTimeCheck() {
         });
     });
 
-
-    //console.log('listening');
 }
 
 setDateTimeCheck();
@@ -55,13 +53,202 @@ $(document).ready(function () {
     $('#series-slider').slick();
 });
 
+/* Gestione pagination buttons */
+
+function pagination_buttons(button, res, home = true) {
+    // Gestione paginazione buttons
+
+    let button_page = parseInt(button.attr("href").substring(6, 7));
+
+    if (home) {
+        if (button.text() === 'NEXT') {
+
+            $('#home_pagination a').each(function (index) {
+                let current_button_page = parseInt($(this).attr("href").slice(6));
+                if (current_button_page === (button_page - 1)) {
+                    $(this).removeClass('page_active');
+                }
+                if ($(this).attr("href") === button.attr("href")) {
+                    $(this).addClass('page_active');
+                    if (current_button_page < res.totpages) {
+                        button.attr("href", "?page=" + (current_button_page + 1));
+
+                        if (button.hasClass("d-none")) {
+                            button.removeClass("d-none");
+                        }
+                    } else if (current_button_page === res.totpages) {
+                        button.addClass("d-none");
+                    }
+                    return false;
+
+                }
+            });
+        } else {
+
+            if (!button.hasClass('page_active')) {
+                $('#home_pagination a').each(function () {
+                    if ($(this).hasClass('page_active')) {
+                        $(this).removeClass('page_active');
+                        return false;
+                    }
+                });
+                if (button_page < res.totpages) {
+                    $('#home_pagination a:last-child').attr("href", "?page=" + (button_page + 1));
+                    if ($('#home_pagination a:last-child').hasClass("d-none")) {
+                        $('#home_pagination a:last-child').removeClass("d-none");
+                    }
+
+                } else if (button_page === res.totpages) {
+                    $('#home_pagination a:last-child').addClass('d-none');
+                }
+                button.addClass('page_active');
+            }
+        }
+    } else {
+
+        if (button.text() === 'NEXT') {
+
+            $('#palinsesto_pagination a').each(function (index) {
+                let current_button_page = parseInt($(this).attr("href").substring(6, 7));
+                if (current_button_page === (button_page - 1)) {
+                    $(this).removeClass('page_active');
+                }
+                if ($(this).attr("href") === button.attr("href")) {
+                    $(this).addClass('page_active');
+                    if (current_button_page < res.totpages) {
+                        button.attr("href", $(this).attr("href").replace("?page=" + button_page, "?page=" + (button_page + 1)));
+                        console.log(button.attr("href"))
+                        if (button.hasClass("d-none")) {
+                            button.removeClass("d-none");
+                        }
+                    } else if (current_button_page === res.totpages) {
+                        button.addClass("d-none");
+                    }
+                    return false;
+
+                }
+            });
+        } else {
+
+            if (!button.hasClass('page_active')) {
+                $('#palinsesto_pagination a').each(function () {
+                    if ($(this).hasClass('page_active')) {
+                        $(this).removeClass('page_active');
+                        return false;
+                    }
+                });
+                if (button_page < res.totpages) {
+                    $('#palinsesto_pagination a:last-child').attr("href", button.attr("href").replace("?page=" + button_page, "?page=" + (button_page + 1)));
+                    if ($('#palinsesto_pagination a:last-child').hasClass("d-none")) {
+                        $('#palinsesto_pagination a:last-child').removeClass("d-none");
+                    }
+
+                } else if (button_page === res.totpages) {
+                    $('#palinsesto_pagination a:last-child').addClass('d-none');
+                }
+                button.addClass('page_active');
+            }
+        }
+}
+}
+
+/* Palinsesto generale dynamic funciton */
+
+function palinsesto_generale(data) {
+
+    let container = $('.canali');
+
+    container.fadeOut(500, function () {
+        $(this).empty().show();
+
+        for (let x of data.data) {
+            let canale = x.canale;
+            let programmazioni;
+            if (canale.programmazioni) {
+                programmazioni = canale.programmazioni;
+            }
+
+            let target = $('#palinsesto_generale_prototype').clone();
+            let lista_programmi = target.find('.lista_programmi');
+            let li = lista_programmi.children('li').clone();
+            lista_programmi.empty();
+            let canale_logo = target.children(".canale-logo");
+
+            /* CANALE LOGO */
+            canale_logo.children().eq(0).children('a').attr("href", "canale?c_key=" + canale.id);
+            canale_logo.children().eq(0).children('a').children('img').attr("src", canale.logo);
+            canale_logo.children().eq(0).children('a').children('img').attr("alt", canale.nome);
+
+            canale_logo.children().eq(1).children('a').attr("href", "canale?c_key=" + canale.id);
+            canale_logo.children().eq(1).children('a').children('h5').text(canale.nome);
+
+            canale_logo.children().eq(2).children('small').eq(0).text(canale.start + " - " + canale.end);
+            canale_logo.children().eq(2).children('small').eq(1).text(canale.start);
+            canale_logo.children().eq(2).children('small').eq(2).text(canale.end);
+            /* END CANALE LOGO */
+
+            /* CANALE PROGRAMMAZIONI */
+            if (programmazioni != undefined) {
+
+                for (let z of programmazioni) {
+
+                    let programma = z.programma;
+                    let li_element = li.clone();
+                    let target_row = li_element.find('.programma');
+                    li_element.children('a').attr("href", "programma?p_key=" + programma.id);
+                    target_row.children().eq(0).children('img').attr("src", programma.img);
+                    target_row.children().eq(0).children('img').attr("alt", programma.titolo.replace(/&#39;/gi, "\'"));
+
+                    let second_row = target_row.children().eq(1).children('div').children('div');
+                    second_row.eq(0).children('h5').text(programma.titolo);
+                    second_row.eq(1).children('small').text("(" + z.durata + " min)");
+
+                    /* Lista generi */
+                    if (programma.generi[0].default) {
+                        second_row.eq(2).children('small').text("Questo programma non ha generi");
+                    } else {
+                        let generi = "";
+                        for (let i = 0; i < programma.generi.length; i++) {
+                            if ((i + 1) === programma.generi.length) {
+                                generi += programma.generi[i].nome;
+                            } else {
+                                generi += programma.generi[i].nome + ", ";
+                            }
+                        }
+                        second_row.eq(2).children('small').text(generi);
+                    }
+                    /* End lista generi */
+
+                    second_row.eq(3).children('small').text(z.start_time);
+                    lista_programmi.append(li_element);
+                }
+            } else {
+                lista_programmi.empty();
+                target.children('div').eq(1).append(
+                        `<div class="col-lg-9 text-center align-self-center">
+                        <p>Nessuna programmazione</p> 
+                    </div>`
+                        );
+            }
+
+            /* END CANALE PROGRAMMAZIONI */
+
+            target.removeAttr("id");
+            target.removeClass("d-none");
+            target.hide().appendTo(container).fadeIn(500);
+        }
+    })
+}
+
+
+
 /* Homepage pagination AJAX */
 
 $(document).on('click', '#home_pagination a', function (event) {
     event.preventDefault();
     // console.log(window.location + $(this).attr("href") + "&json=true");
     var container = $('#in_onda');
-    var pagination_button = $(this);
+    var button = $(this);
     $.ajax({
         url: window.location.pathname + $(this).attr("href") + "&json=true",
         method: "GET",
@@ -69,7 +256,7 @@ $(document).on('click', '#home_pagination a', function (event) {
         success: function (data) {
 
             var res = JSON.parse(data);
-            console.log(res);
+            // console.log(res);
 
             container.fadeOut(500, function () {
                 $(this).empty().show();
@@ -98,7 +285,7 @@ $(document).on('click', '#home_pagination a', function (event) {
                         set_bg.data('setbg', programma.img);
                         set_bg.find('div').find('a').attr('href', 'programma?p_key=' + x.canale.programmazione.programma.id);
                         text_inside.children('a').attr('href', 'programma?p_key=' + programma.id);
-                        text_inside.children('a').children('h5').text(programma.titolo);
+                        text_inside.children('a').children('h5').text(programma.titolo.replace(/&#39;/gi, "\'"));
                         text_inside.children('.listing__item__text__rating').children('.listing__item__rating__star').find('h6').text(programmazione.start_time + ' - ' + programmazione.end_time);
 
                         for (let genere of programma.generi) {
@@ -141,52 +328,131 @@ $(document).on('click', '#home_pagination a', function (event) {
 
             });
 
-            // Gestione paginazione buttons
+            /* Gestione pagination buttons */
+            pagination_buttons(button, res);
 
-            if (pagination_button.text() === 'NEXT') {
 
-                $('#home_pagination a').each(function (index) {
-                    console.log($(this))
-                    if ((parseInt($(this).attr("href").slice(6))) === (parseInt(pagination_button.attr("href").slice(6))) - 1) {
-                        $(this).removeClass('page_active');
-                    }
-                    if ($(this).attr("href") === pagination_button.attr("href")) {
-                        $(this).addClass('page_active');
-                        if (parseInt($(this).attr("href").slice(6)) < res.totpages) {
-                            pagination_button.attr("href", "?page=" + (parseInt($(this).attr("href").slice(6)) + 1));
 
-                            if (pagination_button.hasClass("d-none")) {
-                                pagination_button.removeClass("d-none");
-                            }
-                        } else if (parseInt($(this).attr("href").slice(6)) == res.totpages) {
-                            pagination_button.addClass("d-none");
-                        }
-                        console.log("aggiungo la classe active a " + $(this).attr("href"))
-                        return false;
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+});
 
-                    }
-                });
-            } else {
 
-                if (!pagination_button.hasClass('page_active')) {
-                    $('#home_pagination a').each(function () {
-                        if ($(this).hasClass('page_active')) {
-                            $(this).removeClass('page_active');
-                            return false;
-                        }
-                    });
-                    if (parseInt(pagination_button.attr("href").slice(6)) < res.totpages) {
-                        $('#home_pagination a:last-child').attr("href", "?page=" + (parseInt(pagination_button.attr("href").slice(6)) + 1));
-                        if ($('#home_pagination a:last-child').hasClass("d-none")) {
-                            $('#home_pagination a:last-child').removeClass("d-none");
-                        }
 
-                    } else if (parseInt(pagination_button.attr("href").slice(6)) == res.totpages) {
-                        $('#home_pagination a:last-child').addClass('d-none');
-                    }
-                    pagination_button.addClass('page_active');
+/* Palinsesto Generale AJAX */
+
+$(document).on('click', '#palinsesto_pagination a', function (event) {
+    event.preventDefault();
+    // console.log(window.location + $(this).attr("href") + "&json=true");
+
+    var button = $(this);
+    $.ajax({
+        url: $(this).attr("href") + "&json=true",
+        method: "GET",
+        cache: false,
+        success: function (data) {
+
+            var res = JSON.parse(data);
+
+
+            /* container.fadeOut(500, function () {
+             $(this).empty().show();
+             
+             }); */
+
+            palinsesto_generale(res);
+
+            /* Gestione pagination buttons */
+            pagination_buttons(button, res, false);
+
+
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+});
+
+$(document).on('click', '.day-number-container a', function (event) {
+    event.preventDefault();
+    button = $(this);
+    // console.log(window.location + $(this).attr("href") + "&json=true");
+
+    var button = $(this);
+    $.ajax({
+        url: $(this).attr("href") + "&json=true",
+        method: "GET",
+        cache: false,
+        success: function (data) {
+
+            var res = JSON.parse(data);
+
+
+            /* container.fadeOut(500, function () {
+             $(this).empty().show();
+             
+             }); */
+
+            palinsesto_generale(res);
+
+            $('.day-number').each(function () {
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active');
                 }
-            }
+            });
+
+            button.children('div').addClass('active');
+
+            /* Gestione  buttons */
+
+
+
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+});
+
+
+
+$(document).on('click', '.fascia a', function (event) {
+    event.preventDefault();
+    // console.log(window.location + $(this).attr("href") + "&json=true");
+
+    var button = $(this);
+    $.ajax({
+        url: $(this).attr("href") + "&json=true",
+        method: "GET",
+        cache: false,
+        success: function (data) {
+
+            var res = JSON.parse(data);
+
+
+            /* container.fadeOut(500, function () {
+             $(this).empty().show();
+             
+             }); */
+
+            palinsesto_generale(res);
+
+            /* Gestione  buttons */
+
+            $('.fascia').each(function () {
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                }
+            });
+
+            button.parent().addClass('active');
+
+
 
         },
         error: function (e) {

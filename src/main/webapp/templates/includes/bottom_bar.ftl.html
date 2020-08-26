@@ -1,0 +1,44 @@
+<!-- Blog Section Begin -->
+
+<#if (bottom_bar?size > 0 )>
+<section class="news-post spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="section-title">
+                    <h2>Ultime programmazioni</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <#list bottom_bar as prog_footer>
+            <div class="col-lg-4 col-md-6">
+                <div class="blog__item">
+                    <div class="blog__item__pic set-bg" data-setbg="${prog_footer.programma.img}" style="background-image: url(${prog_footer.programma.img});">
+                        <a href="${prog_footer.programma.link_ref}" class="play-btn video-popup"><i
+                                class="icon_zoom-in_alt"></i></a>
+                    </div>
+                    <div class="blog__item__text">
+                        <ul class="blog__item__tags">
+                            <#list prog_footer.programma.generi as genere>
+                            <li>
+                                <#if (genere?index == 0)><i class="fa fa-tags"></i></#if>
+                                ${genere.nome}</li>
+                            <#else>
+                            <li><i class="fa fa-tags"></i>Questo programma non ha generi</li>
+                            </#list>
+                        </ul>
+                        <h5><a href="programma?p_key=${prog_footer.key}" target="_blank">${prog_footer.programma.titolo}</a></h5>
+                        <ul class="blog__item__widget">
+                            <li><i class="fa fa-clock-o"></i> ${prog_footer.date}</li>
+                            <li>${prog_footer.time} - ${prog_footer.endTime}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </#list>
+        </div>
+    </div>
+</section>
+</#if>
+<!-- Blog Section End -->

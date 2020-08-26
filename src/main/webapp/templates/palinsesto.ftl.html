@@ -11,7 +11,7 @@
 
         <div class="row  palinsesto-date ">
 
-            <div class="row col-12 m-md-2 justify-content-around align-items-center">
+            <div class="row day-number-container col-12 m-md-2 justify-content-around align-items-center">
                 <#list settimana as giorno>
                 <a href="palinsesto?day=${giorno.toString()}" class="col-1 col-lg-1 p-1 text-center"> <div class="day-number <#if day == giorno.toString()>active</#if>"><span>${giorno.getDayOfMonth()}</span></div> </a>
                 </#list>
@@ -124,7 +124,7 @@
                             <a href="programma?p_key=${programmazione.programma.key}">
                                 <div class="row programma">
                                     <div class="col-3 col-lg-3 align-self-center">
-                                        <#if programmazione.programma.img??><img class="palinsesto_programma_img" src="${programmazione.programma.img}">
+                                        <#if programmazione.programma.img??><img class="palinsesto_programma_img" src="${programmazione.programma.img}" alt="${programmazione.programma.titolo}">
                                         <#else>
                                         <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
                                         </#if>
@@ -178,20 +178,82 @@
             </div>
             </#list>
 
-            <div class="row col-12">
-                <div class="col-12 text-center">
-                    <div class="blog__pagination">
-                        <#list 1..(numero_pagine+1) as p>
-                        <a <#if (p-1) == pagina>class="page_active"</#if> href="?page=${p-1}">${p}</a>
-                        </#list>
-                        <#if pagina < numero_pagine>
-                        <a href="?page=${pagina+1}">NEXT</a>
-                        </#if>
-                    </div>
+        </div>
+
+        <div class="row col-12">
+            <div class="col-12 text-center">
+                <div id="palinsesto_pagination" class="blog__pagination">
+                    <#list 1..(numero_pagine+1) as p>
+                    <a <#if (p-1) == pagina>class="page_active"</#if> href="?page=${p-1}<#if day?? >&day=${day}</#if><#if fascia?? >&fascia=${fascia}</#if>">${p}</a>
+                    </#list>
+                    <#if pagina < numero_pagine>
+                    <a href="?page=${pagina+1}<#if day?? >&day=${day}</#if><#if fascia?? >&fascia=${fascia}</#if>">NEXT</a>
+                    </#if>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 <!-- Most Search Section End -->
+
+
+<div id="palinsesto_generale_prototype" class="row col-12  canale  justify-content-center align-items-center d-none">
+
+    <div class="canale-logo col-3 col-lg-3 text-center">
+
+        <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
+            <a href=""><img src=""  alt=""></a>
+        </div>
+
+        <div class="col-12 col-sm-8 col-md-8 col-lg-6 mt-2">
+            <a href=""><h5></h5></a>
+        </div>
+
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+            <small class="d-none d-md-block"></small>
+            <small class="d-md-none"></small>
+            <small class="d-md-none"></small>
+        </div>
+
+    </div>
+
+
+    <div class="col-9 col-lg-9">
+        <ul class="lista_programmi">
+            <li>
+                <a href="">
+                    <div class="row programma">
+                        <div class="col-3 col-lg-3 align-self-center">
+                            <img class="palinsesto_programma_img" src="">
+                        </div>
+
+                        <div class=" col-9 col-lg-9 align-self-center">
+
+                            <div class="row">
+                                <div class="col-9 col-lg-10 align-self-center">
+                                    <h5></h5>
+                                </div>
+                                <div class="col-3 col-lg-2 align-self-center">
+                                    <small></small>
+                                </div>   
+
+                                <div class="col-9 col-lg-10 align-self-center">
+                                    <small></small>
+                                </div>
+
+                                <div class="col-3 col-lg-2 align-self-center">
+                                    <small></small>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+</div>

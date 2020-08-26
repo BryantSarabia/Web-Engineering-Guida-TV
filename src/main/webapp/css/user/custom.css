@@ -377,6 +377,7 @@ small{
 @media (min-width:1300px){
     .palinsesto_programma_img{
         width: 80%;
+        max-height: 140px;
     }
 
     .card, h5, p{
