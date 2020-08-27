@@ -138,7 +138,7 @@ public class Series extends BaseController {
             String epis = request.getParameter("episodio");
             /**
              * questa funzione serve per prendere generi
-             *
+             */
             ArrayList<Integer> generi = null;
             if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
                 generi = new ArrayList<>();
@@ -148,7 +148,7 @@ public class Series extends BaseController {
                     }
                 }
             }
-             */
+             
            Serie target = new SerieImpl();
             Integer stagione = SecurityLayer.checkNumeric(stg);
             Integer episodio = SecurityLayer.checkNumeric(epis);
@@ -159,7 +159,11 @@ public class Series extends BaseController {
             target.setEpisodio(episodio);
             target.setDurata(durata);
             target.setLink_ref(link_ref);
-         //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+            List<Genere> generi_list = new ArrayList<>();
+            for(int i : generi){
+                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            target.setGeneri(generi_list);
             target.setImg("null");
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 

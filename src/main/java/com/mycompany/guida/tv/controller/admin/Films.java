@@ -195,6 +195,7 @@ public class Films extends BaseController {
             target.setDescrizione(descrizione);
             target.setDurata(durata);
             target.setLink_ref(link_ref);
+            
             //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
             target.setImg("null");
 
