@@ -20,7 +20,7 @@
                     <p class="card-text">Canale disponibile sul numero ${canale.numero}</p>
                 </div>
                 <div class="col-7 col-md-7 col-lg-6">
-                    <form action="canale" method="GET">
+                    <form action="canale" method="GET" id="palinsesto_canale_cerca_form">
                         <div class="form-group d-flex flex-column flex-md-row  justify-content-md-end justify-content-lg-between">
                             <input type="date" class="form-control dateTime flex-md-shrink-1 flex-lg-fill w-auto mr-2 mb-3 mb-md-auto" required="required" name="day" placeholder="yyyy-mm-dd" value="${day}"/>
                             <input type="hidden" name="c_key" value="${canale.key}"/>
@@ -120,7 +120,7 @@
                                             <small>${programmazione.time} - ${programmazione.endTime}</small>
                                         </div>
                                         <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
-                                            <img class="dettaglio_series_img" src="${programmazione.programma.img}" class="rounded">
+                                            <img class="dettaglio_series_img rounded" src="${programmazione.programma.img}">
                                         </div>
 
                                         <div class="row col-7 col-sm-8 col-lg-8">
@@ -164,3 +164,31 @@
     </div>
 </section>
 <!-- Most Search Section End -->
+
+
+<ul id="palinsesto_canale_prototype" class="d-none">
+    <li>
+        <a href="programma?p_key">
+            <div class="row programma">
+
+                <div class="col-2 col-lg-2 align-self-center">
+                    <small>10:00 - 12:00</small>
+                </div>
+                <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
+                    <img class="dettaglio_series_img rounded" src="">
+                </div>
+
+                <div class="row col-7 col-sm-8 col-lg-8">
+
+                    <div class="col-8 col-sm-10 col-lg-10 align-self-center">
+
+                    </div>
+                    <div class="col-4 col-sm-2 col-lg-2 align-self-center">
+                        <small>(120 min)</small>
+                    </div>   
+
+                </div>
+            </div>
+        </a>
+    </li>
+</ul>

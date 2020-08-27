@@ -62,7 +62,6 @@ public class PalinsestoGeneral extends BaseController {
                 }
             } else if (request.getParameter("fascia") != null && request.getParameter("json") != null) {
                 fascia = SecurityLayer.checkNumeric(request.getParameter("fascia"));
-                System.out.println("JSON");
                 if (fascia >= 1 && fascia <= 4) {
                     // Se la fascia non è valida la lascio a 1 (Mattina) altrimenti eseguo la action get_by_fascia
                     action_get_by_fascia_json(request, response, fascia);
@@ -94,13 +93,11 @@ public class PalinsestoGeneral extends BaseController {
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
         action_get_by_fascia(request, response, 1);
-        System.out.println("action default");
     }
 
     private void action_default_json(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
 
         action_get_by_fascia_json(request, response, 1);
-        System.out.println("action json default");
 
     }
 
@@ -258,7 +255,7 @@ public class PalinsestoGeneral extends BaseController {
             request.setAttribute("day", day_target);
             request.setAttribute("start", start.format(DateTimeFormatter.ofPattern("HH:mm")));
             request.setAttribute("end", end.format(DateTimeFormatter.ofPattern("HH:mm")));
-            results.activate("/json/palinsesto_generale_json.ftl.json", request, response);
+            results.activate("/json/palinsesto_generale.ftl.json", request, response);
         } catch (DataException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);

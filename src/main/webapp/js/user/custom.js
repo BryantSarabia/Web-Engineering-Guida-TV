@@ -188,7 +188,7 @@ function palinsesto_generale(data) {
             /* END CANALE LOGO */
 
             /* CANALE PROGRAMMAZIONI */
-            if (programmazioni != undefined) {
+            if (programmazioni !== undefined) {
 
                 for (let z of programmazioni) {
 
@@ -237,9 +237,79 @@ function palinsesto_generale(data) {
             target.removeClass("d-none");
             target.hide().appendTo(container).fadeIn(500);
         }
-    })
+    });
 }
 
+function palinsesto_canale(data) {
+
+    let container = $('.canale').children('div');
+
+    container.fadeOut(500, function () {
+        $(this).empty().show();
+        console.log(data.data[0])
+        let canale = data.data[0].canale;
+        let programmazioni;
+
+        if (canale.programmazioni !== undefined) {
+            programmazioni = canale.programmazioni;
+        }
+
+        let lista_programmi = $('#palinsesto_canale_prototype').clone();
+        let li_element = lista_programmi.children('li').clone();
+        lista_programmi.empty();
+
+        /* CANALE PROGRAMMAZIONI */
+        if (programmazioni !== undefined) {
+
+            for (let z of programmazioni) {
+
+                let programma = z.programma;
+                let li = li_element.clone();
+                li.children('a').attr("href", "programma?p_key=" + programma.id);
+                let target_row = li.find('.programma');
+
+                target_row.children().eq(0).children('small').text(z.start_time + " - " + z.end_time);
+
+                target_row.children().eq(1).children('img').attr("src", programma.img);
+
+                let second_row = target_row.children().eq(2);
+                second_row.children().eq(0).append("<h5>" + programma.titolo + "</h5>");
+
+                /* Lista generi */
+                if (programma.generi[0].default) {
+                    second_row.children().eq(0).append("<h6>Questo programma non ha generi</h6>");
+                } else {
+                    let generi = "";
+                    for (let i = 0; i < programma.generi.length; i++) {
+                        if ((i + 1) === programma.generi.length) {
+                            generi += programma.generi[i].nome;
+                        } else {
+                            generi += programma.generi[i].nome + ", ";
+                        }
+                    }
+                    second_row.children().eq(0).append("<small>" + generi + "</small>");
+                }
+                /* End lista generi */
+
+                second_row.children().eq(1).children('small').text("(" + programma.durata + " min)");
+                lista_programmi.append(li);
+            }
+        } else {
+            lista_programmi.empty();
+            container.append(
+                    `<span class="alert alert-warning">Nessuna programmazione corrente</span>`
+                    );
+        }
+
+
+        /* END CANALE PROGRAMMAZIONI */
+
+        lista_programmi.removeAttr("id");
+        lista_programmi.removeClass("d-none").addClass("lista_programmi");
+        lista_programmi.hide().appendTo(container).fadeIn(500);
+
+    });
+}
 
 
 /* Homepage pagination AJAX */
@@ -424,6 +494,8 @@ $(document).on('click', '.day-number-container a', function (event) {
 $(document).on('click', '.fascia a', function (event) {
     event.preventDefault();
     // console.log(window.location + $(this).attr("href") + "&json=true");
+    if ($(event.target).parents('div').hasClass("canale"))
+        return false;
 
     var button = $(this);
     $.ajax({
@@ -433,7 +505,6 @@ $(document).on('click', '.fascia a', function (event) {
         success: function (data) {
 
             var res = JSON.parse(data);
-
 
             /* container.fadeOut(500, function () {
              $(this).empty().show();
@@ -463,3 +534,70 @@ $(document).on('click', '.fascia a', function (event) {
 
 
 
+$(document).on('click', '.fascia.canale a', function (event) {
+    event.preventDefault();
+    // console.log(window.location + $(this).attr("href") + "&json=true");
+
+    var button = $(this);
+    $.ajax({
+        url: $(this).attr("href") + "&json=true",
+        method: "GET",
+        cache: false,
+        success: function (data) {
+
+            var res = JSON.parse(data);
+
+            /* container.fadeOut(500, function () {
+             $(this).empty().show();
+             
+             }); */
+
+            palinsesto_canale(res);
+
+            /* Gestione  buttons */
+
+            $('.fascia').each(function () {
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                }
+            });
+
+            button.parent().addClass('active');
+
+
+
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+});
+
+$("#palinsesto_canale_cerca_form").on("submit", function (event) {
+    event.preventDefault();
+    let data_to_send = $(this).serialize();
+    /* let date = null;
+     let canale_key = null;
+     let pos = data_to_send.indexOf("=");
+     if (pos !== -1)
+     date = data_to_send.substring(pos + 1, pos + 11);
+     pos = data_to_send.lastIndexOf("=");
+     if (pos !== -1)
+     canale_key = data_to_send.substring(pos + 1, pos + 2);
+     */
+    $.ajax({
+        url: "canale?"+ data_to_send + "&json=true",
+        method: "GET",
+        cache: false,
+        success: function (data) {
+            var res = JSON.parse(data);
+            palinsesto_canale(res);
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+
+
+
+});
