@@ -129,7 +129,6 @@ public class Series extends BaseController {
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            // non so perche non va forse centra qualcosa con i generi
             String titolo = request.getParameter("titolo");
             String descrizione = request.getParameter("descrizione");
             String link_ref = request.getParameter("link_ref");
@@ -170,21 +169,16 @@ public class Series extends BaseController {
                 Part image = request.getPart("immagine");
                 if (image != null) {
                     String name = "prog_" + target.getKey() + ".jpg";
-                    String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                    String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
                     long size = image.getSize();
                     if (size > 0 && name != null && !name.isEmpty()) {
                         File new_file = new File(path);
                         Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        target.setImg("img_tv/progs" + name);
+                        target.setImg("img_tv/progs/" + name);
                         ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
                     }
                 }
-            /**
-             * debugging genere
-             */
-            request.setAttribute("success", request.getParameter("genere"));
-
-
+            request.setAttribute("success", request.getParameter("serie creata con successo"));
             TemplateResult results = new TemplateResult(getServletContext());
             List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
@@ -213,79 +207,73 @@ public class Series extends BaseController {
     }
     private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
 
-        try {
-            int id = SecurityLayer.checkNumeric(request.getParameter("id"));
-            // non so perche non va forse centra qualcosa con i generi
-            String titolo = request.getParameter("titolo");
-            String descrizione = request.getParameter("descrizione");
-            String link_ref = request.getParameter("link_ref");
-            String durata = request.getParameter("durata");
-            String stg = request.getParameter("stagione");
-            String epis = request.getParameter("episodio");
+            try {
+                int id = SecurityLayer.checkNumeric(request.getParameter("id"));
+                String titolo = request.getParameter("titolo");
+                String descrizione = request.getParameter("descrizione");
+                String link_ref = request.getParameter("link_ref");
+                String durata = request.getParameter("durata");
+                String stg = request.getParameter("stagione");
+                String epis = request.getParameter("episodio");
 
-            /**
-             * questa funzione serve per prendere generi
-             *
-            ArrayList<Integer> generi = null;
-            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
-                generi = new ArrayList<>();
-                for (String g : request.getParameterValues("genere")) {
-                    if (g != null) {
-                        generi.add(SecurityLayer.checkNumeric(g));
+                ArrayList<Integer> generi = null;
+                if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
+                    generi = new ArrayList<>();
+                    for (String g : request.getParameterValues("genere")) {
+                        if (g != null) {
+                            generi.add(SecurityLayer.checkNumeric(g));
+                        }
                     }
                 }
-            }
-             */
-            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
+                Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
 
-            Integer stagione = SecurityLayer.checkNumeric(stg);
-            Integer episodio = SecurityLayer.checkNumeric(epis);
-            target.setTitolo(titolo);
-            if(descrizione != null) {
-                target.setDescrizione(descrizione);}
-            target.setStagione(stagione);
-            target.setEpisodio(episodio);
-            target.setDurata(durata);
-            target.setLink_ref(link_ref);
-            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
-            target.setImg("null");
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
-
-            Part image = request.getPart("immagine");
-            if (image != null) {
-                String name = "prog_" + target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
-                long size = image.getSize();
-                if (size > 0 && name != null && !name.isEmpty()) {
-                    File new_file = new File(path);
-                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setImg("img_tv/progs" + name);
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+                Integer stagione = SecurityLayer.checkNumeric(stg);
+                Integer episodio = SecurityLayer.checkNumeric(epis);
+                target.setTitolo(titolo);
+                    target.setDescrizione(descrizione);
+                target.setStagione(stagione);
+                target.setEpisodio(episodio);
+                target.setDurata(durata);
+                target.setLink_ref(link_ref);
+                List<Genere> generi_list = new ArrayList<>();
+                for(int i : generi){
+                    generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
                 }
+                target.setGeneri(generi_list);
+
+                Part image = request.getPart("immagine");
+                if (image != null) {
+                    String name = "prog_" + target.getKey() + ".jpg";
+                    String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
+                    long size = image.getSize();
+                    if (size > 0 && name != null && !name.isEmpty()) {
+                        File new_file = new File(path);
+                        Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        target.setImg("img_tv/progs/" + name);
+                    }
+                }
+                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+
+                request.setAttribute("success", "serie aggiornata con successo!");
+
+
+                TemplateResult results = new TemplateResult(getServletContext());
+                List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
+                int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+                request.setAttribute("numero_pagine", numero_pagine);
+                request.setAttribute("serie", serie);
+                request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+                results.activate("/admin/serie/index.ftl.html", request, response);
+            } catch (IOException | ServletException | DataException ex) {
+                request.setAttribute("errors", ex.getMessage());
+                TemplateResult results = new TemplateResult(getServletContext());
+                List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
+                request.setAttribute("generi", generi);
+                request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+                results.activate("/admin/serie/edit.ftl.html", request, response);
+
             }
-            /**
-             * debugging genere
-             */
-            request.setAttribute("success", request.getParameter("genere"));
-
-
-            TemplateResult results = new TemplateResult(getServletContext());
-            List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("serie", serie);
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/index.ftl.html", request, response);
-        } catch (IOException | ServletException | DataException ex) {
-            request.setAttribute("errors", ex.getMessage());
-            TemplateResult results = new TemplateResult(getServletContext());
-            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-            request.setAttribute("generi", generi);
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/edit.ftl.html", request, response);
-
         }
-    }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
             Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");

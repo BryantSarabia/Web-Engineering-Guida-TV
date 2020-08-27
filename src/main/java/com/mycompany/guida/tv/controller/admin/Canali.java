@@ -51,9 +51,7 @@ public class Canali extends BaseController {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-           // Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         try {
             boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
 
@@ -178,7 +176,7 @@ public class Canali extends BaseController {
             Part image = request.getPart("image");
             if (image != null) {
                 String name = target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/canali/small") + File.separatorChar + name;
+                String path = getServletContext().getRealPath("img_tv/canali/small/") + File.separatorChar + name;
                 String contentType = image.getContentType();
                 long size = image.getSize();
                 if (size > 0 && name != null && !name.isEmpty()) {
@@ -222,10 +220,10 @@ public class Canali extends BaseController {
             target.setNumero(numero);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().storeCanale(target);
 
-            Part image = request.getPart("image");
+            Part image = request.getPart("logo");
             if (image != null) {
                 String name = target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/canali/small") + File.separatorChar + name;
+                String path = getServletContext().getRealPath("img_tv/canali/small/") + File.separatorChar + name;
                 String contentType = image.getContentType();
                 long size = image.getSize();
                 if (size > 0 && name != null && !name.isEmpty()) {

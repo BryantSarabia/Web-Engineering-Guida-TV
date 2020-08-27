@@ -140,24 +140,35 @@ public class Films extends BaseController {
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
             Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
-
+            ArrayList<Integer> generi = null;
+            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
+                generi = new ArrayList<>();
+                for (String g : request.getParameterValues("genere")) {
+                    if (g != null) {
+                        generi.add(SecurityLayer.checkNumeric(g));
+                    }
+                }
+            } List<Genere> generi_list = new ArrayList<>();
+            for(int i : generi){
+                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            target.setGeneri(generi_list);
             target.setTitolo(titolo);
             target.setDescrizione(descrizione);
             target.setDurata(durata);
             target.setLink_ref(link_ref);
-            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
 
             Part image = request.getPart("immagine");
             if (image != null) {
                 String name = "prog_" + target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
                 long size = image.getSize();
                 if (size > 0 && name != null && !name.isEmpty()) {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setLink_ref("img_tv/progs" + name);
+                    target.setLink_ref("img_tv/progs/" + name);
                     ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
                 }
             }
@@ -188,15 +199,29 @@ public class Films extends BaseController {
             String descrizione = request.getParameter("descrizione");
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
-
-
             Film target = new FilmImpl();
+
+            ArrayList<Integer> generi = null;
+            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
+                generi = new ArrayList<>();
+                for (String g : request.getParameterValues("genere")) {
+                    if (g != null) {
+                        generi.add(SecurityLayer.checkNumeric(g));
+                    }
+                }
+            }
+
+
+            List<Genere> generi_list = new ArrayList<>();
+            for(int i : generi){
+                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            target.setGeneri(generi_list);
             target.setTitolo(titolo);
-            target.setDescrizione(descrizione);
+            if(descrizione != null) target.setDescrizione(descrizione);
             target.setDurata(durata);
             target.setLink_ref(link_ref);
             
-            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
             target.setImg("null");
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
@@ -204,12 +229,12 @@ public class Films extends BaseController {
             Part image = request.getPart("immagine");
             if (image != null) {
                 String name = "prog_" + target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
                 long size = image.getSize();
                 if (size > 0 && name != null && !name.isEmpty()) {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setLink_ref("img_tv/progs" + name);
+                    target.setLink_ref("img_tv/progs/" + name);
                     ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
                 }
             }

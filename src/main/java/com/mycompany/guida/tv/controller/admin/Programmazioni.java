@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Security;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -140,8 +141,11 @@ public class Programmazioni extends BaseController {
 
             Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
             Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
-            LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start_time"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");
             Integer durata = (Integer) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
+            String data =request.getParameter("date");
+            String time =request.getParameter("time");
+            String start_time= data+" "+time+":00";
+          LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
@@ -149,6 +153,7 @@ public class Programmazioni extends BaseController {
             Programmazione target = new ProgrammazioneImpl();
             target.setProgramma(p);
             target.setCanale(c);
+
             target.setStartTime(start);
             target.setDurata(durata);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
@@ -156,7 +161,7 @@ public class Programmazioni extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", "programmazione creata con successo!");
+            request.setAttribute("success", "programmazione creata con successo");
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             results.activate("/admin/programmazioni/index.ftl.html", request, response);
