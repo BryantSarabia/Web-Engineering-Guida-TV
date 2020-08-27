@@ -269,6 +269,8 @@ small{
 .dettaglio_series_img{
     min-height: 50px;
     min-width: 50px;
+    max-height: 180px;
+    max-width: 180px;
     width: auto;
     height: auto;
 }
