@@ -1,11 +1,10 @@
 package com.mycompany.guida.tv.controller.admin;
 
 import com.mycompany.guida.tv.data.DataException;
+import com.mycompany.guida.tv.data.impl.FilmImpl;
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
-import com.mycompany.guida.tv.data.model.Canale;
-import com.mycompany.guida.tv.data.model.Film;
-import com.mycompany.guida.tv.data.model.Genere;
-import com.mycompany.guida.tv.data.model.Programma;
+import com.mycompany.guida.tv.data.impl.SerieImpl;
+import com.mycompany.guida.tv.data.model.*;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
@@ -116,104 +115,119 @@ public class Films extends BaseController {
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        int id_element = SecurityLayer.checkNumeric(request.getParameter("data_id"));
-        Programma item = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_element);
+        int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
+        Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-      //  List<Programma> series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getIdSerie();
         request.setAttribute("generi", generi);
-     //   request.setAttribute("series", series);
 
         TemplateResult results = new TemplateResult(getServletContext());
-        request.setAttribute("item", item);
+        request.setAttribute("film", film);
 
-        request.setAttribute("outline_tpl", "");
-        results.activate("/admin/serie/edit.ftl.html", request, response);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/film/edit.ftl.html", request, response);
     }
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + "/login");
     }
-    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
-    }
-    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException {
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, UnsupportedEncodingException {
+        int id = SecurityLayer.checkNumeric(request.getParameter("id"));
 
         try {
 
-            boolean serie_update = false;
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
-            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
-            //UtilityMethods.debugConsole(this.getClass(), "default", request.getCharacterEncoding() + " - " + URLDecoder.decode(request.getParameter("nome"), "UTF-8"));
-            String descrizione = (String) Validator.validate(request.getParameter("descrizione"), new ArrayList<>(Arrays.asList(Validator.STRING_QUERY_PARAMETER)), "descrizione");
-            String linkRefDetails = (String) Validator.validate(request.getParameter("linkExt"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY)), "Link Details");
-            String durata = (String) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
-            Integer id_serie = (Integer) Validator.validate(request.getParameter("idSerie"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "idSerie");
-            Integer stagione = (Integer) Validator.validate(request.getParameter("stagione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Stagione");
-            Integer episodio = (Integer) Validator.validate(request.getParameter("episodio"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Episodio");
-            Integer id_classificazione = (Integer) Validator.validate(request.getParameter("classificazione"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Classificazione");
-            Integer id_genere = (Integer) Validator.validate(request.getParameter("genere"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Genere");
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            String link_ref = request.getParameter("link_ref");
+            String durata = request.getParameter("durata");
+            Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
 
-
-
-            Programma target;
-            if (key == null) {
-                target = new ProgrammaImpl();
-            } else {
-                target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(key);
-            }
-            target.setTitolo(nome);
-            if(descrizione != null) target.setDescrizione(descrizione);
-           /* if(id_serie != 0) {
-                if(id_serie > 0) target.setIdSerie(id_serie);
-                else serie_update = true;
-            }
-            else target.setIdSerie(null);
-            target.setStagione(stagione);
-            target.setEpisodio(episodio);*/
+            target.setTitolo(titolo);
+            target.setDescrizione(descrizione);
             target.setDurata(durata);
-            target.setLink_ref(linkRefDetails);
+            target.setLink_ref(link_ref);
+            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
 
-           // target.setGeneri(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
 
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-
-          /*  if(serie_update) {
-                target.setIdSerie(target.getKey());
-                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-            }*/
-
-            // GESTIONE DELL'IMMAGINE
-            if(request.getParameter("serie_image") != null && ((String) request.getParameter("serie_image")).equals("sel")) {
-                // UTILIZZO L'immagine della serie
-               /* if(target.getIdSerie() > 0) {
-                    target.setLink_ref(((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(target.getIdSerie()).getLinkRefImg());
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-                }*/
-            }
-            else {
-                Part image = request.getPart("image");
-                if (image != null) {
-                    String name = "prog_" + target.getKey() + ".jpg";
-                    String path = getServletContext().getRealPath("/img/progs") + File.separatorChar + name;
-                    String contentType = image.getContentType();
-                    long size = image.getSize();
-                    if (size > 0 && name != null && !name.isEmpty()) {
-                        File new_file = new File(path);
-                        Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        target.setLink_ref("/img/progs/" + name);
-                        ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().storeProgramma(target);
-                    }
+            Part image = request.getPart("immagine");
+            if (image != null) {
+                String name = "prog_" + target.getKey() + ".jpg";
+                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                long size = image.getSize();
+                if (size > 0 && name != null && !name.isEmpty()) {
+                    File new_file = new File(path);
+                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    target.setLink_ref("img_tv/progs" + name);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
                 }
             }
-
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("success", "Serie creata");
+            TemplateResult results = new TemplateResult(getServletContext());
             List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
-
-            request.setAttribute("film",film);
-            request.setAttribute("numero_pagine",numero_pagine);
-            request.setAttribute("success", "true");
-
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
+            request.setAttribute("film", film);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/index.ftl.html", request, response);
         } catch (IOException | ServletException | DataException ex) {
             request.setAttribute("errors", ex.getMessage());
+            Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("film", film);
+            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
+            request.setAttribute("generi", generi);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/edit.ftl.html", request, response);
+
+        }
+    }
+    private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException,DataException {
+        try {
+
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            String link_ref = request.getParameter("link_ref");
+            String durata = request.getParameter("durata");
+
+
+            Film target = new FilmImpl();
+            target.setTitolo(titolo);
+            target.setDescrizione(descrizione);
+            target.setDurata(durata);
+            target.setLink_ref(link_ref);
+            //  target.setGeneri((List<Genere>) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(id_genere));
+            target.setImg("null");
+
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
+
+            Part image = request.getPart("immagine");
+            if (image != null) {
+                String name = "prog_" + target.getKey() + ".jpg";
+                String path = getServletContext().getRealPath("img_tv/progs") + File.separatorChar + name;
+                long size = image.getSize();
+                if (size > 0 && name != null && !name.isEmpty()) {
+                    File new_file = new File(path);
+                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    target.setLink_ref("img_tv/progs" + name);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
+                }
+            }
+            request.setAttribute("success", "Serie creata");
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
+            request.setAttribute("numero_pagine", numero_pagine);
+            request.setAttribute("film", film);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/index.ftl.html", request, response);
+        } catch (IOException | ServletException | DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            TemplateResult results = new TemplateResult(getServletContext());
+            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
+            request.setAttribute("generi", generi);
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/film/new.ftl.html", request, response);
+
         }
     }
 
