@@ -6,17 +6,13 @@ import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.dao.CanaleDAO;
 import com.mycompany.guida.tv.data.dao.FilmDAO;
 import com.mycompany.guida.tv.data.dao.ProgrammaDAO;
-import com.mycompany.guida.tv.data.dao.ProgrammazioneDAO;
 import com.mycompany.guida.tv.data.dao.SerieDAO;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Programma;
-import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Serie;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

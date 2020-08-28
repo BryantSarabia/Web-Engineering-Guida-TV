@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.mycompany.guida.tv.data.model.Interessa;
-import com.mycompany.guida.tv.shared.Methods;
 
 public class InteressaDAO_MySQL extends DAO implements InteressaDAO {
     PreparedStatement getInteresseByID, getInteressiUtente, insertInteresse, deleteInteresse;

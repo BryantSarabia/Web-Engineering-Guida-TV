@@ -10,7 +10,7 @@ import java.util.List;
 public class GenereImpl extends DataItemImpl<Integer> implements Genere {
 
     private String nome;
-    private List<Programma> programmi = new ArrayList<Programma>();
+    private List<Programma> programmi = new ArrayList<>();
 
     public GenereImpl() {
         super();
@@ -19,18 +19,22 @@ public class GenereImpl extends DataItemImpl<Integer> implements Genere {
 
     }
 
+    @Override
     public String getNome() {
         return nome;
     }
 
+    @Override
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    @Override
     public List<Programma> getProgrammi() {
         return programmi;
     }
 
+    @Override
     public void setProgrammi(List<Programma> programmi) {
         this.programmi = programmi;
     }

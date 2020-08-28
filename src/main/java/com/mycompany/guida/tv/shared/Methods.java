@@ -5,27 +5,19 @@
  */
 package com.mycompany.guida.tv.shared;
 
-import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
-import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Utente;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,10 +27,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- *
- * @author Federico Di Menna
- */
 public class Methods {
 
     /**
@@ -93,24 +81,6 @@ public class Methods {
     }
 
 
-    public static boolean equalsIntegerLists(List<Integer> list1, List<Integer> list2) {
-        Collections.sort(list1);
-        Collections.sort(list2);
-        if (list1.size() <= 0 || list2.size() <= 0) {
-            return false;
-        }
-        if (list1.size() != list2.size()) {
-            return false;
-        }
-        for (int i = 0; i < list1.size(); i++) {
-            if (!Objects.equals(list2.get(i), list1.get(i))) {
-                return false;
-            }
-        }
-        return true;
-
-    }
-
     public static Map<String, String> getQueryMap(String query) throws UnsupportedEncodingException {
         String[] params = query.split("&");
         String canali_list = "";
@@ -141,7 +111,7 @@ public class Methods {
             for (int i : values) {
                 ret += name + "=" + i + "&";
             }
-            // Tolgo l'ultimo &
+
             if (ret.charAt(ret.length() - 1) == '&') {
                 ret = ret.substring(0, ret.length() - 1);
             }
@@ -149,11 +119,7 @@ public class Methods {
         return ret;
     }
 
-    public static void clearRequestAttributes(HttpServletRequest request) {
-        while(request.getAttributeNames().hasMoreElements()) {
-            request.removeAttribute(request.getAttributeNames().nextElement());
-        }
-    }
+
     
     /*
      * Metodi per gestione Fasce Orarie
@@ -222,108 +188,5 @@ public class Methods {
                 throw new IllegalArgumentException();
         }
     }
-
-    /**
-     * Restituisce una stringa con il body della richiesta effettuata
-     * @param request
-     * @return
-     * @throws IOException 
-     */
-    public static String getBody(HttpServletRequest request) throws IOException {
-
-        String body = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            throw ex;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
-        }
-
-        body = stringBuilder.toString();
-        return body;
-    }
-
-    /**
-     * Effettua il resize di un'immagine
-     * @param inputImagePath
-     * @param outputImagePath
-     * @param scaledWidth
-     * @param scaledHeight
-     * @throws IOException 
-     */
-    public static void resize(String inputImagePath,
-            String outputImagePath, int scaledWidth, int scaledHeight)
-            throws IOException {
-        // reads input image
-        File inputFile = new File(inputImagePath);
-        BufferedImage inputImage = ImageIO.read(inputFile);
- 
-        // creates output image
-        BufferedImage outputImage = new BufferedImage(scaledWidth,
-                scaledHeight, inputImage.getType());
- 
-        // scales the input image to the output image
-        Graphics2D g2d = outputImage.createGraphics();
-        g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
-        g2d.dispose();
- 
-        // extracts extension of output file
-        String formatName = outputImagePath.substring(outputImagePath
-                .lastIndexOf(".") + 1);
- 
-        // writes to output file
-        ImageIO.write(outputImage, formatName, new File(outputImagePath));
-    }
     
-    /**
-     * Effettua il resize di un'immagine
-     * @param inputImagePath
-     * @param outputImagePath
-     * @param percent
-     * @throws IOException 
-     */
-    public static void resize(String inputImagePath,
-            String outputImagePath, double percent) throws IOException {
-        File inputFile = new File(inputImagePath);
-        BufferedImage inputImage = ImageIO.read(inputFile);
-        int scaledWidth = (int) (inputImage.getWidth() * percent);
-        int scaledHeight = (int) (inputImage.getHeight() * percent);
-        resize(inputImagePath, outputImagePath, scaledWidth, scaledHeight);
-    }
-    
-    /**
-     * Restituisce la URL di base della richiesta
-     * @param request
-     * @return 
-     */
-    public static String getBaseUrl(HttpServletRequest request) {
-        String scheme = request.getScheme() + "://";
-        String serverName = request.getServerName();
-        String serverPort = (request.getServerPort() == 80) ? "" : ":" + request.getServerPort();
-        String contextPath = request.getContextPath();
-        return scheme + serverName + serverPort + contextPath;
-     }
-
-
-
 }

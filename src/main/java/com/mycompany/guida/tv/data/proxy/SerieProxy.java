@@ -6,7 +6,6 @@ import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.dao.GenereDAO;
 import com.mycompany.guida.tv.data.impl.SerieImpl;
 import com.mycompany.guida.tv.data.model.Genere;
-import com.mycompany.guida.tv.data.model.Programma;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -8,30 +8,22 @@ package com.mycompany.guida.tv.controller;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
-import com.mycompany.guida.tv.data.model.Genere;
-import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.result.JSONResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author HP
- */
+
 public class Home extends BaseController {
 
     /**
@@ -86,9 +78,7 @@ public class Home extends BaseController {
             Map<Canale, Programmazione> current = new TreeMap();
 
             for (Canale c : canali) {
-                // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
                 Programmazione programmazione = c.getProgrammazioneCorrente();
-
                 if (programmazione != null) {
                     current.put(c, programmazione);
                 } else {
@@ -119,9 +109,7 @@ public class Home extends BaseController {
             Map<Canale, Programmazione> current = new TreeMap();
 
             for (Canale c : canali) {
-                // FILTRAGGIO IN BASE ALLA CLASSIFICAZIONE
                 Programmazione programmazione = c.getProgrammazioneCorrente();
-
                 if (programmazione != null) {
                     current.put(c, programmazione);
                 } else {
@@ -141,7 +129,7 @@ public class Home extends BaseController {
     }
 
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

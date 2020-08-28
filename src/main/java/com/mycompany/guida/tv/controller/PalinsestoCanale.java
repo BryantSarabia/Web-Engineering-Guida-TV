@@ -16,27 +16,15 @@ import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author HP
- */
 public class PalinsestoCanale extends BaseController {
 
     /**
@@ -46,7 +34,6 @@ public class PalinsestoCanale extends BaseController {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -95,8 +82,7 @@ public class PalinsestoCanale extends BaseController {
 
         LocalTime start_time = Methods.getOrarioInizioFascia(fascia);
         LocalTime end_time = Methods.getOrarioFineFascia(fascia);
-        //UtilityMethods.debugConsole(this.getClass(), "action_get_by_fascia", "Sono in palinsesto post fascia");
-
+        
         try {
             TemplateResult results = new TemplateResult(getServletContext());
 
@@ -148,8 +134,7 @@ public class PalinsestoCanale extends BaseController {
 
         LocalTime start_time = Methods.getOrarioInizioFascia(fascia);
         LocalTime end_time = Methods.getOrarioFineFascia(fascia);
-        //UtilityMethods.debugConsole(this.getClass(), "action_get_by_fascia", "Sono in palinsesto post fascia");
-
+        
         try {
             JSONResult results = new JSONResult(getServletContext());
 

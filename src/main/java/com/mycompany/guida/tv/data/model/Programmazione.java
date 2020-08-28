@@ -2,7 +2,6 @@ package com.mycompany.guida.tv.data.model;
 
 import com.mycompany.guida.tv.data.DataItem;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface Programmazione extends DataItem<Integer> {

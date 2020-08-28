@@ -28,50 +28,62 @@ public class ProgrammaImpl extends DataItemImpl<Integer> implements Programma {
 
     }
 
+    @Override
     public String getTitolo() {
         return titolo;
     }
 
+    @Override
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }
 
+    @Override
     public String getDescrizione() {
         return descrizione;
     }
 
+    @Override
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
+    @Override
     public String getImg() {
         return img;
     }
 
+    @Override
     public void setImg(String img) {
         this.img = img;
     }
 
+    @Override
     public String getLink_ref() {
         return link_ref;
     }
 
+    @Override
     public void setLink_ref(String link_ref) {
         this.link_ref = link_ref;
     }
 
+    @Override
     public String getDurata() {
         return durata;
     }
 
+    @Override
     public void setDurata(String durata) {
         this.durata = durata;
     }
 
+    @Override
     public List<Genere> getGeneri() {
         return generi;
     }
 
+    @Override
     public void setGeneri(List<Genere> generi) {
         this.generi = generi;
     }

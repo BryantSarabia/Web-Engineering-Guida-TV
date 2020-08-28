@@ -14,34 +14,24 @@ import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Ricerca;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
-import com.mycompany.guida.tv.result.StreamResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Federico Di Menna
- */
+
 public class Cerca extends BaseController {
 
     /**
@@ -59,10 +49,7 @@ public class Cerca extends BaseController {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            //if(request.getParameter("resize") != null) action_resize(request, response);
-            //else 
             action_default(request, response);
-
         } catch (DataException | TemplateManagerException | IOException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
@@ -87,7 +74,6 @@ public class Cerca extends BaseController {
 
         // VALIDAZIONE CAMPI
         titolo = (String) SecurityLayer.removeSpecialCharsQuery(request.getParameter("titolo"));
-        //UtilityMethods.debugConsole(this.getClass(), "action_default", "titolo: " + titolo);
         if (request.getParameterValues("generi") != null && !request.getParameter("generi").isEmpty()) {
             generi = new ArrayList<>();
             for (String g : request.getParameterValues("generi")) {
@@ -118,7 +104,7 @@ public class Cerca extends BaseController {
         }
 
         if (request.getParameter("send_email") != null && SecurityLayer.checkSession(request) != null) {
-            // DEVO SALVARE LA RICERCA
+            // Salvo la ricerca
             UtenteProxy me = (UtenteProxy) Methods.getMe(request);
             boolean exists = false;
 
@@ -137,13 +123,12 @@ public class Cerca extends BaseController {
             // Controllo se la ricerca è già presente
             for (Ricerca prec : ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRicercaDAO().getRicercheUtente(me)) {
                 if (prec.getQuery().equals(safe_queryString)) {
-                    // La ricerca è presente
                     exists = true;
                 }
             }
 
             if (!exists) {
-                // La ricerca è nuova e la salvo
+                // La ricerca non è presente quindi devo salvarla
                 Ricerca da_salvare = new RicercaImpl();
                 da_salvare.setQuery(safe_queryString);
                 ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRicercaDAO().storeRicerca(da_salvare, me.getKey());
@@ -162,8 +147,7 @@ public class Cerca extends BaseController {
                 // Se ho solo il titolo cerco solo per titolo
                 interessati.addAll(((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().cercaProgrammi(titolo, 0));
             } else if ((titolo.length() > 0) && !generi.contains(0)) {
-                // Se ho anche il genere cerco per titolo e per genere stando
-                // attento a non inserire duplicati
+                // Se ho anche il genere cerco per titolo e per genere 
                 for (Integer id_genere : generi) {
                     for (Programma p : ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().cercaProgrammi(titolo, id_genere)) {
                         if (!interessati.contains(p)) {
@@ -183,7 +167,6 @@ public class Cerca extends BaseController {
                 }
             }
 
-            // a questo punto ho i programmi che mi interessano e devo filtrare le programmazioni
             LocalDate start, end;
 
             if (date_min == null) {
@@ -201,7 +184,7 @@ public class Cerca extends BaseController {
             Map<Canale, List<Programmazione>> programmazioni_per_canale = new TreeMap<>();
 
             if (canali == null || canali.contains(0)) {
-                // se non sto filtrando per canale
+
                 for (Programma p : interessati) {
                     for (Programmazione prog : ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSpecifica(p.getKey(), start, end, min_ora, max_ora)) {
 
@@ -217,7 +200,7 @@ public class Cerca extends BaseController {
                     }
                 }
             } else {
-                // Se sto filtrando per canale
+
                 for (Programma p : interessati) {
                     for (Programmazione prog : ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSpecifica(p.getKey(), start, end, min_ora, max_ora)) {
                         if ((boolean) request.getAttribute("logged")) {

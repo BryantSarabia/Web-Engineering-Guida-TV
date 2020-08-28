@@ -7,7 +7,6 @@ import com.mycompany.guida.tv.data.dao.GenereDAO;
 
 import com.mycompany.guida.tv.data.impl.ProgrammaImpl;
 import com.mycompany.guida.tv.data.model.Genere;
-import com.mycompany.guida.tv.shared.Methods;
 
 import java.util.List;
 import java.util.logging.Level;

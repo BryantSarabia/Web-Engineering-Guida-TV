@@ -1,7 +1,5 @@
 package com.mycompany.guida.tv.data.impl;
 
-import com.mycompany.guida.tv.data.DataItemImpl;
-import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Serie;
 
 public class SerieImpl extends ProgrammaImpl implements Serie {
@@ -15,18 +13,22 @@ public class SerieImpl extends ProgrammaImpl implements Serie {
         this.episodio = 0;
     }
 
+    @Override
     public int getStagione() {
         return stagione;
     }
 
+    @Override
     public void setStagione(int stagione) {
         this.stagione = stagione;
     }
 
+    @Override
     public int getEpisodio() {
         return episodio;
     }
 
+    @Override
     public void setEpisodio(int episodio) {
         this.episodio = episodio;
     }

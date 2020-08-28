@@ -9,7 +9,6 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Interessa;
-import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.data.proxy.InteressaProxy;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
@@ -19,19 +18,11 @@ import com.mycompany.guida.tv.security.BCrypt;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -49,7 +40,6 @@ public class Profile extends BaseController {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws DataException
      */
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -172,7 +162,6 @@ public class Profile extends BaseController {
                         to_add.setUtente(me);
                         to_add.setStartTime(Methods.getOrarioInizioFascia(0));
                         to_add.setEndTime(Methods.getOrarioFineFascia(0));
-                        //Methods.debugConsole(this.getClass(), "update", Methods.getOrarioInizioFascia(0).toString());
                         update_interessi.add(to_add);
                         ((GuidaTVDataLayer) request.getAttribute("datalayer")).getInteressaDAO().storeInteresse(to_add);
                     } else {
@@ -191,7 +180,7 @@ public class Profile extends BaseController {
                 ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
             } else {
                 if (send) {
-                    // AGGIORNO SOLTANTO EMAIL
+                    // aggiorno email
                     UtenteProxy me = (UtenteProxy) Methods.getMe(request);
                     me.setSendEmail(send);
                     ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);

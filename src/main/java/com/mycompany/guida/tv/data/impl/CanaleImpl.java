@@ -21,26 +21,32 @@ public class CanaleImpl extends DataItemImpl<Integer> implements Canale {
         this.programmazioneCorrente = null;
     }
 
+    @Override
     public String getNome() {
         return nome;
     }
 
+    @Override
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    @Override
     public int getNumero() {
         return numero;
     }
 
+    @Override
     public void setNumero(int numero) {
         this.numero = numero;
     }
 
+    @Override
     public String getLogo() {
         return logo;
     }
 
+    @Override
     public void setLogo(String logo) {
         this.logo = logo;
     }

@@ -16,26 +16,19 @@ import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author HP
- */
+
 public class PalinsestoGeneral extends BaseController {
 
     /**
@@ -57,13 +50,11 @@ public class PalinsestoGeneral extends BaseController {
             if (request.getParameter("fascia") != null && request.getParameter("json") == null) {
                 fascia = SecurityLayer.checkNumeric(request.getParameter("fascia"));
                 if (fascia >= 1 && fascia <= 4) {
-                    // Se la fascia non è valida la lascio a 1 (Mattina) altrimenti eseguo la action get_by_fascia
                     action_get_by_fascia(request, response, fascia);
                 }
             } else if (request.getParameter("fascia") != null && request.getParameter("json") != null) {
                 fascia = SecurityLayer.checkNumeric(request.getParameter("fascia"));
                 if (fascia >= 1 && fascia <= 4) {
-                    // Se la fascia non è valida la lascio a 1 (Mattina) altrimenti eseguo la action get_by_fascia
                     action_get_by_fascia_json(request, response, fascia);
                 }
             } else if (request.getParameter("fascia") == null && request.getParameter("json") != null) {
@@ -102,7 +93,6 @@ public class PalinsestoGeneral extends BaseController {
     }
 
     private void action_get_by_fascia(HttpServletRequest request, HttpServletResponse response, int fascia) throws TemplateManagerException, DataException {
-        /* Da fare */
         int elements = 5, page = 0;
         if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
             page = SecurityLayer.checkNumeric(request.getParameter("page"));
@@ -144,14 +134,12 @@ public class PalinsestoGeneral extends BaseController {
                     break;
                 }
                 default: {
-                    // anche se non dovrebbe mai verificarsi lo metto per sicurezza. Setto mattina
                     start_str = day_target + " 06:00";
                     end_str = day_target + " 12:00";
                     break;
                 }
             }
 
-            // Converto le stinghe in LocalDateTime
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(start_str, formatter);
             LocalDateTime end = LocalDateTime.parse(end_str, formatter);;
@@ -224,14 +212,12 @@ public class PalinsestoGeneral extends BaseController {
                     break;
                 }
                 default: {
-                    // anche se non dovrebbe mai verificarsi lo metto per sicurezza. Setto mattina
                     start_str = day_target + " 06:00";
                     end_str = day_target + " 12:00";
                     break;
                 }
             }
 
-            // Converto le stinghe in LocalDateTime
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(start_str, formatter);
             LocalDateTime end = LocalDateTime.parse(end_str, formatter);;

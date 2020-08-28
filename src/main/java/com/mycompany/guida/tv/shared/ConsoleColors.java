@@ -5,10 +5,6 @@
  */
 package com.mycompany.guida.tv.shared;
 
-/**
- *
- * @author Federico Di Menna
- */
 public class ConsoleColors {
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
