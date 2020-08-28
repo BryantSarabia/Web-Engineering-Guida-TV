@@ -23,7 +23,7 @@ public class Dashboard extends BaseController {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            boolean admin = true;//SecurityLayer.checkAdminSession(request);
+            boolean admin = SecurityLayer.checkAdminSession(request);
 
             if (admin) {
                 action_default(request, response);
@@ -54,9 +54,9 @@ public class Dashboard extends BaseController {
         int numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
         int numero_programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni();
 
-/*
+
         UtenteProxy me = (UtenteProxy) ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().getUtente((int) request.getSession().getAttribute("userid"));
-        request.setAttribute("me", me);*/
+        request.setAttribute("me", me);
         request.setAttribute("utenti", numero_utenti);
         request.setAttribute("programmi", numero_programmi);
         request.setAttribute("canali", numero_canali);
