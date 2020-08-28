@@ -8,23 +8,13 @@ package com.mycompany.guida.tv.shared;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Utente;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 public class Methods {
@@ -71,15 +61,14 @@ public class Methods {
         }
         return to_return;
     }
-    
+
     public static String generateNewToken(GuidaTVDataLayer dl) throws DataException {
         String token;
         do {
             token = getRandomString(10);
-        } while(dl.getUtenteDAO().tokenExists(token));
+        } while (dl.getUtenteDAO().tokenExists(token));
         return token;
     }
-
 
     public static Map<String, String> getQueryMap(String query) throws UnsupportedEncodingException {
         String[] params = query.split("&");
@@ -92,13 +81,17 @@ public class Methods {
             if (p.length > 1) {
                 String value = p[1];
                 map.put(name, URLDecoder.decode(value, "UTF-8"));
-                if(name.equals("canale")) canali_list += URLDecoder.decode(value, "UTF-8") + ",";
-                if(name.equals("generi")) generi_list += URLDecoder.decode(value, "UTF-8") + ",";
+                if (name.equals("canale")) {
+                    canali_list += URLDecoder.decode(value, "UTF-8") + ",";
+                }
+                if (name.equals("generi")) {
+                    generi_list += URLDecoder.decode(value, "UTF-8") + ",";
+                }
             }
-            if(!canali_list.isBlank()){
+            if (!canali_list.isBlank()) {
                 map.put("Canali", canali_list);
             }
-            if(!generi_list.isBlank()){
+            if (!generi_list.isBlank()) {
                 map.put("Generi", generi_list);
             }
         }
@@ -119,8 +112,6 @@ public class Methods {
         return ret;
     }
 
-
-    
     /*
      * Metodi per gestione Fasce Orarie
      * 1 : Mattina
@@ -147,8 +138,9 @@ public class Methods {
 
     /**
      * Restituisce l'orario di inizio della fascia indicata
+     *
      * @param fascia_id
-     * @return 
+     * @return
      */
     public static LocalTime getOrarioInizioFascia(int fascia_id) {
         switch (fascia_id) {
@@ -169,8 +161,9 @@ public class Methods {
 
     /**
      * Restituisce l'rario di fine della fascia indicata
+     *
      * @param fascia_id
-     * @return 
+     * @return
      */
     public static LocalTime getOrarioFineFascia(int fascia_id) {
         switch (fascia_id) {
@@ -188,5 +181,11 @@ public class Methods {
                 throw new IllegalArgumentException();
         }
     }
-    
+
+    public static void clearRequestAttributes(HttpServletRequest request) {
+        while (request.getAttributeNames().hasMoreElements()) {
+            request.removeAttribute(request.getAttributeNames().nextElement());
+        }
+    }
+
 }
