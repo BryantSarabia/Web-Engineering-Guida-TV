@@ -11,7 +11,6 @@ import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
-import com.mycompany.guida.tv.shared.Validator;
 import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 
@@ -55,7 +54,7 @@ public class Films extends BaseController {
             Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
+            boolean is_admin = SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 if (request.getParameter("insert") != null) {
@@ -96,7 +95,7 @@ public class Films extends BaseController {
             film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
         }
         else {
-            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
             int start=(numero-1)*10;
             int elements=10;
             film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilmPaginated(start, elements);
@@ -104,8 +103,8 @@ public class Films extends BaseController {
         int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
-     /*   UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("film",film);
         request.setAttribute("numero_pagine",numero_pagine);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -140,6 +139,7 @@ public class Films extends BaseController {
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
             Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
+
             ArrayList<Integer> generi = null;
             if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
                 generi = new ArrayList<>();
@@ -151,6 +151,9 @@ public class Films extends BaseController {
             } List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
                 generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            if (((String) titolo).isBlank()) {
+                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
             }
             target.setGeneri(generi_list);
             target.setTitolo(titolo);
@@ -211,7 +214,9 @@ public class Films extends BaseController {
                 }
             }
 
-
+            if (((String) titolo).isBlank()) {
+                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
+            }
             List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
                 generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
@@ -268,7 +273,7 @@ public class Films extends BaseController {
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
 
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -281,13 +286,12 @@ public class Films extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
             List<Film> film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm(0, 10);
 
+            TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("film",film);
             request.setAttribute("numero_pagine",numero_pagine);
             request.setAttribute("success", "Film cancellato con successo!");
-            TemplateResult results = new TemplateResult(getServletContext());
-
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/index.ftl.html", request, response);
+            results.activate("/admin/film/index.ftl.html", request, response);
         } catch (DataException ex) {
             request.setAttribute("errors", ex.getMessage());
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;

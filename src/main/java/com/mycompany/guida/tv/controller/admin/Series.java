@@ -4,15 +4,16 @@ import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.impl.SerieImpl;
-import com.mycompany.guida.tv.data.model.Film;
 import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Serie;
+import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
-import com.mycompany.guida.tv.shared.Validator;
+import com.mycompany.guida.tv.shared.Methods;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -51,7 +52,7 @@ public class Series extends BaseController {
             Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
+            boolean is_admin = SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 if (request.getParameter("insert") != null) {
@@ -94,7 +95,7 @@ public class Series extends BaseController {
             serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
         }
         else {
-            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
             int start=(numero-1)*10;
             int elements=10;
             serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSeriePaginated(start, elements);
@@ -102,8 +103,8 @@ public class Series extends BaseController {
         int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
-     /*   UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("serie", serie);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -149,8 +150,26 @@ public class Series extends BaseController {
             }
              
            Serie target = new SerieImpl();
-            Integer stagione = SecurityLayer.checkNumeric(stg);
-            Integer episodio = SecurityLayer.checkNumeric(epis);
+            if (((String) titolo).isBlank()) {
+                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
+            }
+            Integer stagione=null;
+            Integer episodio=null;
+            if (((String) stg) != null) {
+                    try{
+                        stagione = SecurityLayer.checkNumeric(stg);
+                    } catch (Exception ex) {
+                        throw new DataException("Invalid parameter: " + stg + " must be a integer value");
+                    }
+                }
+            if (((String) epis) != null) {
+                try{
+                    episodio = SecurityLayer.checkNumeric(stg);
+                } catch (Exception ex) {
+                    throw new DataException("Invalid parameter: " + epis + " must be a integer value");
+                }
+            }
+
             target.setTitolo(titolo);
             if(descrizione != null) {
                 target.setDescrizione(descrizione);}
@@ -226,9 +245,25 @@ public class Series extends BaseController {
                     }
                 }
                 Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
-
-                Integer stagione = SecurityLayer.checkNumeric(stg);
-                Integer episodio = SecurityLayer.checkNumeric(epis);
+                if (((String) titolo).isBlank()) {
+                    throw new DataException("Invalid parameter: " + titolo + " must be not empty");
+                }
+                Integer stagione=null;
+                Integer episodio=null;
+                if (((String) stg) != null) {
+                    try{
+                        stagione = SecurityLayer.checkNumeric(stg);
+                    } catch (Exception ex) {
+                        throw new DataException("Invalid parameter: " + stg + " must be a integer value");
+                    }
+                }
+                if (((String) epis) != null) {
+                    try{
+                        episodio = SecurityLayer.checkNumeric(stg);
+                    } catch (Exception ex) {
+                        throw new DataException("Invalid parameter: " + epis + " must be a integer value");
+                    }
+                }
                 target.setTitolo(titolo);
                     target.setDescrizione(descrizione);
                 target.setStagione(stagione);
@@ -276,7 +311,7 @@ public class Series extends BaseController {
         }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
