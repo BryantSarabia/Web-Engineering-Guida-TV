@@ -9,14 +9,14 @@
             </div>
         </div>
 
-        <div class="row col-lg-12 canali">
+        <div class="row col-12 canali">
 
             <#list risultati as canale,programmazioni>
-            <div class="row col-lg-12  canale  justify-content-center ">
+            <div class="row col-12  canale  justify-content-center ">
 
-                <div class="canale-logo col-lg-3 col-md-6">
+                <div class="canale-logo col-3 col-lg-3 align-self-center text-center">
 
-                    <div class="col-lg-12">
+                    <div class="col-12">
                         <#if canale.logo??>
                         <a href="canale?c_key=${canale.key}"><img src="${canale.logo}"  alt="${canale.nome}"></a>
                         <#else>
@@ -24,7 +24,7 @@
                         </#if>
                     </div>
 
-                    <div class="col-lg-12 mt-2">
+                    <div class="col-12 mt-2">
                         <a href="canale?c_key=${canale.key}"><h5>${canale.nome}</h5></a>
                     </div>
 
@@ -32,42 +32,45 @@
                 </div>
 
 
-                <div class="col-lg-9 col-md-6">
+                <div class="col-9 col-lg-9">
                     <#if (programmazioni?size > 0)>
                     <ul class="lista_programmi">
-                        <#list programmazioni as programmazione>
-                        <li>
+                        <#list programmazioni?sort_by("startTime") as programmazione>
+                        <li class="mb-1">
                             <a href="programma?p_key=${programmazione.programma.key}">
                                 <div class="row programma">
-                                    <div class="col-lg-3 col-md-2">
-                                        <#if programmazione.programma.img??><img class="programma_img" src="${programmazione.programma.img}">
+                                    <div class="col-3 col-lg-3 align-self-center">
+                                        <#if programmazione.programma.img??><img class="palinsesto_programma_img" src="${programmazione.programma.img}" alt="${programmazione.programma.titolo}">
                                         <#else>
                                         <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
                                         </#if>
                                     </div>
 
-                                    <div class="row col-lg-9">
+                                    <div class=" col-9 col-lg-9 align-self-center">
 
-                                        <div class="col-lg-9 col-md-10 align-self-center">
-                                            <h5>${programmazione.programma.titolo}</h5>
-                                            <#if programmazione.programma.stagione??>
-                                            <small> Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio}</small>
-                                            </#if>
-                                        </div>
-                                        <div class="col-lg-3 col-md-10 align-self-center text-center">
-                                            <small>(${programmazione.date})</small>
-                                        </div>   
+                                        <div class="row">
+                                            <div class="col-12 col-md-8 col-lg-9 align-self-center">
+                                                <h5>${programmazione.programma.titolo} ${programmazione.key}</h5>
+                                                <#if programmazione.programma.stagione??>
+                                                <small>(Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio})</small>
+                                                </#if>
+                                            </div>
+                                            <div class="col-12 col-md-4 col-lg-3 align-self-center ">
+                                                <small>${programmazione.date}</small>
+                                            </div>   
 
-                                        <div class="col-lg-10 align-self-center">
-                                            <#list programmazione.programma.generi as genere>
-                                            <small>${genere.nome} <#sep>, </#sep></small>
-                                            <#else>
-                                            <small>Questo programma non ha generi</small>
-                                            </#list>
-                                        </div>
+                                            <div class="col-12 col-sm-9 col-lg-9 align-self-center">
+                                                <#list programmazione.programma.generi as genere>
+                                                <small>${genere.nome} <#sep>, </#sep></small>
+                                                <#else>
+                                                <small>Questo programma non ha generi</small>
+                                                </#list>
+                                            </div>
 
-                                        <div class="col-lg-2 align-self-center">
-                                            <small>${programmazione.time}</small>
+                                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 align-self-center ">
+                                                <small>${programmazione.time}</small>
+                                            </div>
+
                                         </div>
 
                                     </div>
@@ -77,7 +80,7 @@
                         </#list>
                     </ul>
                     <#else>
-                    <div class="col-lg-9 text-center align-self-center">
+                    <div class="col-9 text-center align-self-center">
                         <p>Nessuna programmazione</p> 
                     </div>
                     </#if>
@@ -88,14 +91,14 @@
             </div>
 
             <#else>
-            
-            
+
+
             <div class="alert alert-danger col-lg text-center" role="alert">
-                   Nessuna programmazione
+                Nessuna programmazione
             </div>
 
-            
-         
+
+
 
             </#list>
 

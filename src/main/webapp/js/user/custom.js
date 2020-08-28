@@ -2,6 +2,8 @@
 "use strict";
 // Constants and Variables Declaration
 
+const find_fascia = (element) => element.includes("fascia");
+
 function getFormattedDate(d) {
     var year = d.getFullYear();
     var month = parseInt(d.getMonth()) + 1;
@@ -155,7 +157,7 @@ function pagination_buttons(button, res, home = true) {
 /* Palinsesto generale dynamic funciton */
 
 function palinsesto_generale(data) {
-
+    console.log(data);
     let container = $('.canali');
 
     container.fadeOut(500, function () {
@@ -201,6 +203,9 @@ function palinsesto_generale(data) {
 
                     let second_row = target_row.children().eq(1).children('div').children('div');
                     second_row.eq(0).children('h5').text(programma.titolo);
+                    if (programma.stagione !== undefined) {
+                        second_row.eq(0).append("<small>(Stagione " + programma.stagione + ", Episodio " + programma.episodio + ")</small>");
+                    }
                     second_row.eq(1).children('small').text("(" + z.durata + " min)");
 
                     /* Lista generi */
@@ -241,7 +246,7 @@ function palinsesto_generale(data) {
 }
 
 function palinsesto_canale(data) {
-
+    console.log(data);
     let container = $('.canale').children('div');
 
     container.fadeOut(500, function () {
@@ -274,6 +279,11 @@ function palinsesto_canale(data) {
 
                 let second_row = target_row.children().eq(2);
                 second_row.children().eq(0).append("<h5>" + programma.titolo + "</h5>");
+
+                if (programma.stagione !== undefined) {
+                    second_row.children().eq(0).append("<small>(Stagione " + programma.stagione + ", Episodio " + programma.episodio + ")</small>");
+                    second_row.children().eq(0).append("<br>");
+                }
 
                 /* Lista generi */
                 if (programma.generi[0].default) {
@@ -586,12 +596,32 @@ $("#palinsesto_canale_cerca_form").on("submit", function (event) {
      canale_key = data_to_send.substring(pos + 1, pos + 2);
      */
     $.ajax({
-        url: "canale?"+ data_to_send + "&json=true",
+        url: "canale?" + data_to_send + "&json=true",
         method: "GET",
         cache: false,
         success: function (data) {
             var res = JSON.parse(data);
             palinsesto_canale(res);
+
+            /* Gestione  buttons */
+
+            $('.fascia').each(function () {
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                }
+            });
+
+            $(".fascia.canale a").each(function () {
+                let arr = $(this).attr("href").split("&");
+                let index = arr.findIndex(find_fascia);
+                $(this).attr("href", "canale?" + data_to_send + "&" + arr[index]);
+                if (arr[index] === "fascia=0"){
+                    $(this).parent().addClass('active');
+                }
+                    
+            });
+
+
         },
         error: function (e) {
             console.log(e);
@@ -601,3 +631,4 @@ $("#palinsesto_canale_cerca_form").on("submit", function (event) {
 
 
 });
+

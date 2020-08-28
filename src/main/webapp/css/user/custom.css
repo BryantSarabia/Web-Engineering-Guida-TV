@@ -46,6 +46,16 @@ a:hover, a:hover div div div > *{
     list-style: none;
 }
 
+.listing__item__text__inside h5 {
+    transition: .4s color;
+}
+
+.listing__item__text__inside h5:hover {
+    color: #f03250;
+    border-bottom: 2px solid #f03250;
+    transition: .4s color;
+}
+
 
 .programma{
     border-bottom: 1px solid #ccc;
@@ -341,6 +351,12 @@ small{
     color: #ffffff;
     border-color: #f03250;
 }
+
+.slick-prev:before, .slick-next:before { 
+    color:red !important;
+}
+
+/* MEDIA QUERIES */
 
 @media (min-width:2000px){
     .palinsesto_programma_img{

@@ -102,7 +102,7 @@ PRIMARY KEY (`id`)
 
 LOCK TABLES `programmi` WRITE;
 /*!40000 ALTER TABLE `programmi` DISABLE KEYS */;
-INSERT INTO `programmi` VALUES (1,'Reazione a Catena','descrizione','img_tv/progs/prog_1.jpg','https://it.wikipedia.org/wiki/Reazione_a_catena_-_L%27intesa_vincente',120,0),(2,'L\'occhio del ciclone','descrizione','img_tv/progs/prog_2.jpg','https://it.wikipedia.org/wiki/L%27occhio_del_ciclone_-_In_the_Electric_Mist',null,0),(3,'Presa Diretta','descrizione','img_tv/progs/prog_3.jpg','https://it.wikipedia.org/wiki/Presa_diretta_(programma_televisivo)',null,0),(4,'Telegiornale','descrizione','img_tv/progs/prog_4.jpg','https://it.wikipedia.org/wiki/TG4',120,0),(5,'The Wall','descrizione','img_tv/progs/prog_5.jpg','https://it.wikipedia.org/wiki/The_Wall_(programma_televisivo_italiano)',120,0),(6,'Il commisario Cordier','descrizione','img_tv/progs/prog_7.jpg','https://it.wikipedia.org/wiki/Il_commissario_Cordier_(serie_televisiva_1992)',null,0);
+INSERT INTO `programmi` VALUES (1,'Reazione a Catena','descrizione','img_tv/progs/prog_1.jpg','https://it.wikipedia.org/wiki/Reazione_a_catena_-_L%27intesa_vincente',null,0),(2,'L\'occhio del ciclone','descrizione','img_tv/progs/prog_2.jpg','https://it.wikipedia.org/wiki/L%27occhio_del_ciclone_-_In_the_Electric_Mist',94,0),(3,'Presa Diretta','descrizione','img_tv/progs/prog_3.jpg','https://it.wikipedia.org/wiki/Presa_diretta_(programma_televisivo)',null,0),(4,'Telegiornale','descrizione','img_tv/progs/prog_4.jpg','https://it.wikipedia.org/wiki/TG4',120,0),(5,'The Wall','descrizione','img_tv/progs/prog_5.jpg','https://it.wikipedia.org/wiki/The_Wall_(programma_televisivo_italiano)',null,0),(6,'Il commisario Cordier','descrizione','img_tv/progs/prog_7.jpg','https://it.wikipedia.org/wiki/Il_commissario_Cordier_(serie_televisiva_1992)',null,0);
 /*!40000 ALTER TABLE `programmi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +157,7 @@ CONSTRAINT `id_programmazione_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie`
 
 LOCK TABLES `programmazioni` WRITE;
 /*!40000 ALTER TABLE `programmazioni` DISABLE KEYS */;
-INSERT INTO `programmazioni` VALUES (1,1,1,1,'2020-08-15 18:00:00',120,0),(2,2,2,NULL,'2020-08-15 20:00:00',120,0),(3,3,3,2,'2020-08-15 16:00:00',120,0),(4,4,4,NULL,'2020-08-15 14:00:00',120,0),(5,5,5,3,'2020-08-15 18:00:00',120,0),(6,6,7,4,'2020-08-15 22:00:00',120,0),(7,1,1,5,'2020-08-15 20:00:00',120,0);
+INSERT INTO `programmazioni` VALUES (1,1,1,1,'2020-08-15 18:00:00',120,0),(2,2,2,NULL,'2020-08-15 20:00:00',120,0),(3,3,3,2,'2020-08-15 16:00:00',120,0),(4,4,4,NULL,'2020-08-15 14:00:00',120,0),(5,5,5,5,'2020-08-15 18:00:00',120,0),(6,6,7,4,'2020-08-15 22:00:00',120,0),(7,1,1,5,'2020-08-15 20:00:00',120,0);
 /*!40000 ALTER TABLE `programmazioni` ENABLE KEYS */;
 UNLOCK TABLES;
 

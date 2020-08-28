@@ -58,7 +58,7 @@
 
         <div class="row" id="series-slider">
             <#if (series?size > 0)>
-            <#list series as programmazione>
+            <#list series?sort_by("startTime") as programmazione>
             <div>
 
                 <div class="row col-12  canale slider justify-content-center ">

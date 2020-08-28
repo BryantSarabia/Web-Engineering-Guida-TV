@@ -35,13 +35,15 @@
                             <li><i class="fa fa-tags"></i>Questo programma non ha generi</li>
                             </#list>
                         </ul>
-                        <h5><a href="programma?p_key=${prog_footer.key}" target="_blank">${prog_footer.programma.titolo}</a></h5>
-                        <#if prog_footer.programma.stagione??>
-                        <small>Stagione ${prog_footer.programma.stagione}, Episodio ${prog_footer.programma.episodio}</small>
-                        </#if>
+                        <h5><a href="programma?p_key=${prog_footer.programma.key}" target="_blank">${prog_footer.programma.titolo}</a></h5>
+
                         <ul class="blog__item__widget">
                             <li><i class="fa fa-clock-o"></i> ${prog_footer.date}</li>
                             <li>${prog_footer.time} - ${prog_footer.endTime}</li>
+                            <#if prog_footer.programma.stagione??>
+                            <li>Stagione ${prog_footer.programma.stagione}, Episodio ${prog_footer.programma.episodio}</li>
+                            </#if>
+
                         </ul>
                     </div>
                 </div>
