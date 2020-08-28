@@ -13,7 +13,6 @@ import com.mycompany.guida.tv.shared.Methods;
 
 import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
-import com.mycompany.guida.tv.shared.Validator;
 import java.io.File;
 
 import java.io.IOException;
@@ -23,11 +22,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -53,7 +50,7 @@ public class Canali extends BaseController {
         } catch (UnsupportedEncodingException ex) {
         }
         try {
-            boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
+            boolean is_admin = SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                  if (request.getParameter("insert") != null) {
@@ -92,12 +89,14 @@ public class Canali extends BaseController {
     }
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+
         List <Canale> canali;
         if(request.getParameter("page") == null){
             canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(0, 10);
         }
         else {
-            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+
+            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
             int start=(numero-1)*10;
             int elements=10;
             canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanaliPaginated(start, elements);
@@ -105,8 +104,8 @@ public class Canali extends BaseController {
         int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("canali", canali);
         request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -118,8 +117,10 @@ public class Canali extends BaseController {
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
-    private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/canali/new.ftl.html", request, response);
     }
@@ -127,16 +128,17 @@ public class Canali extends BaseController {
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
         Canale canale = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id);
-
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("canale", canale);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/canali/edit.ftl.html", request, response);
     }
 
-    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Id");
+            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -147,26 +149,20 @@ public class Canali extends BaseController {
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().deleteCanale(key);
             request.setAttribute("success", "canale cancellato con successo!");
-            List <Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali()/10;
-
-            TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
-            request.setAttribute("canali", canali);
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/canali/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
+            action_default(request,response);
         }
     }
 
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         try {
-            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
-            Integer numero = (Integer) Validator.validate(request.getParameter("numero"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            String nome = request.getParameter("nome");
+            Integer numero = (Integer) SecurityLayer.checkNumeric(request.getParameter("numero"));
+            if (((String) nome).isBlank()) {
+                throw new DataException("Invalid parameter: " + nome + " must be not empty");
+            }
             Canale target = new CanaleImpl();
                 target.setNome(nome);
                 target.setNumero(numero);
@@ -188,33 +184,23 @@ public class Canali extends BaseController {
             }
 
 
-            List <Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali()/10;
-            TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
-            request.setAttribute("canali", canali);
-            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("success", "canale creato");
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/canali/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
             request.setAttribute("errors", ex.getMessage());
-            TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/canali/new.ftl.html", request, response);
+            action_create(request,response);
 
         }
     }
-    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+    private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException  {
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("key"));
+
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("key"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
-            String nome = (String) Validator.validate(request.getParameter("nome"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.STRING_NOT_EMPTY, Validator.STRING_QUERY_PARAMETER)), "nome");
-            Integer numero = (Integer) Validator.validate(request.getParameter("numero"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
-            Canale target;
+            String nome = request.getParameter("nome");
+            Integer numero = (Integer) SecurityLayer.checkNumeric(request.getParameter("numero"));
+            if (((String) nome).isBlank()) {
+                throw new DataException("Invalid parameter: " + nome + " must be not empty");
+            }  Canale target;
             target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(key);
             target.setNome(nome);
             target.setNumero(numero);
@@ -224,7 +210,6 @@ public class Canali extends BaseController {
             if (image != null) {
                 String name = target.getKey() + ".jpg";
                 String path = getServletContext().getRealPath("img_tv/canali/small/") + File.separatorChar + name;
-                String contentType = image.getContentType();
                 long size = image.getSize();
                 if (size > 0 && name != null && !name.isEmpty()) {
                     File new_file = new File(path);
@@ -234,25 +219,12 @@ public class Canali extends BaseController {
                 }
             }
 
-
-            List <Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali()/10;
-            TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("canali", canali);
             request.setAttribute("success", "canale aggiornato");
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/canali/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
-            // GESTISCO IN MODO DIVERSO L'ECCEZIONE
+            request.setAttribute("edit", key);
             request.setAttribute("errors", ex.getMessage());
-            TemplateResult results = new TemplateResult(getServletContext());
-        /*UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/canali/edit.ftl.html", request, response);
+            action_update(request,response);
 
         }
     }

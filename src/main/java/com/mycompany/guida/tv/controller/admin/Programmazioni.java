@@ -4,7 +4,7 @@ package com.mycompany.guida.tv.controller.admin;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
 import com.mycompany.guida.tv.data.model.Canale;
-import com.mycompany.guida.tv.data.model.Film;
+
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
@@ -15,12 +15,8 @@ import com.mycompany.guida.tv.security.SecurityLayer;
 import com.mycompany.guida.tv.shared.Methods;
 import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
-
-import com.mycompany.guida.tv.shared.Validator;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.Security;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,7 +42,7 @@ public class Programmazioni extends BaseController {
             throws ServletException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            boolean is_admin = true;// SecurityLayer.checkAdminSession(request);
+            boolean is_admin =  SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 if (request.getParameter("insert") != null) {
@@ -88,7 +84,7 @@ public class Programmazioni extends BaseController {
             programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
         }
         else {
-            Integer numero = (Integer) Validator.validate(request.getParameter("page"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "numero");
+            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
             int start=(numero-1)*10;
             int elements=10;
             programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(start, elements);
@@ -96,8 +92,8 @@ public class Programmazioni extends BaseController {
         int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
-       /* UtenteProxy me = (UtenteProxy) Methods.getMe(request);
-        request.setAttribute("me", me);*/
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("programmazioni", programmazioni);
         request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -114,7 +110,8 @@ public class Programmazioni extends BaseController {
         TemplateResult results = new TemplateResult(getServletContext());
         List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
         List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali();
-
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("programmi", programmi);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
@@ -122,13 +119,14 @@ public class Programmazioni extends BaseController {
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        Integer key = (Integer) Validator.validate(request.getParameter("edit"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("edit"));
         if (key == null) {
             throw new DataException("Invalid Key");
         }
         Programmazione programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
         List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
-
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("programmi", programmi);
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("programmazione", programmazione);
@@ -139,9 +137,9 @@ public class Programmazioni extends BaseController {
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
 
-            Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
-            Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
-            Integer durata = (Integer) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
+            Integer id_canale = SecurityLayer.checkNumeric(request.getParameter("canale"));
+            Integer id_programma = SecurityLayer.checkNumeric(request.getParameter("programma"));
+            Integer durata = SecurityLayer.checkNumeric(request.getParameter("durata"));
             String data =request.getParameter("date");
             String time =request.getParameter("time");
             String start_time= data+" "+time+":00";
@@ -174,13 +172,20 @@ public class Programmazioni extends BaseController {
         }
     }
     private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException, DataException {
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.INTEGER)), "ID");
-            Integer id_canale = (Integer) Validator.validate(request.getParameter("canale"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Canale");
-            Integer id_programma = (Integer) Validator.validate(request.getParameter("programma"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Programma");
-            LocalDateTime start = (LocalDateTime) Validator.validate(request.getParameter("start_time"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.DATETIME)), "Start Time");
-            Integer durata = (Integer) Validator.validate(request.getParameter("durata"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "Durata");
 
+            Integer id_canale = SecurityLayer.checkNumeric(request.getParameter("canale"));
+            Integer id_programma = SecurityLayer.checkNumeric(request.getParameter("programma"));
+            Integer durata = SecurityLayer.checkNumeric(request.getParameter("durata"));
+            /*
+            String data =request.getParameter("date");
+            String time =request.getParameter("time");
+            String start_time= data+" "+time+":00";/
+
+             */
+            String start_time =request.getParameter("start_time");
+            LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
             Programmazione target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
@@ -189,25 +194,18 @@ public class Programmazioni extends BaseController {
             target.setStartTime(start);
             target.setDurata(durata);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
-            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
-            request.setAttribute("programmazioni", programmazioni);
-            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("success", "programmazione aggiornata con successo!");
-            TemplateResult results = new TemplateResult(getServletContext());
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (DataException ex) {
             request.setAttribute("errors", ex.getMessage());
-            TemplateResult results = new TemplateResult(getServletContext());
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/programmazioni/edit.ftl.html", request, response);
+            request.setAttribute("edit", key);
+            action_edit(request,response);
 
         }
     }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
         try {
-            Integer key = (Integer) Validator.validate(request.getParameter("id"), new ArrayList<>(Arrays.asList(Validator.REQUIRED, Validator.INTEGER)), "ID");
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -215,26 +213,14 @@ public class Programmazioni extends BaseController {
             if (p == null) {
                 throw new DataException("Invalid Key");
             }
-            TemplateResult results = new TemplateResult(getServletContext());
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().deleteProgrammazione(key);
 
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
-            request.setAttribute("programmazioni", programmazioni);
-            request.setAttribute("numero_pagine", numero_pagine);
             request.setAttribute("success", "programmazione cancellata con successo!");
-            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+            action_default(request,response);
 
         } catch (DataException ex) {
-            TemplateResult results = new TemplateResult(getServletContext());
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             request.setAttribute("errors", ex.getMessage());
-            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
-            request.setAttribute("programmazioni", programmazioni);
-            request.setAttribute("numero_pagine", numero_pagine);
-            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+            action_default(request,response);
 
         }
 

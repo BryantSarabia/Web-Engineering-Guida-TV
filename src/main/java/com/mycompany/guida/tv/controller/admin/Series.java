@@ -90,6 +90,7 @@ public class Series extends BaseController {
 
 
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+
         List<Serie> serie;
         if(request.getParameter("page") == null){
             serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
@@ -117,7 +118,8 @@ public class Series extends BaseController {
         Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
         request.setAttribute("generi", generi);
-
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("serie", serie);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
@@ -198,20 +200,11 @@ public class Series extends BaseController {
                     }
                 }
             request.setAttribute("success", request.getParameter("serie creata con successo"));
-            TemplateResult results = new TemplateResult(getServletContext());
-            List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("serie", serie);
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
             request.setAttribute("errors", ex.getMessage());
             TemplateResult results = new TemplateResult(getServletContext());
-            List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-            request.setAttribute("generi", generi);
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/new.ftl.html", request, response);
+            action_create(request,response);
 
         }
     }
@@ -219,15 +212,16 @@ public class Series extends BaseController {
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
         request.setAttribute("generi", generi);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/serie/new.ftl.html", request, response);
     }
     private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        int id = SecurityLayer.checkNumeric(request.getParameter("id"));
 
             try {
-                int id = SecurityLayer.checkNumeric(request.getParameter("id"));
                 String titolo = request.getParameter("titolo");
                 String descrizione = request.getParameter("descrizione");
                 String link_ref = request.getParameter("link_ref");
@@ -290,28 +284,18 @@ public class Series extends BaseController {
                 ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 
                 request.setAttribute("success", "serie aggiornata con successo!");
-
-
-                TemplateResult results = new TemplateResult(getServletContext());
-                List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-                int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
-                request.setAttribute("numero_pagine", numero_pagine);
-                request.setAttribute("serie", serie);
-                request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-                results.activate("/admin/serie/index.ftl.html", request, response);
+                action_default(request,response);
             } catch (IOException | ServletException | DataException ex) {
                 request.setAttribute("errors", ex.getMessage());
-                TemplateResult results = new TemplateResult(getServletContext());
-                List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
-                request.setAttribute("generi", generi);
-                request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-                results.activate("/admin/serie/edit.ftl.html", request, response);
+                request.setAttribute("edit", id);
+                action_edit(request,response);
 
             }
         }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
+
         try {
-            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
@@ -322,24 +306,10 @@ public class Series extends BaseController {
 
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().deleteProgramma(key);
             request.setAttribute("success", "Serie cancellata con successo!");
-            List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("serie", serie);
-            TemplateResult results = new TemplateResult(getServletContext());
-
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/index.ftl.html", request, response);
+            action_default(request,response);
         } catch (DataException ex) {
             request.setAttribute("errors", ex.getMessage());
-            List<Serie> serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
-            request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("serie", serie);
-            TemplateResult results = new TemplateResult(getServletContext());
-
-            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-            results.activate("/admin/serie/index.ftl.html", request, response);
+            action_default(request,response);
         }
 
     }
