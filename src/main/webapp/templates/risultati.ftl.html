@@ -48,18 +48,21 @@
 
                                     <div class="row col-lg-9">
 
-                                        <div class="col-lg-10 col-md-10 align-self-center">
+                                        <div class="col-lg-9 col-md-10 align-self-center">
                                             <h5>${programmazione.programma.titolo}</h5>
+                                            <#if programmazione.programma.stagione??>
+                                            <small> Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio}</small>
+                                            </#if>
                                         </div>
-                                        <div class="col-lg-2 col-md-10 align-self-center">
-                                            <small>(${programmazione.programma.durata} min)</small>
+                                        <div class="col-lg-3 col-md-10 align-self-center text-center">
+                                            <small>(${programmazione.date})</small>
                                         </div>   
 
                                         <div class="col-lg-10 align-self-center">
                                             <#list programmazione.programma.generi as genere>
                                             <small>${genere.nome} <#sep>, </#sep></small>
                                             <#else>
-                                            <small>Questo programma non ha generi></small>
+                                            <small>Questo programma non ha generi</small>
                                             </#list>
                                         </div>
 

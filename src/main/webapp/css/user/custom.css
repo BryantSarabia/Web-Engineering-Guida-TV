@@ -382,6 +382,13 @@ small{
         max-height: 140px;
     }
 
+    .dettaglio_series_img{
+        min-height: 150px;
+        min-width: 50px;
+        max-width: 175px;
+        max-height: 150px;
+    }
+
     .card, h5, p{
         font-size: 18px;
     }
@@ -391,14 +398,13 @@ small{
     }
 }
 
-@media (max-width: 1200px){
+@media (max-width: 1299px){
 
     .dettaglio_series_img{
-        min-height: 123px;
+        min-height: 140px;
         min-width: 50px;
-        width: auto;
-        height: auto;
-        max-height: 123px;
+        max-width: 175px;
+        max-height: 140px;
     }
 
 }
@@ -409,8 +415,7 @@ small{
     .dettaglio_series_img{
         min-height: 100px;
         min-width: 50px;
-        width: auto;
-        height: auto;
+        max-width: 110px;
         max-height: 100px;
     }
 
@@ -424,9 +429,8 @@ small{
     .dettaglio_series_img{
         min-height: 90px;
         min-width: 50px;
-        width: auto;
-        height: auto;
         max-height: 90px;
+        max-width: 90px;
     }
 
 
@@ -516,7 +520,15 @@ small{
     }
 }
 
-@media (max-width: 476px){
+@media (max-width: 490px){
+
+    .dettaglio_series_img {
+        min-height: 90px;
+        min-width: 50px;
+        max-height: 90px;
+        max-width: 70px;
+    }
+
     #cerca{
         width: 30%;
     }
@@ -553,7 +565,7 @@ small{
     .section-title h2{
         font-size: 26px;
     }
-    
+
     #cerca_giorno{
         padding: 5px 0px 5px 1px;
     }
@@ -586,9 +598,18 @@ small{
 
 }
 
+@media (max-width:370px){
+    .dettaglio_series_img {
+        min-height: 62px;
+        min-width: 60px;
+        max-height: 62px;
+        max-width: 60px;
+    }
+}
+
 @media (max-width:330px){
-    
-    
+
+
     .card, h5, p{
         font-size: 10px;
     }

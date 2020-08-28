@@ -4,6 +4,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.dao.GenereDAO;
+import com.mycompany.guida.tv.data.dao.SerieDAO;
 import com.mycompany.guida.tv.data.impl.SerieImpl;
 import com.mycompany.guida.tv.data.model.Genere;
 import java.util.List;
@@ -68,4 +69,17 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
         }
         return super.getGeneri();
     }
+    
+    /*
+    @Override
+    public String getDurata() {
+        if (super.getDurata() == null){
+         try{
+             super.setDurata(((SerieDAO) dataLayer.getDAO(Genere.class)).getSerie(this.getKey()));
+         } catch(DataException ex){
+         Logger.getLogger(ProgrammaProxy.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        }
+        return super.getDurata();
+    } */
 }

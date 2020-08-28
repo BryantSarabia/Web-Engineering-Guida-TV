@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemProxy {
 
     private boolean modified;
-    private int canale_key, programma_key;
+    private int canale_key, programma_key, serie_key;
 
     private final DataLayer dataLayer;
 
@@ -29,7 +29,7 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
         this.modified = false;
         this.canale_key = 0;
         this.programma_key = 0;
-
+        this.serie_key = 0;
         this.dataLayer = dataLayer;
     }
 
@@ -47,6 +47,14 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
 
     public void setProgramma_key(int programma_key) {
         this.programma_key = programma_key;
+    }
+    
+     public int getSerie_key() {
+        return serie_key;
+    }
+
+    public void setSerie_key(int serie_key) {
+        this.serie_key = serie_key;
     }
 
     @Override
@@ -88,9 +96,10 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
                 
                 Programma programma = ((FilmDAO) dataLayer.getDAO(Film.class)).getFilm(programma_key);
                 if(programma == null) {
-                    programma = ((SerieDAO) dataLayer.getDAO(Serie.class)).getSerie(programma_key);
+                    
+                    programma = ((SerieDAO) dataLayer.getDAO(Serie.class)).getSerieByProgrammazione(programma_key, serie_key);
+
                 }
-                
                 if(programma == null) {
                     programma = ((ProgrammaDAO) dataLayer.getDAO(Programma.class)).getProgramma(programma_key);
                 }

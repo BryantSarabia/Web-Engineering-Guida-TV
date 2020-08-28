@@ -27,16 +27,6 @@
                         <h4>Descrizione: </h4><p>${programma.descrizione}</p>
                     </div>
 
-                    <#if programma.stagione??>
-                    <div class="col-12">
-                        <h4>Stagione: </h4><p>${programma.stagione}</p>
-                    </div>
-
-                    <div class="col-12">
-                        <h4>Episodio: </h4><p>${programma.episodio}</p>
-                    </div>
-                    </#if>
-
                     <div class="col-12">
                         <h4>Generi: </h4>
                         <p>
@@ -53,11 +43,6 @@
                 <div class="row">
                     <div class="col">
                         <p>Per saperne pi&ugrave; riguardo clicca <a href="${programma.link_ref}" target="_blank">qui</a></p>
-                    </div>
-                </div>
-                <div class="row justify-content-end">
-                    <div class="col">
-                        <small>(${programma.durata} min)</small>
                     </div>
                 </div>
             </div>
@@ -78,7 +63,7 @@
 
                 <div class="row col-12  canale slider justify-content-center ">
 
-                    <div class="canale-logo col-2 align-self-center text-center">
+                    <div class="canale-logo col-2 align-self-center">
 
                         <div class="col-12">
                             <#if programmazione.canale.logo??>
@@ -98,7 +83,7 @@
                     <div class="col-10">
                         <a href="programma?p_key=${programmazione.programma.key}">
                             <div class="row programma">
-                                <div class="col-3">
+                                <div class="col-3 align-self-center">
                                     <#if programmazione.programma.img??><img class="dettaglio_series_img" src="${programmazione.programma.img}">
                                     <#else>
                                     <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
@@ -107,12 +92,12 @@
 
                                 <div class="row col-9">
 
-                                    <div class="col-12 col-sm-9 align-self-center ">
+                                    <div class="col-12 col-sm-9 align-self-center">
                                         <h5>${programmazione.programma.titolo}</h5>
                                         <small> (Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio})</small>
                                     </div>
-                                    <div class="col-sm-3 d-none d-sm-block align-self-center text-center">
-                                        <small>(${programmazione.programma.durata} min)</small>
+                                    <div class="col-12 col-sm-3 align-self-center">
+                                        <small>(${programmazione.date})</small>
                                     </div>   
 
                                     <div class="col-10 col-sm-9 align-self-center">
@@ -123,7 +108,7 @@
                                         </#list>
                                     </div>
 
-                                    <div class="col-2 col-sm-3 align-self-center text-center">
+                                    <div class="col-2 col-sm-3 align-self-center">
                                         <small>${programmazione.time}</small>
                                     </div>
 

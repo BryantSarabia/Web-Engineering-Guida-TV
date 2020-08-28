@@ -73,7 +73,10 @@ public class DettagliProgramma extends BaseController {
             List<Programmazione> series;
 
             series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioneSerie(p.getKey());
-
+            System.out.println(series + "series");
+            for(Programmazione x : series){
+                System.out.println(x.getProgramma());
+            }
             request.setAttribute("series", series);
             request.setAttribute("programma", p);
             results.activate("programma.ftl.html", request, response);

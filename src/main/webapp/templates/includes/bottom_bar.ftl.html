@@ -14,10 +14,17 @@
             <#list bottom_bar as prog_footer>
             <div class="col-lg-4 col-md-6">
                 <div class="blog__item">
+                    <#if prog_footer.programma.img??>
                     <div class="blog__item__pic set-bg" data-setbg="${prog_footer.programma.img}" style="background-image: url(${prog_footer.programma.img});">
                         <a href="${prog_footer.programma.link_ref}" class="play-btn video-popup"><i
                                 class="icon_zoom-in_alt"></i></a>
                     </div>
+                    <#else>
+                    <div class="blog__item__pic set-bg" data-setbg="img_tv/static/no-image.png" style="background-image: url(img_tv/static/no-image.png);">
+                        <a href="${prog_footer.programma.link_ref}" class="play-btn video-popup"><i
+                                class="icon_zoom-in_alt"></i></a>
+                    </div>
+                    </#if>
                     <div class="blog__item__text">
                         <ul class="blog__item__tags">
                             <#list prog_footer.programma.generi as genere>
@@ -29,6 +36,9 @@
                             </#list>
                         </ul>
                         <h5><a href="programma?p_key=${prog_footer.key}" target="_blank">${prog_footer.programma.titolo}</a></h5>
+                        <#if prog_footer.programma.stagione??>
+                        <small>Stagione ${prog_footer.programma.stagione}, Episodio ${prog_footer.programma.episodio}</small>
+                        </#if>
                         <ul class="blog__item__widget">
                             <li><i class="fa fa-clock-o"></i> ${prog_footer.date}</li>
                             <li>${prog_footer.time} - ${prog_footer.endTime}</li>

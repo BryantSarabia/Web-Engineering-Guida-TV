@@ -135,6 +135,9 @@
                                         <div class="row">
                                             <div class="col-9 col-lg-10 align-self-center">
                                                 <h5>${programmazione.programma.titolo}</h5>
+                                                <#if programmazione.programma.stagione??>
+                                                <small>(Stagione ${programmazione.programma.stagione}, Episodio ${programmazione.programma.episodio})</small>
+                                                </#if>
                                             </div>
                                             <div class="col-3 col-lg-2 align-self-center">
                                                 <small>(${programmazione.programma.durata} min)</small>

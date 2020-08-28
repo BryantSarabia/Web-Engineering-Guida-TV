@@ -221,7 +221,7 @@ public class Cerca extends BaseController {
                     }
                 }
             }
-
+            
             // Ordino le programmazioni per start_time
             for (Map.Entry<Canale, List<Programmazione>> entry : programmazioni_per_canale.entrySet()) {
                 Collections.sort(entry.getValue(), Collections.reverseOrder());
