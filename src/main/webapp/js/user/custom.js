@@ -199,7 +199,7 @@ function palinsesto_generale(data) {
                     let target_row = li_element.find('.programma');
                     li_element.children('a').attr("href", "programma?p_key=" + programma.id);
                     target_row.children().eq(0).children('img').attr("src", programma.img);
-                    target_row.children().eq(0).children('img').attr("alt", programma.titolo.replace(/&#39;/gi, "\'"));
+                    target_row.children().eq(0).children('img').attr("alt", programma.titolo);
 
                     let second_row = target_row.children().eq(1).children('div').children('div');
                     second_row.eq(0).children('h5').text(programma.titolo);

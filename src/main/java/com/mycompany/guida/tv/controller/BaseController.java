@@ -7,6 +7,7 @@ package com.mycompany.guida.tv.controller;
 
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.security.SecurityLayer;
+import com.mycompany.guida.tv.shared.Methods;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
@@ -43,7 +44,14 @@ public abstract class BaseController extends HttpServlet {
              * Navbar Management
              */
             boolean logged = (SecurityLayer.checkSession(request) != null && request.isRequestedSessionIdValid() && !request.getSession(false).isNew());
+            if(logged){
+                boolean verified = (Methods.getMe(request).getEmailVerifiedAt() != null);
+                 request.setAttribute("verified", verified);
+            } else {
+                 request.setAttribute("verified", false);
+            }
             request.setAttribute("logged", logged);
+           
             request.setAttribute("is_admin", SecurityLayer.checkAdminSession(request));
 
             /* Referrer link quando si fa login */

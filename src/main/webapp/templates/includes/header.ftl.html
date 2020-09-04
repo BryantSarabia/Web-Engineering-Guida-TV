@@ -13,15 +13,14 @@
                         <ul>
                             <li><a href="./">Home</a></li>
                             <li><a href="palinsesto">Palinsesto</a></li>
-                            <li><a href="canale">Canale</a></li>
                             <#if logged>
                             <li><a href="#">Me</a>
                                 <ul class="dropdown">
                                     <#if is_admin><li><a href="dashboard">Admin Panel</a></li></#if>
                                     <li><a href="profile">Profile</a></li>
-                                    <li><a href="logout">Logout</a></li>
                                 </ul>
                             </li>
+                            <li><a href="logout">Logout</a></li>
                             </#if>
 
                             <#if !logged>

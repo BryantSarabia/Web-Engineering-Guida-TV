@@ -44,7 +44,7 @@ public class Logout extends BaseController {
         if (request.getParameter("referrer") != null) {
             response.sendRedirect(request.getParameter("referrer"));
         } else {
-            response.sendRedirect("home");
+            response.sendRedirect("/guida-tv");
         }
     }
     
