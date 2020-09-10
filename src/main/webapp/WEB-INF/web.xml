@@ -102,6 +102,10 @@
         <servlet-class>com.mycompany.guida.tv.controller.admin.Films</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ProgrammiAdmin</servlet-name>
+        <servlet-class>com.mycompany.guida.tv.controller.admin.Programmi</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SerieAdmin</servlet-name>
         <servlet-class>com.mycompany.guida.tv.controller.admin.Series</servlet-class>
     </servlet>
@@ -172,6 +176,10 @@
     <servlet-mapping>
         <servlet-name>SerieAdmin</servlet-name>
         <url-pattern>/serie</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProgrammiAdmin</servlet-name>
+        <url-pattern>/programmi</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FilmsAdmin</servlet-name>

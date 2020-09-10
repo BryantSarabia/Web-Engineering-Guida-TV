@@ -1,0 +1,135 @@
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Tutte i programmi</h1>
+            <#if success??>
+            <div class="alert alert-success">
+                ${success}
+            </div>
+        </#if>
+        <#if errors??>
+        <div class="alert alert-danger">
+            ${errors}
+        </div>
+    </#if>
+</div>
+            <div class="col-lg-12">
+                <a class="page-header" href="serie?insert" style="color: green; cursor: pointer;" >Aggiungi una serie <em class="fa fa-plus color-green"></em></a>
+            </div>
+
+<div class="col-lg-12">
+    <a class="page-header" href="serie?insert_e" style="color: green; cursor: pointer;" >Aggiungi un episodio <em class="fa fa-plus color-green"></em></a>
+</div>
+
+        </div>
+
+        <div class="panel panel-container" style="background-color: #F1F4F7">
+            <div class="row">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Titolo
+                    </div>
+                </div>
+                <div class="col-xs- col-md-3 col-lg-3 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Link di riferimento
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Generi
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Durata
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Stagione / Episodio
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Edit
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        Delete
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-container">
+            <#list serie as programma>
+
+            <div class="row">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        ${programma.titolo}
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        ${programma.link_ref}
+                    </div>
+                </div>
+
+
+                <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <select class="form-control">
+                            <#list programma.generi as genere>
+                            <#if genere??>
+                            <option>${genere.nome}</option>
+                            <#else>
+                            <p style="color: red">nessun genere</p>
+                        </#if>
+                        </#list>
+                        </select>
+                    </div>
+                </div>
+            <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                    ${programma.durata}
+                </div>
+            </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <p style="color: black">Episodio:${programma.episodio}
+                        Stagione:${programma.stagione}</p>  <!-- vedere se è una serie o un film -->
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
+                        <a href="serie?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
+
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
+                    <div class="panel panel-teal panel-widget border-right">
+                        <form id="delete-form-${programma.key}"method="POST" action="serie">
+                            <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.key}()" ></em>
+                            <script>
+                                function deleteFunc${programma.key}() {
+                                    var x = confirm('Vuoi veramente cancellare questo programma?')
+                                    if(x == true){
+                                        document.getElementById('delete-form-${programma.key}').submit(); }
+                                }
+                            </script>
+                            <input name="id" value="${programma.key}" hidden >
+                            <input name="delete" value="delete" hidden >
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </#list>
+</div>
+    </div>
+</div>
