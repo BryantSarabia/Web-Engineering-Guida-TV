@@ -149,7 +149,7 @@ public class Series extends BaseController {
         request.setAttribute("numero_pagine", numero_pagine);
         request.setAttribute("serie", serie);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-        results.activate("/admin/serie/index.ftl.html", request, response);
+        results.activate("/admin/serie/index_e.ftl.html", request, response);
     }
 
         private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
