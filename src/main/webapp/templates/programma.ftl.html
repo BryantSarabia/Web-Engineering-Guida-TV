@@ -12,7 +12,7 @@
         <div class="row justify-content-center align-items-center">
 
             <div class="col-6 col-lg-3">
-                <img class="rounded" src="${programma.img}"/>
+                <img class="rounded" src="${programma.img}" alt=""/>
             </div>
 
             <div class="col-6 offset-lg-2 ">
@@ -42,7 +42,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p>Per saperne pi&ugrave; riguardo clicca <a href="${programma.link_ref}" target="_blank">qui</a></p>
+                        <p>Per saperne di pi&ugrave; clicca <a href="${programma.link_ref}" target="_blank">qui</a></p>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                         <a href="programma?p_key=${programmazione.programma.key}">
                             <div class="row programma">
                                 <div class="col-3 align-self-center">
-                                    <#if programmazione.programma.img??><img class="dettaglio_series_img" src="${programmazione.programma.img}">
+                                    <#if programmazione.programma.img??><img class="dettaglio_series_img" src="${programmazione.programma.img}" alt="">
                                     <#else>
                                     <img class="programma_img" src="img_tv/static/no_img.png"  alt="${programmazione.programma.titolo}">
                                     </#if>

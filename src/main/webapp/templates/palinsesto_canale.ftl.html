@@ -22,7 +22,7 @@
                 <div class="col-7 col-md-7 col-lg-6">
                     <form action="canale" method="GET" id="palinsesto_canale_cerca_form">
                         <div class="form-group d-flex flex-column flex-md-row  justify-content-md-end justify-content-lg-between">
-                            <input type="date" class="form-control dateTime flex-md-shrink-1 flex-lg-fill w-auto mr-2 mb-3 mb-md-auto" required="required" name="day" placeholder="yyyy-mm-dd" value="${day}"/>
+                            <input type="date" class="form-control dateTime flex-md-shrink-1 flex-lg-fill w-auto mr-2 mb-3 mb-md-auto" required="required" name="day" value="${day}"/>
                             <input type="hidden" name="c_key" value="${canale.key}"/>
                             <button type="submit" id="cerca_giorno" class="btn primary-btn align-self-center flex-sm-fill  flex-md-shrink-1 flex-lg-fill pd-2">
                                 <i class="fa fa-search"></i>
@@ -81,7 +81,7 @@
                     <div class="col-6 col-sm-4 col-md-3 col-lg  m-0 fascia canale <#if (fascia==3)>active</#if>">
                         <a href="canale?c_key=${canale.key}&fascia=3<#if day?? >&day=${day}</#if>">
                             <div class="fascia-icon col-12 text-center">
-                                <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png"/>
+                                <img src="https://img.icons8.com/pastel-glyph/64/000000/sunset--v2.png" alt=""/>
                             </div>
                             <div class="col col-lg-12 text-center">
                                 <h5>Sera</h5>
@@ -120,7 +120,7 @@
                                             <small>${programmazione.time} - ${programmazione.endTime}</small>
                                         </div>
                                         <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
-                                            <img class="dettaglio_series_img rounded" src="${programmazione.programma.img}">
+                                            <img class="dettaglio_series_img rounded" src="${programmazione.programma.img}" alt="">
                                         </div>
 
                                         <div class="row col-7 col-sm-8 col-lg-8">
@@ -179,7 +179,7 @@
                     <small>10:00 - 12:00</small>
                 </div>
                 <div class="col-3 col-sm-2 col-lg-2 col-md-2 p-1">
-                    <img class="dettaglio_series_img rounded" src="">
+                    <img class="dettaglio_series_img rounded" src="#" alt="">
                 </div>
 
                 <div class="row col-7 col-sm-8 col-lg-8">
