@@ -65,7 +65,25 @@ public class Series extends BaseController {
                     action_store(request, response);
                 } else if (request.getParameter("update") != null) {
                     action_update(request, response);
-                }else {
+                } else if (request.getParameter("e") != null) {
+                    action_e_default(request, response);
+                }
+                else if (request.getParameter("e_insert") != null) {
+                    action_edit(request, response);
+                }
+                else if (request.getParameter("e_edit") != null) {
+                    action_edit(request, response);
+                }
+                else if (request.getParameter("e_delete") != null) {
+                    action_edit(request, response);
+                }
+                else if (request.getParameter("e_store") != null) {
+                    action_edit(request, response);
+                }
+                else if (request.getParameter("e_update") != null) {
+                    action_edit(request, response);
+                }
+                else {
                     action_default(request, response);
                 }
 
@@ -112,8 +130,29 @@ public class Series extends BaseController {
         results.activate("/admin/serie/index.ftl.html", request, response);
 
     }
+    private void action_e_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        List<Serie> serie;
+        if(request.getParameter("page") == null){
+            serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
+        }
+        else {
+            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
+            int start=(numero-1)*10;
+            int elements=10;
+            serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSeriePaginated(start, elements);
+        }
+        int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
 
-    private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        TemplateResult results = new TemplateResult(getServletContext());
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
+        request.setAttribute("numero_pagine", numero_pagine);
+        request.setAttribute("serie", serie);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/serie/index.ftl.html", request, response);
+    }
+
+        private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
         int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
         Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
