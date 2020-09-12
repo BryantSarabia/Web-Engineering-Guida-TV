@@ -1,16 +1,25 @@
 ----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
 
-10/09/2020 - 15:01
+12/09/2020 - 22:28
 Newsletter per Giacomo Sfratato (xbit18@hotmail.it) dallo staff di GuidaTV
 
 Ciao Giacomo,
-ecco la tua programmazione di oggi 10 settembre 2020:
+ecco la tua programmazione di oggi 12 settembre 2020:
 
-Per oggi non c'è nulla in programma
+Rai1: dalle 14:00 alle 16:00 - Reazione a Catena
+Rai 2: dalle 08:00 alle 10:00 - L'occhio del ciclone
+Rai 2: dalle 14:00 alle 14:30 - TG2
+Italia 1: dalle 16:00 alle 18:40 - Harry Potter e il Calice di Fuoco
 
 Aggiornamenti sulle tue ricerche:
 
-Non hai salvato nessuna ricerca
+Ecco i parametri di ricerca che hai specificato:
+Canali: Tutti i canali
+Titolo: "harry potter"
+Generi: Tutti i generi
+
+Clicca qui per vedere aggiornamenti sulla tua ricerca:
+localhost:8080/guida-tv/cerca?titolo=harry+potter&generi=0&canale=0&min_ora=&max_ora=&date_min=&date_max=
 
 ----------------------------------------------------------------------- GuidaTV -----------------------------------------------------------------------
 

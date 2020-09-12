@@ -10,6 +10,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.impl.UtenteImpl;
 import com.mycompany.guida.tv.data.model.Utente;
+import com.mycompany.guida.tv.email.VerificationLinkGenerator;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -132,7 +133,7 @@ public class Register extends BaseController {
                 }
                 else {
                     //Non invio mail ma stampo il link in un file .txt
-                    SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + newUser.getNome() + newUser.getCognome() + "Verify.txt", newUser);
+                    VerificationLinkGenerator.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + newUser.getNome() + newUser.getCognome() + "Verify.txt", newUser);
                    
                     //Redirect
                     if (request.getParameter("referrer") != null) {

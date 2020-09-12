@@ -126,10 +126,15 @@ public class DailyMailRunnable implements Runnable{
                             
                             for(String chiave : chiavi){
                                 canaliToPrint.add(((CanaleDAO) dataLayer.getDAO(Canale.class)).getCanale(SecurityLayer.checkNumeric(chiave)));
+                                System.out.println("ID Canale: " + chiave);
                             }
                         
                             for(Canale canale : canaliToPrint){
+                                if(canale != null){
                                 mail_text += canale.getNome() + ", "; 
+                                } else {
+                                    mail_text += "Tutti i canali  ";
+                                } 
                             }
                             
                         //Rimuovo l'ultima virgola
@@ -148,7 +153,11 @@ public class DailyMailRunnable implements Runnable{
                             }
                         
                             for(Genere genere : generiToPrint){
+                                if(genere != null){
                                 mail_text += genere.getNome() + ", "; 
+                                } else {
+                                    mail_text += "Tutti i generi  ";
+                                }
                             }
                             
                         //Rimuovo l'ultima virgola

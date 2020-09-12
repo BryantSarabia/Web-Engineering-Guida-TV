@@ -9,6 +9,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Utente;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
+import com.mycompany.guida.tv.email.VerificationLinkGenerator;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -138,7 +139,7 @@ public class VerifyEmail extends BaseController {
             me.setToken(Methods.generateNewToken(((GuidaTVDataLayer) request.getAttribute("datalayer"))));
             me.setExpirationDate(LocalDate.now().plusDays(1));
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getUtenteDAO().storeUtente(me);
-            SecurityLayer.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + me.getNome() + me.getCognome() + "Verify.txt", me);
+            VerificationLinkGenerator.generateVerificationLink(this.getServletContext().getInitParameter("files.directory") + "/VerificationLinks/" + me.getNome() + me.getCognome() + "Verify.txt", me);
             response.sendRedirect("verifyemail");
         } else {
             action_default(request, response);

@@ -76,7 +76,7 @@
         </div>
         <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
             <div class="panel panel-teal panel-widget border-right">
-                <form id="delete-form-${utente.key}"method="POST" action="utenti">
+                <form id="delete-form-${utente.key}" method="POST" action="utenti">
                     <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${utente.key}()" ></em>
                     <script>
                         function deleteFunc${utente.key}() {
@@ -85,8 +85,8 @@
                                 document.getElementById('delete-form-${utente.key}').submit(); }
                         }
                     </script>
-                    <input id="id" name="id" value="${utente.key}" hidden >
-                    <input id="delete" name="delete" value="delete" hidden >
+                    <input id="id${utente.key}" name="id" value="${utente.key}" hidden >
+                    <input id="delete${utente.key}" name="delete" value="delete" hidden >
                 </form>
             </div>
         </div>
