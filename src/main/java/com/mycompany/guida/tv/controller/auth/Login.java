@@ -105,7 +105,7 @@ public class Login extends BaseController {
                  if (me.getEmailVerifiedAt() == null) {
                     response.sendRedirect("verifyemail");
                 }  else if (request.getParameter("referrer") != null) {
-                    response.sendRedirect(request.getParameter("referrer"));
+                    response.sendRedirect(URLDecoder.decode(request.getParameter("referrer")));
 
                 } else {
                     response.sendRedirect("profile");
