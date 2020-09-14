@@ -13,12 +13,12 @@
         </div>
     </#if>
 </div>
-
 <div class="col-lg-12">
-    <a class="page-header" href="serie?insert_e" style="color: green; cursor: pointer;" >Aggiungi un episodio <em class="fa fa-plus color-green"></em></a>
+    <a class="page-header" href="serie?e_insert" style="color: green; cursor: pointer;" >Aggiungi un episodio <em class="fa fa-plus color-green"></em></a>
+</div>
 </div>
 
-        <div class="panel panel-container" style="background-color: #F1F4F7">
+<div class="panel panel-container" style="background-color: #F1F4F7">
             <div class="row">
                 <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
@@ -67,35 +67,22 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        ${programma.link_ref}
+                        ${programma.stagione}
                     </div>
                 </div>
-
-
-                <div class="col-xs-6 col-md-3 col-lg-2 no-padding">
+                <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <select class="form-control">
-                            <#list programma.generi as genere>
-                            <#if genere??>
-                            <option>${genere.nome}</option>
-                            <#else>
-                            <p style="color: red">nessun genere</p>
-                        </#if>
-                        </#list>
-                        </select>
+                        ${programma.episodio}
                     </div>
                 </div>
+
+
             <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                 <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
                     ${programma.durata}
                 </div>
             </div>
-                <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
-                    <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <p style="color: black">Episodio:${programma.episodio}
-                        Stagione:${programma.stagione}</p>  <!-- vedere se è una serie o un film -->
-                    </div>
-                </div>
+
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
                         <a href="serie?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
@@ -121,5 +108,4 @@
             </div>
         </#list>
 </div>
-    </div>
 </div>

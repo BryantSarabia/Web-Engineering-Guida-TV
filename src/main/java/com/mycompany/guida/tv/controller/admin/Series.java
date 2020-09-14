@@ -132,15 +132,10 @@ public class Series extends BaseController {
     }
     private void action_e_default(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
         List<Serie> serie;
-        if(request.getParameter("page") == null){
-            serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie(0, 10);
-        }
-        else {
-            Integer numero = SecurityLayer.checkNumeric(request.getParameter("page"));
-            int start=(numero-1)*10;
-            int elements=10;
-            serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSeriePaginated(start, elements);
-        }
+        Integer e = SecurityLayer.checkNumeric(request.getParameter("e"));
+
+            serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodi(e);
+
         int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getNumeroFilm()/10;
 
         TemplateResult results = new TemplateResult(getServletContext());
@@ -174,9 +169,7 @@ public class Series extends BaseController {
             String titolo = request.getParameter("titolo");
             String descrizione = request.getParameter("descrizione");
             String link_ref = request.getParameter("link_ref");
-            String durata = request.getParameter("durata");
-            String stg = request.getParameter("stagione");
-            String epis = request.getParameter("episodio");
+
             /**
              * questa funzione serve per prendere generi
              */
@@ -193,7 +186,7 @@ public class Series extends BaseController {
            Serie target = new SerieImpl();
             if (((String) titolo).isBlank()) {
                 throw new DataException("Invalid parameter: " + titolo + " must be not empty");
-            }
+            }/*
             Integer stagione=null;
             Integer episodio=null;
             if (((String) stg) != null) {
@@ -210,13 +203,13 @@ public class Series extends BaseController {
                     throw new DataException("Invalid parameter: " + epis + " must be a integer value");
                 }
             }
-
+*/
             target.setTitolo(titolo);
             if(descrizione != null) {
                 target.setDescrizione(descrizione);}
-            target.setStagione(stagione);
-            target.setEpisodio(episodio);
-            target.setDurata(durata);
+            target.setStagione(1);
+            target.setEpisodio(1);
+
             target.setLink_ref(link_ref);
             List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
@@ -231,7 +224,7 @@ public class Series extends BaseController {
                     String name = "prog_" + target.getKey() + ".jpg";
                     String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
                     long size = image.getSize();
-                    if (size > 0 && name != null && !name.isEmpty()) {
+                    if (size > 0) {
                         File new_file = new File(path);
                         Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         target.setImg("img_tv/progs/" + name);
@@ -242,7 +235,6 @@ public class Series extends BaseController {
             action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
             request.setAttribute("errors", ex.getMessage());
-            TemplateResult results = new TemplateResult(getServletContext());
             action_create(request,response);
 
         }
@@ -264,10 +256,6 @@ public class Series extends BaseController {
                 String titolo = request.getParameter("titolo");
                 String descrizione = request.getParameter("descrizione");
                 String link_ref = request.getParameter("link_ref");
-                String durata = request.getParameter("durata");
-                String stg = request.getParameter("stagione");
-                String epis = request.getParameter("episodio");
-
                 ArrayList<Integer> generi = null;
                 if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
                     generi = new ArrayList<>();
@@ -281,27 +269,9 @@ public class Series extends BaseController {
                 if (((String) titolo).isBlank()) {
                     throw new DataException("Invalid parameter: " + titolo + " must be not empty");
                 }
-                Integer stagione=null;
-                Integer episodio=null;
-                if (((String) stg) != null) {
-                    try{
-                        stagione = SecurityLayer.checkNumeric(stg);
-                    } catch (Exception ex) {
-                        throw new DataException("Invalid parameter: " + stg + " must be a integer value");
-                    }
-                }
-                if (((String) epis) != null) {
-                    try{
-                        episodio = SecurityLayer.checkNumeric(stg);
-                    } catch (Exception ex) {
-                        throw new DataException("Invalid parameter: " + epis + " must be a integer value");
-                    }
-                }
+
                 target.setTitolo(titolo);
-                    target.setDescrizione(descrizione);
-                target.setStagione(stagione);
-                target.setEpisodio(episodio);
-                target.setDurata(durata);
+                target.setDescrizione(descrizione);
                 target.setLink_ref(link_ref);
                 List<Genere> generi_list = new ArrayList<>();
                 for(int i : generi){
@@ -314,7 +284,7 @@ public class Series extends BaseController {
                     String name = "prog_" + target.getKey() + ".jpg";
                     String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
                     long size = image.getSize();
-                    if (size > 0 && name != null && !name.isEmpty()) {
+                    if (size > 0 ) {
                         File new_file = new File(path);
                         Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         target.setImg("img_tv/progs/" + name);

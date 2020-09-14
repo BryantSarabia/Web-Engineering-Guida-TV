@@ -209,7 +209,7 @@ public class Utenti extends BaseController {
 
             Ruolo user_role = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getRuoloDAO().getRuolo(id_ruolo);
             if(user_role == null) throw new DataException("Invalid role");
-            if(password != "noncambiata"){
+            if(!password.equals("noncambiata")){
                 target.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
             }
             target.setEmail(email);

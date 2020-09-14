@@ -128,8 +128,16 @@ public class Programmazioni extends BaseController {
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
         request.setAttribute("programmi", programmi);
+        String start_time= programmazione.getDate()+" "+programmazione.getTime()+":00";
+        LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("dd-MM-uuuu HH:mm:ss"));
+        String d=String.format("%d",start.getDayOfMonth());
+        String m=String.format("%d",start.getMonthValue());
+        String y=String.format("%d",start.getYear());
+        if(m.length()==1){ m='0'+m;}
+        String date = d + "/"+ m+'/'+y;
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("programmazione", programmazione);
+        request.setAttribute("date", date);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/programmazioni/edit.ftl.html", request, response);
     }
@@ -159,7 +167,7 @@ public class Programmazioni extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", "programmazione creata con successo");
+            request.setAttribute("success", start_time);
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             results.activate("/admin/programmazioni/index.ftl.html", request, response);
@@ -178,22 +186,23 @@ public class Programmazioni extends BaseController {
             Integer id_canale = SecurityLayer.checkNumeric(request.getParameter("canale"));
             Integer id_programma = SecurityLayer.checkNumeric(request.getParameter("programma"));
             Integer durata = SecurityLayer.checkNumeric(request.getParameter("durata"));
-            /*
+
             String data =request.getParameter("date");
             String time =request.getParameter("time");
-            String start_time= data+" "+time+":00";/
+            String start_time= data+" "+time+":00";
 
-             */
-            String start_time =request.getParameter("start_time");
-            LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
+            LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("dd/MM/uuuu HH:mm:ss"));
+
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
             Programmazione target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
+
             target.setProgramma(p);
             target.setCanale(c);
             target.setStartTime(start);
             target.setDurata(durata);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
+
             request.setAttribute("success", "programmazione aggiornata con successo!");
             action_default(request,response);
         } catch (DataException ex) {

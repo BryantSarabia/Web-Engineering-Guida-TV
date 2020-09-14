@@ -52,7 +52,7 @@ public class Films extends BaseController {
             Logger.getLogger(Programma.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            boolean is_admin = SecurityLayer.checkAdminSession(request);
+            boolean is_admin = true; //SecurityLayer.checkAdminSession(request);
 
             if (is_admin) {
                 if (request.getParameter("insert") != null) {
@@ -130,15 +130,18 @@ public class Films extends BaseController {
         response.sendRedirect(request.getContextPath() + "/login");
     }
     private void action_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException, UnsupportedEncodingException {
-        int id = SecurityLayer.checkNumeric(request.getParameter("id"));
 
         try {
+            int id = SecurityLayer.checkNumeric(request.getParameter("id"));
 
             String titolo = request.getParameter("titolo");
             String descrizione = request.getParameter("descrizione");
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
             Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
+/*
+            generi da il problema
+
 
             ArrayList<Integer> generi = null;
             if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
@@ -148,14 +151,18 @@ public class Films extends BaseController {
                         generi.add(SecurityLayer.checkNumeric(g));
                     }
                 }
-            } List<Genere> generi_list = new ArrayList<>();
+            }
+
+
+            List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
                 generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
             }
+
+            target.setGeneri(generi_list);*/
             if (((String) titolo).isBlank()) {
                 throw new DataException("Invalid parameter: " + titolo + " must be not empty");
             }
-            target.setGeneri(generi_list);
             target.setTitolo(titolo);
             target.setDescrizione(descrizione);
             target.setDurata(durata);
@@ -171,13 +178,15 @@ public class Films extends BaseController {
                 if (size > 0 && name != null && !name.isEmpty()) {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setLink_ref("img_tv/progs/" + name);
+                    target.setImg("img_tv/progs/" + name);
                     ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
                 }
             }
-            request.setAttribute("success", "Serie creata");
+            request.setAttribute("success", "Film aggiornato");
             action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
+            int id = SecurityLayer.checkNumeric(request.getParameter("id"));
+
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("edit", id);
             action_edit(request,response);
@@ -228,11 +237,11 @@ public class Films extends BaseController {
                 if (size > 0 && name != null && !name.isEmpty()) {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setLink_ref("img_tv/progs/" + name);
+                    target.setImg("img_tv/progs/" + name);
                     ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(target);
                 }
             }
-            request.setAttribute("success", "Serie creata");
+            request.setAttribute("success", "Film creato");
             action_default(request,response);
         } catch (IOException | ServletException | DataException ex) {
             request.setAttribute("errors", ex.getMessage());
