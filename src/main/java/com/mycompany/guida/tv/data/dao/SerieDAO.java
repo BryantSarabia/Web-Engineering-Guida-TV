@@ -12,6 +12,8 @@ public interface SerieDAO {
     
     Serie getSerie(int key_programma) throws DataException;
     
+    List<Serie> getEpisodi(int key_programma) throws DataException;
+    
      Serie getSerieByProgrammazione(int key_programma, int key_serie) throws DataException;
     
     int getNumeroSerie() throws DataException;

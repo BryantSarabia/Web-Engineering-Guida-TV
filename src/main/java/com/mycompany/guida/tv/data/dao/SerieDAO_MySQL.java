@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public class SerieDAO_MySQL extends DAO implements SerieDAO {
 
-    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, uProgramma, uSerie, dProgramma, dSerie;
+    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, uProgramma, uSerie, dProgramma, dSerie;
 
     public SerieDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -33,6 +33,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             getSeries = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma ORDER BY titolo ASC");
             getSeriesPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN (SELECT DISTINCT id_programma from serie) serie ON programmi.id = serie.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
             getSerieByID = connection.prepareStatement("SELECT programmi.*, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
+            getEpisodi = connection.prepareStatement("SELECT programmi.*, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=? ORDER BY titolo ASC, stagione ASC, episodio ASC");
             getSerieByProgrammazione = connection.prepareStatement("SELECT programmi.*, serie.id, serie.id_programma, serie.stagione, serie.episodio, serie.durata as serie_durata FROM programmi JOIN serie ON programmi.id = serie.id_programma JOIN programmazioni ON programmazioni.id_serie = serie.id WHERE programmi.id=? AND serie.id = ?");
             getNumeroSerie = connection.prepareStatement("SELECT COUNT(*) AS num FROM serie");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -114,6 +115,23 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             }
         }
         return serie;
+    }
+    
+    @Override
+    public List<Serie> getEpisodi(int key_programma) throws DataException {
+        List<Serie> episodi = new ArrayList<Serie>();
+            try {
+                getEpisodi.setInt(1, key_programma);
+                try (ResultSet rs = getEpisodi.executeQuery()) {
+                    while (rs.next()) {
+                        episodi.add(createSerie(rs));
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load serie by ID", ex);
+            }
+        
+        return episodi;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.result.JSONResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -72,6 +73,12 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
+            List<Serie> episodi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodi(1);
+            System.out.println(episodi.size());
+            for (Serie s : episodi){
+                System.out.println("Stagione: " + s.getStagione() + " Episodio: " + s.getEpisodio());
+            }
+            
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
