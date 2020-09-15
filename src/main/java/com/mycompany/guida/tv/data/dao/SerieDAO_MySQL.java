@@ -33,7 +33,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
 
             getSeries = connection.prepareStatement("SELECT * FROM programmi JOIN serie ON programmi.id = serie.id_programma ORDER BY titolo ASC");
             getSeriesPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN (SELECT DISTINCT id_programma from serie) serie ON programmi.id = serie.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
-            getSerieByID = connection.prepareStatement("SELECT programmi.*, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
+            getSerieByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
             getEpisodi = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=? ORDER BY titolo ASC, stagione ASC, episodio ASC");
             getSerieByProgrammazione = connection.prepareStatement("SELECT programmi.*, serie.id, serie.id_programma, serie.stagione, serie.episodio, serie.durata as serie_durata FROM programmi JOIN serie ON programmi.id = serie.id_programma JOIN programmazioni ON programmazioni.id_serie = serie.id WHERE programmi.id=? AND serie.id = ?");
             getNumeroSerie = connection.prepareStatement("SELECT COUNT(*) AS num FROM serie");
@@ -88,7 +88,6 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             serie.setDurata(rs.getString("serie_durata"));
             serie.setStagione(rs.getInt("stagione"));
             serie.setEpisodio(rs.getInt("episodio"));
-            serie.setKeyEpisodio(rs.getInt("id_episodio"));
 
         } catch (SQLException ex) {
             throw new DataException("Unable to create serie object form ResultSet", ex);
@@ -126,7 +125,9 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 getEpisodi.setInt(1, key_programma);
                 try (ResultSet rs = getEpisodi.executeQuery()) {
                     while (rs.next()) {
-                        episodi.add(createSerie(rs));
+                        Serie serie = createSerie(rs);
+                        serie.setKeyEpisodio(rs.getInt("id_episodio"));
+                        episodi.add(serie);
                     }
                 }
             } catch (SQLException ex) {
