@@ -58,6 +58,8 @@ public class Programmazioni extends BaseController {
                     action_s_store(request, response);
                 } else if (request.getParameter("update") != null) {
                     action_update(request, response);
+                }else if (request.getParameter("update_s") != null) {
+                    action_s_update(request, response);
                 }else {
                     action_default(request, response);
                 }
@@ -254,6 +256,9 @@ public class Programmazioni extends BaseController {
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
+            Serie s = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().createSerie();
+            s.setKeyEpisodio(0);
+
             Programmazione target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
 
             String data =request.getParameter("date_time");
@@ -276,6 +281,43 @@ public class Programmazioni extends BaseController {
 
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("edit", key);
+            action_edit(request,response);
+
+        }
+    }
+    private void action_s_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, UnsupportedEncodingException, DataException {
+        try {
+            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
+
+            Integer id_canale = SecurityLayer.checkNumeric(request.getParameter("canale"));
+            Integer id_programma = SecurityLayer.checkNumeric(request.getParameter("programma"));
+            Integer durata = SecurityLayer.checkNumeric(request.getParameter("durata"));
+
+            Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
+            Serie s = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id_programma);
+            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(s.getKey());
+            Programmazione target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
+
+            String data =request.getParameter("date_time");
+            String time =request.getParameter("time");
+            String start_time= data+" "+time+":00";
+            //   LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+            LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss"));
+            target.setEpisodio(s);
+            target.setProgramma(p);
+            target.setCanale(c);
+            target.setStartTime(start);
+            target.setDurata(durata);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
+
+            request.setAttribute("success", start_time);
+            action_default(request,response);
+        } catch (DataException ex) {
+            Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
+
+            request.setAttribute("errors", ex.getMessage());
+            request.setAttribute("edit_s", key);
             action_edit(request,response);
 
         }
