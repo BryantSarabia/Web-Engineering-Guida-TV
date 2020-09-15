@@ -152,6 +152,7 @@ public class Programmazioni extends BaseController {
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("programmazione", programmazione);
         request.setAttribute("date", date);
+    //    if(programmazione.getProgramma())
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/programmazioni/edit.ftl.html", request, response);
     }
@@ -167,10 +168,11 @@ public class Programmazioni extends BaseController {
             LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
-            Serie p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id_programma);
-
+            Serie s = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id_programma);
+            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(s.getKey());
             Programmazione target = new ProgrammazioneImpl();
             target.setProgramma(p);
+            target.setEpisodio(s);
             target.setCanale(c);
 
             target.setStartTime(start);
