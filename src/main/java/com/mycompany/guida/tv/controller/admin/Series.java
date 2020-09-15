@@ -182,20 +182,20 @@ public class Series extends BaseController {
             String epis = request.getParameter("episodio");
             String durata = request.getParameter("durata");
           //  Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id_prog);
-           Serie target = new SerieImpl();
+           Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().createSerie();
             Integer stagione=null;
             Integer episodio=null;
 
-            if (((String) epis) != null) {
+            if (((String) stg) != null) {
                 try{
-                    episodio = SecurityLayer.checkNumeric(stg);
+                    stagione = SecurityLayer.checkNumeric(stg);
                 } catch (Exception ex) {
-                    throw new DataException("Invalid parameter: " + epis + " must be a integer value");
+                    throw new DataException("Invalid parameter: " + stg + " must be a integer value");
                 }
             }
             if (((String) epis) != null) {
                 try{
-                    episodio = SecurityLayer.checkNumeric(stg);
+                    episodio = SecurityLayer.checkNumeric(epis);
                 } catch (Exception ex) {
                     throw new DataException("Invalid parameter: " + epis + " must be a integer value");
                 }
@@ -241,7 +241,7 @@ public class Series extends BaseController {
                 target.setDescrizione(descrizione);}
             target.setStagione(1);
             target.setEpisodio(1);
-
+            target.setDurata("60");
             target.setLink_ref(link_ref);
             List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
@@ -341,51 +341,38 @@ public class Series extends BaseController {
         int id = SecurityLayer.checkNumeric(request.getParameter("id"));
 
         try {
-            String titolo = request.getParameter("titolo");
-            String descrizione = request.getParameter("descrizione");
-            String link_ref = request.getParameter("link_ref");
-            ArrayList<Integer> generi = null;
-            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
-                generi = new ArrayList<>();
-                for (String g : request.getParameterValues("genere")) {
-                    if (g != null) {
-                        generi.add(SecurityLayer.checkNumeric(g));
-                    }
+            String stg = request.getParameter("stagione");
+            String epis = request.getParameter("episodio");
+            String durata = request.getParameter("durata");
+            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id);
+            Integer stagione=null;
+            Integer episodio=null;
+
+            if (((String) stg) != null) {
+                try{
+                    stagione = SecurityLayer.checkNumeric(stg);
+                } catch (Exception ex) {
+                    throw new DataException("Invalid parameter: " + stg + " must be a integer value");
                 }
             }
-            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
-            if (((String) titolo).isBlank()) {
-                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
-            }
-
-            target.setTitolo(titolo);
-            target.setDescrizione(descrizione);
-            target.setLink_ref(link_ref);
-            List<Genere> generi_list = new ArrayList<>();
-            for(int i : generi){
-                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
-            }
-            target.setGeneri(generi_list);
-
-            Part image = request.getPart("immagine");
-            if (image != null) {
-                String name = "prog_" + target.getKey() + ".jpg";
-                String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
-                long size = image.getSize();
-                if (size > 0 ) {
-                    File new_file = new File(path);
-                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    target.setImg("img_tv/progs/" + name);
+            if (((String) epis) != null) {
+                try{
+                    episodio = SecurityLayer.checkNumeric(epis);
+                } catch (Exception ex) {
+                    throw new DataException("Invalid parameter: " + epis + " must be a integer value");
                 }
             }
+            target.setStagione(stagione);
+            target.setDurata(durata);
+            target.setEpisodio(episodio);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 
             request.setAttribute("success", "serie aggiornata con successo!");
             action_default(request,response);
-        } catch (IOException | ServletException | DataException ex) {
+        } catch ( DataException ex) {
             request.setAttribute("errors", ex.getMessage());
             request.setAttribute("edit", id);
-            action_edit(request,response);
+            action_e_edit(request,response);
 
         }
     }
@@ -417,12 +404,13 @@ public class Series extends BaseController {
             if (key == null) {
                 throw new DataException("Invalid Key");
             }
-            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(key);
-            if (p == null) {
+            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(key);
+
+            if (target == null) {
                 throw new DataException("Invalid Key");
             }
 
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().deleteProgramma(key);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().deleteSerie(key);
             request.setAttribute("success", "Serie cancellata con successo!");
             action_default(request,response);
         } catch (DataException ex) {

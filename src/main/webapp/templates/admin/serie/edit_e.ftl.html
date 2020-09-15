@@ -33,8 +33,8 @@
                     </ul>
                 </div>
             </#if>
-            <input type="hidden" value="${serie.key}" name="id"/>
-            <input type="hidden" value="update" name="update"/>
+            <input type="hidden" value="${serie.getKeyEpisodio()}" name="id"/>
+            <input type="hidden" value="e_update" name="e_update"/>
             <button type="submit" class="btn btn-primary">Aggiorna</button>
             </form>
         </div>
