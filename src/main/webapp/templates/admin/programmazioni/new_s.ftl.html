@@ -1,0 +1,55 @@
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Aggiungi una programmazione</h1>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form method="POST" action="programmazioni">
+                <div class="form-group">
+                    <label>Canale</label>
+                    <select class="form-control form-control-sm" name="canale" >
+                        <#list canali as canale>
+                        <option class="text-uppercase" value="${canale.key}" >
+                            ${canale.nome}
+                        </option>
+                    </#list>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Programma</label>
+                    <select class="form-control form-control-sm" name="programma" id="programma">
+                        <#list programmi as programma>
+                        <option class="text-uppercase" value="${programma.getKeyEpisodio()}" >
+                            ${programma.titolo}, stg: ${programma.stagione}, ep: ${programma.episodio}
+                        </option>
+                    </#list>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Orario d'inizio</label>
+                    <input type="date" class="form-control" placeholder="2020/08/21" name="date">
+                    <input type="time" class="form-control" placeholder="15:00" name="time">
+                </div>
+                <div class="form-group">
+                    <label>Durata</label>
+                    <input type="number" class="form-control" placeholder="60" name="durata">
+                </div>
+
+                <#if errors??>
+                <div class="alert alert-danger">
+                    <ul>
+                        <p> something goes wrong!</p>
+                        <li>${errors}</li>
+                    </ul>
+                </div>
+            </#if>
+            <input type="hidden" value="store_s" name="store_s"/>
+            <button type="submit" class="btn btn-primary">Crea</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -3,10 +3,8 @@ package com.mycompany.guida.tv.controller.admin;
 
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.impl.ProgrammazioneImpl;
-import com.mycompany.guida.tv.data.model.Canale;
+import com.mycompany.guida.tv.data.model.*;
 
-import com.mycompany.guida.tv.data.model.Programma;
-import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.proxy.UtenteProxy;
 import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
@@ -47,12 +45,17 @@ public class Programmazioni extends BaseController {
             if (is_admin) {
                 if (request.getParameter("insert") != null) {
                     action_create(request, response);
-                } else if (request.getParameter("edit") != null) {
+                }
+                else if (request.getParameter("insert_s") != null) {
+                    action_s_create(request, response);
+                }else if (request.getParameter("edit") != null) {
                     action_edit(request, response);
                 } else if (request.getParameter("delete") != null) {
                     action_delete(request, response);
                 } else if (request.getParameter("store") != null) {
                     action_store(request, response);
+                }  else if (request.getParameter("store_s") != null) {
+                    action_s_store(request, response);
                 } else if (request.getParameter("update") != null) {
                     action_update(request, response);
                 }else {
@@ -108,7 +111,7 @@ public class Programmazioni extends BaseController {
 
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
-        List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
+        List<Film> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
         List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali();
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
@@ -116,6 +119,17 @@ public class Programmazioni extends BaseController {
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
 
         results.activate("/admin/programmazioni/new.ftl.html", request, response);
+    }
+    private void action_s_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        TemplateResult results = new TemplateResult(getServletContext());
+        List<Serie> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+        List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali();
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
+        request.setAttribute("programmi", programmi);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+
+        results.activate("/admin/programmazioni/new_s.ftl.html", request, response);
     }
 
     private void action_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
@@ -141,7 +155,43 @@ public class Programmazioni extends BaseController {
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/programmazioni/edit.ftl.html", request, response);
     }
+    private void action_s_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
+        try {
 
+            Integer id_canale = SecurityLayer.checkNumeric(request.getParameter("canale"));
+            Integer id_programma = SecurityLayer.checkNumeric(request.getParameter("programma"));
+            Integer durata = SecurityLayer.checkNumeric(request.getParameter("durata"));
+            String data =request.getParameter("date");
+            String time =request.getParameter("time");
+            String start_time= data+" "+time+":00";
+            LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
+
+            Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
+            Serie p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id_programma);
+
+            Programmazione target = new ProgrammazioneImpl();
+            target.setProgramma(p);
+            target.setCanale(c);
+
+            target.setStartTime(start);
+            target.setDurata(durata);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(target);
+            List<Programmazione> programmazioni = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazioniPaginated(0, 10);
+            int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
+            request.setAttribute("programmazioni", programmazioni);
+            request.setAttribute("numero_pagine", numero_pagine);
+            request.setAttribute("success", start_time);
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/index.ftl.html", request, response);
+        } catch (DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            TemplateResult results = new TemplateResult(getServletContext());
+            request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+            results.activate("/admin/programmazioni/new.ftl.html", request, response);
+
+        }
+    }
     private void action_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
 
@@ -154,7 +204,7 @@ public class Programmazioni extends BaseController {
           LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
-            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(id_programma);
+            Film p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id_programma);
 
             Programmazione target = new ProgrammazioneImpl();
             target.setProgramma(p);
