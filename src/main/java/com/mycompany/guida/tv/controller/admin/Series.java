@@ -182,6 +182,7 @@ public class Series extends BaseController {
             String epis = request.getParameter("episodio");
             String dur = request.getParameter("durata");
             Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id_prog);
+           //Serie target = new SerieImpl();
             Integer stagione=null;
             Integer episodio=null;
             Integer durata=null;
@@ -209,6 +210,7 @@ public class Series extends BaseController {
             target.setStagione(stagione);
             target.setStagione(durata);
             target.setEpisodio(episodio);
+       //     target.setKey(id_prog);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
             request.setAttribute("success", request.getParameter("serie creata con successo"));
             action_default(request,response);
