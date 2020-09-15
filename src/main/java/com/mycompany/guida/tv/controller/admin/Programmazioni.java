@@ -207,10 +207,15 @@ public class Programmazioni extends BaseController {
 
             Canale c = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(id_canale);
             Film p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id_programma);
+            
+            //Per differenziare fra film e serie setto a null il campo id_serie con setKeyEpisodio a 0
+            Serie s = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().createSerie();
+            s.setKeyEpisodio(0);
 
             Programmazione target = new ProgrammazioneImpl();
             target.setProgramma(p);
             target.setCanale(c);
+            target.setEpisodio(s);
 
             target.setStartTime(start);
             target.setDurata(durata);
