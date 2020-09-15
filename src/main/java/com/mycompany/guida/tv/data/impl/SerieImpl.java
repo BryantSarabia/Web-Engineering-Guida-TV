@@ -6,13 +6,25 @@ public class SerieImpl extends ProgrammaImpl implements Serie {
 
     private int stagione;
     private int episodio;
+    private int key_episodio;
 
     public SerieImpl() {
         super();
         this.stagione = 0;
         this.episodio = 0;
+        this.key_episodio = 0;
     }
-
+    
+    @Override 
+    public int getKeyEpisodio() {
+        return key_episodio;
+    }
+    
+    @Override
+    public void setKeyEpisodio(int key_episodio){
+        this.key_episodio = key_episodio;
+    }
+    
     @Override
     public int getStagione() {
         return stagione;

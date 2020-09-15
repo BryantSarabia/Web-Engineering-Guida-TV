@@ -27,6 +27,12 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
         this.modified = true;
         super.setStagione(stagione);
     }
+    
+    @Override
+    public void setKeyEpisodio(int key_episodio) {
+        this.modified = true;
+        super.setKeyEpisodio(key_episodio);
+    }
 
     @Override
     public void setEpisodio(int episodio) {
