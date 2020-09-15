@@ -180,19 +180,12 @@ public class Series extends BaseController {
             int id_prog = SecurityLayer.checkNumeric(request.getParameter("id_prog"));
             String stg = request.getParameter("stagione");
             String epis = request.getParameter("episodio");
-            String dur = request.getParameter("durata");
-            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id_prog);
-           //Serie target = new SerieImpl();
+            String durata = request.getParameter("durata");
+          //  Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id_prog);
+           Serie target = new SerieImpl();
             Integer stagione=null;
             Integer episodio=null;
-            Integer durata=null;
-            if (((String) dur) != null) {
-                    try{
-                        durata = SecurityLayer.checkNumeric(dur);
-                    } catch (Exception ex) {
-                        throw new DataException("Invalid parameter: " + dur + " must be a integer value");
-                    }
-                }
+
             if (((String) epis) != null) {
                 try{
                     episodio = SecurityLayer.checkNumeric(stg);
@@ -208,9 +201,9 @@ public class Series extends BaseController {
                 }
             }
             target.setStagione(stagione);
-            target.setStagione(durata);
+            target.setDurata(durata);
             target.setEpisodio(episodio);
-       //     target.setKey(id_prog);
+           target.setKey(id_prog);
             ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
             request.setAttribute("success", request.getParameter("serie creata con successo"));
             action_default(request,response);
