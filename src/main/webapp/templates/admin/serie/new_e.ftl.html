@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Aggiungi una nuova serie</h1>
+            <h1 class="page-header">Aggiungi una nuovo epiodio</h1>
         </div>
     </div>
     <hr/>
@@ -21,6 +21,7 @@
                     <label>Durata</label>
                     <input type="number" class="form-control" placeholder="60" name="durata">
                 </div>
+                <input type="hidden" value="${e}" name="id_prog"/>
                 <#if errors??>
                 <div class="alert alert-danger">
                     <ul>
@@ -29,7 +30,8 @@
                     </ul>
                 </div>
             </#if>
-            <input type="hidden" value="store" name="store"/>
+
+            <input type="hidden" value="e_store" name="e_store"/>
             <button type="submit" class="btn btn-primary">Crea</button>
             </form>
         </div>

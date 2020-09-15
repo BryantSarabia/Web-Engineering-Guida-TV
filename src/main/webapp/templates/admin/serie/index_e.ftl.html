@@ -1,7 +1,7 @@
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Tutte gli episodi</h1>
+            <h1 class="page-header">Tutti gli episodi</h1>
             <#if success??>
             <div class="alert alert-success">
                 ${success}
@@ -14,7 +14,7 @@
     </#if>
 </div>
 <div class="col-lg-12">
-    <a class="page-header" href="serie?e_insert" style="color: green; cursor: pointer;" >Aggiungi un episodio <em class="fa fa-plus color-green"></em></a>
+    <a class="page-header" href="serie?e_insert=${e}" style="color: green; cursor: pointer;" >Aggiungi un episodio <em class="fa fa-plus color-green"></em></a>
 </div>
 </div>
 
@@ -91,7 +91,6 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        ${programma.getKeyEpisodio()}
                         <form id="delete-form-${programma.key_episodio}"method="POST" action="serie">
                             <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.getKeyEpisodio()}()" ></em>
                             <script>
