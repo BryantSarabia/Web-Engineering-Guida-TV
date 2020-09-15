@@ -74,14 +74,6 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
-            Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(19);
-            serie.setKey(1);
-            serie.setEpisodio(66);
-            serie.setStagione(6);
-            serie.setDurata("120");
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(serie);
-            
-            
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();

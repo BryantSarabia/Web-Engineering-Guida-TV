@@ -28,5 +28,7 @@ public interface SerieDAO {
     
     void storeSerie(Serie serie) throws DataException;
     
+    void storeEpisodio(Serie serie) throws DataException;
+    
     void deleteSerie(int key) throws DataException;
 }

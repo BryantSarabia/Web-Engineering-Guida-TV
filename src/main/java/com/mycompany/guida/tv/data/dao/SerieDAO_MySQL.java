@@ -377,6 +377,129 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             throw new DataException("Unable to store serie", ex);
         }
     }
+    
+    @Override
+    public void storeSerie(Serie serie) throws DataException {
+        try {
+            
+            if (serie.getKeyEpisodio() != 0 && serie.getKeyEpisodio() > 0) { //update
+                // Se proxy non modificato non facciamo nulla
+                if (serie instanceof DataItemProxy && !((DataItemProxy) serie).isModified()) {
+                    return;
+                }
+                // Altrimenti
+//                uProgramma.setString(1, serie.getTitolo());
+//                uProgramma.setString(5, serie.getDurata());
+//
+//                if (serie.getDescrizione() != null && !serie.getDescrizione().isBlank()) {
+//                    uProgramma.setString(2, serie.getDescrizione());
+//                } else {
+//                    uProgramma.setNull(2, java.sql.Types.VARCHAR);
+//                }
+//
+//                if (serie.getImg() != null && !serie.getImg().isBlank()) {
+//                    uProgramma.setString(3, serie.getImg());
+//                } else {
+//                    uProgramma.setNull(3, java.sql.Types.VARCHAR);
+//                }
+//
+//                if (serie.getLink_ref() != null && !serie.getLink_ref().isBlank()) {
+//                    uProgramma.setString(4, serie.getLink_ref());
+//                } else {
+//                    uProgramma.setNull(4, java.sql.Types.VARCHAR);
+//                }
+//
+//                long current_version = serie.getVersion();
+//                long next_version = current_version + 1;
+//
+//                uProgramma.setLong(6, next_version);
+//                uProgramma.setInt(7, serie.getKey());
+//                uProgramma.setLong(8, current_version);
+//
+//                if (uProgramma.executeUpdate() == 0) {
+//                    throw new OptimisticLockException(serie);
+//                }
+//                serie.setVersion(next_version);
+
+                //update tabella serie (!!!Dubbi su key e version!!!)
+                long current_version = serie.getVersion();
+                long next_version = current_version + 1;
+                
+                uSerie.setInt(1, serie.getKey());
+                uSerie.setInt(2, serie.getStagione());
+                uSerie.setInt(3, serie.getEpisodio());
+                uSerie.setString(4, serie.getDurata());
+                uSerie.setLong(5, next_version);
+                uSerie.setInt(6, serie.getKeyEpisodio());
+                uSerie.setLong(7, current_version);
+                uSerie.executeUpdate();
+                
+                System.out.println("Updating episodio");
+            } else { //insert
+                System.out.println("Inserting episodio");
+                Programma prog = ((GuidaTVDataLayer) getDataLayer()).getProgrammaDAO().getProgramma(serie.getKey());
+                
+                if (prog != null) {         //Controllo che il programma esista già
+                    
+                    iSerie.setInt(1, serie.getKey());
+                    iSerie.setInt(2, serie.getStagione());
+                    iSerie.setInt(3, serie.getEpisodio());
+                    iSerie.setString(4, serie.getDurata());
+                    iSerie.executeUpdate();
+                    
+                } else {                    //Se il programma non esiste restituisco un'eccezione
+                    throw new SQLException("The specified program does not exist");
+
+//                    iProgramma.setString(1, serie.getTitolo());
+//                    iProgramma.setString(5, serie.getDurata());
+//
+//                    if (serie.getDescrizione() != null && !serie.getDescrizione().isBlank()) {
+//                        iProgramma.setString(2, serie.getDescrizione());
+//                    } else {
+//                        iProgramma.setNull(2, java.sql.Types.VARCHAR);
+//                    }
+//
+//                    if (serie.getImg() != null && !serie.getImg().isBlank()) {
+//                        iProgramma.setString(3, serie.getImg());
+//                    } else {
+//                        iProgramma.setNull(3, java.sql.Types.VARCHAR);
+//                    }
+//
+//                    if (serie.getLink_ref() != null && !serie.getLink_ref().isBlank()) {
+//                        iProgramma.setString(4, serie.getLink_ref());
+//                    } else {
+//                        iProgramma.setNull(4, java.sql.Types.VARCHAR);
+//                    }
+//
+//                    int id_programma = 0;
+//
+//                    if (iProgramma.executeUpdate() == 1) {
+//                        //getGeneratedKeys per leggere chiave generata
+//                        try (ResultSet keys = iProgramma.getGeneratedKeys()) {
+//                            if (keys.next()) {
+//                                int key = keys.getInt(1);
+//                                id_programma = key;
+//                                serie.setKey(key);
+//                                dataLayer.getCache().add(Serie.class, serie);
+//                            }
+//                        }
+//                    }
+//
+//                    iSerie.setInt(1, id_programma);
+//                    iSerie.setInt(2, serie.getStagione());
+//                    iSerie.setInt(3, serie.getEpisodio());
+//                    iSerie.executeUpdate();
+                }
+
+                //se abbiamo un proxy, resettiamo il suo attributo dirty
+                if (serie instanceof DataItemProxy) {
+                    ((DataItemProxy) serie).setModified(false);
+                }
+            }
+        } catch (SQLException | OptimisticLockException ex) {
+            throw new DataException("Unable to store serie", ex);
+        }
+    }
 
     @Override
     public void deleteSerie(int key) throws DataException {
