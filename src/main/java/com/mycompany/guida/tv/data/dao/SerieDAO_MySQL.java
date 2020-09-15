@@ -35,7 +35,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             getSeriesPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN (SELECT DISTINCT id_programma from serie) serie ON programmi.id = serie.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
             getSerieByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
             getEpisodi = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=? ORDER BY titolo ASC, stagione ASC, episodio ASC");
-            getEpisodioByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE serie.id=?");
+            getEpisodioByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio, serie.version as serie_version FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE serie.id=?");
             getSerieByProgrammazione = connection.prepareStatement("SELECT programmi.*, serie.id, serie.id_programma, serie.stagione, serie.episodio, serie.durata as serie_durata FROM programmi JOIN serie ON programmi.id = serie.id_programma JOIN programmazioni ON programmazioni.id_serie = serie.id WHERE programmi.id=? AND serie.id = ?");
             getNumeroSerie = connection.prepareStatement("SELECT COUNT(*) AS num FROM serie");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -147,6 +147,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                     if (rs.next()) {
                         serie = createSerie(rs);
                         serie.setKeyEpisodio(rs.getInt("id_episodio"));
+                        serie.setVersion(rs.getInt("serie_version"));
                         //serie.setDurataEpisodio(rs.getInt("serie_durata"));
                         dataLayer.getCache().add(Serie.class, serie);
                     }
@@ -261,10 +262,11 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             
             if (serie.getKeyEpisodio() != 0 && serie.getKeyEpisodio() > 0) { //update
                 // Se proxy non modificato non facciamo nulla
+                
                 if (serie instanceof DataItemProxy && !((DataItemProxy) serie).isModified()) {
                     return;
                 }
-
+                
                 //update tabella serie (!!!Dubbi su key e version!!!)
                 long current_version = serie.getVersion();
                 long next_version = current_version + 1;
@@ -276,7 +278,9 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setLong(5, next_version);
                 uSerie.setInt(6, serie.getKeyEpisodio());
                 uSerie.setLong(7, current_version);
-                uSerie.executeUpdate();
+                if(uSerie.executeUpdate() != 1){
+                    throw new SQLException();
+                }
                 
                 System.out.println("Updating episodio");
             } else { //insert
