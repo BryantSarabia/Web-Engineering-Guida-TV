@@ -57,7 +57,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             getProgrammazioniPaginated = connection.prepareStatement("SELECT * FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ? ORDER BY id_canale, start_time DESC LIMIT ? OFFSET ?");
             getNumeroProgrammazioni = connection.prepareStatement("SELECT COUNT(*) AS num FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ?");
             iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata,id_serie) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, version=? WHERE id = ? AND version = ?");
+            uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, id_serie = ? version=? WHERE id = ? AND version = ?");
             getLatest = connection.prepareStatement("SELECT * FROM programmazioni ORDER BY id DESC LIMIT ?");
             dProgrammazione = connection.prepareStatement("DELETE FROM programmazioni WHERE id = ?");
 
@@ -430,15 +430,21 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
                 uProgrammazione.setInt(2, programmazione.getProgramma().getKey());
                 uProgrammazione.setString(3, programmazione.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 uProgrammazione.setInt(4, programmazione.getDurata());
+                
+                if(programmazione.getEpisodio().getKeyEpisodio() == 0 ){
+                  uProgrammazione.setNull(5, Types.INTEGER);
+                } else {
+                    uProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
+                };
+                
                 long current_version = programmazione.getVersion();
                 long next_version = current_version + 1;
                 
 
-                uProgrammazione.setLong(5, next_version);
-                uProgrammazione.setInt(6, programmazione.getKey());
-                uProgrammazione.setLong(7, current_version);
+                uProgrammazione.setLong(6, next_version);
+                uProgrammazione.setInt(7, programmazione.getKey());
+                uProgrammazione.setLong(8, current_version);
 
-                
                 
                 if (uProgrammazione.executeUpdate() == 0) {
                     throw new OptimisticLockException(programmazione);
