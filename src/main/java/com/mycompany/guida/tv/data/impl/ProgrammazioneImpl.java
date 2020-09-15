@@ -4,6 +4,7 @@ import com.mycompany.guida.tv.data.DataItemImpl;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Programmazione;
+import com.mycompany.guida.tv.data.model.Serie;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,6 +12,7 @@ public class ProgrammazioneImpl extends DataItemImpl<Integer> implements Program
 
     private Canale canale;
     private Programma programma;
+    private Serie episodio;
     private LocalDateTime startTime;
     private Integer durata;
 
@@ -30,6 +32,16 @@ public class ProgrammazioneImpl extends DataItemImpl<Integer> implements Program
     @Override
     public void setCanale(Canale canale) {
         this.canale = canale;
+    }
+    
+    @Override
+    public Serie getEpisodio(){
+        return this.episodio;
+    }
+    
+    @Override
+    public void setEpisodio(Serie episodio){
+        this.episodio = episodio;
     }
 
     @Override

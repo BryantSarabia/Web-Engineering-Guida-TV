@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,7 +56,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             getProgrammazioneSerie = connection.prepareStatement("SELECT DISTINCT programmazioni.* FROM programmazioni JOIN serie ON programmazioni.id_programma = serie.id_programma WHERE programmazioni.id_programma = ? AND start_time BETWEEN (NOW() - INTERVAL 1 MONTH) AND NOW() ORDER BY start_time, serie.stagione ASC, serie.episodio ASC"); 
             getProgrammazioniPaginated = connection.prepareStatement("SELECT * FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ? ORDER BY id_canale, start_time DESC LIMIT ? OFFSET ?");
             getNumeroProgrammazioni = connection.prepareStatement("SELECT COUNT(*) AS num FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ?");
-            iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata,id_serie) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, version=? WHERE id = ? AND version = ?");
             getLatest = connection.prepareStatement("SELECT * FROM programmazioni ORDER BY id DESC LIMIT ?");
             dProgrammazione = connection.prepareStatement("DELETE FROM programmazioni WHERE id = ?");
@@ -448,6 +449,11 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
                 iProgrammazione.setInt(2, programmazione.getProgramma().getKey());
                 iProgrammazione.setString(3, programmazione.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 iProgrammazione.setInt(4, programmazione.getDurata());
+                if(programmazione.getEpisodio().getKeyEpisodio() == 0 ){
+                  iProgrammazione.setNull(5, Types.INTEGER);
+                } else {
+                    iProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
+                };
                 
                 if (iProgrammazione.executeUpdate() == 1) {
                     //getGeneratedKeys per leggere chiave generata

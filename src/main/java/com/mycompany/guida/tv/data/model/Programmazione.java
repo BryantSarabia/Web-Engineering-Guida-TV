@@ -9,6 +9,10 @@ public interface Programmazione extends DataItem<Integer> {
     public Programma getProgramma();
 
     public void setProgramma(Programma programma);
+    
+    public Serie getEpisodio();
+    
+    public void setEpisodio(Serie episodio);
 
     public Canale getCanale();
 
