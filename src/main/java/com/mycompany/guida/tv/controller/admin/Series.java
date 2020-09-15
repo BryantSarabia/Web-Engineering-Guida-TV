@@ -69,10 +69,10 @@ public class Series extends BaseController {
                     action_e_default(request, response);
                 }
                 else if (request.getParameter("e_insert") != null) {
-                    action_edit(request, response);
+                    action_e_create(request, response);
                 }
                 else if (request.getParameter("e_edit") != null) {
-                    action_edit(request, response);
+                    action_e_edit(request, response);
                 }
                 else if (request.getParameter("e_delete") != null) {
                     action_edit(request, response);
@@ -159,6 +159,16 @@ public class Series extends BaseController {
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         results.activate("/admin/serie/edit.ftl.html", request, response);
     }
+    private void action_e_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
+        int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
+        Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id);
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
+        TemplateResult results = new TemplateResult(getServletContext());
+        request.setAttribute("serie", serie);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/serie/edit_e.ftl.html", request, response);
+    }
 
     private void action_loginredirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + "/login");
@@ -241,6 +251,13 @@ public class Series extends BaseController {
     }
 
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        TemplateResult results = new TemplateResult(getServletContext());
+        UtenteProxy me = (UtenteProxy) Methods.getMe(request);
+        request.setAttribute("me", me);
+        request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
+        results.activate("/admin/serie/new_e.ftl.html", request, response);
+    }
+    private void action_e_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
         List<Genere> generi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGeneri();
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);

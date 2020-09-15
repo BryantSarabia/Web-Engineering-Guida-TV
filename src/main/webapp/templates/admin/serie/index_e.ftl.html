@@ -85,22 +85,23 @@
 
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right" style="word-wrap: break-word; overflow-wrap: break-word;">
-                        <a href="serie?edit=${programma.key}"> <i class="fa fa-xl fa-edit"></i> </a>
+                        <a href="serie?e_edit=${programma.key_episodio}"> <i class="fa fa-xl fa-edit"></i> </a>
 
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-${programma.key}"method="POST" action="serie">
-                            <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.key}()" ></em>
+                        ${programma.key_episodio}
+                        <form id="delete-form-${programma.key_episodio}"method="POST" action="serie">
+                            <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.key_episodio}()" ></em>
                             <script>
-                                function deleteFunc${programma.key}() {
+                                function deleteFunc${programma.key_episodio}() {
                                     var x = confirm('Vuoi veramente cancellare questo programma?')
                                     if(x == true){
                                         document.getElementById('delete-form-${programma.key}').submit(); }
                                 }
                             </script>
-                            <input name="id" value="${programma.key}" hidden >
+                            <input name="id" value="${programma.key_episodio}" hidden >
                             <input name="delete" value="delete" hidden >
                         </form>
                     </div>
