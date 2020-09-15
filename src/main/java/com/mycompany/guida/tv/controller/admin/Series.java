@@ -204,7 +204,7 @@ public class Series extends BaseController {
             target.setDurata(durata);
             target.setEpisodio(episodio);
            target.setKey(id_prog);
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
             request.setAttribute("success", request.getParameter("serie creata con successo"));
             action_default(request,response);
         } catch ( DataException ex) {
@@ -249,7 +249,7 @@ public class Series extends BaseController {
             }
             target.setGeneri(generi_list);
             target.setImg("null");
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
 
             Part image = request.getPart("immagine");
             if (image != null) {
@@ -260,7 +260,7 @@ public class Series extends BaseController {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     target.setImg("img_tv/progs/" + name);
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
                 }
             }
             request.setAttribute("success", request.getParameter("serie creata con successo"));
@@ -327,7 +327,7 @@ public class Series extends BaseController {
                         target.setImg("img_tv/progs/" + name);
                     }
                 }
-                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+                ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
 
                 request.setAttribute("success", "serie aggiornata con successo!");
                 action_default(request,response);
@@ -365,7 +365,7 @@ public class Series extends BaseController {
             target.setStagione(stagione);
             target.setDurata(durata);
             target.setEpisodio(episodio);
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
 
             request.setAttribute("success", "serie aggiornata con successo!");
             action_default(request,response);
