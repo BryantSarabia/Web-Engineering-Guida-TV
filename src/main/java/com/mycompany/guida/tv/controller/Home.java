@@ -77,27 +77,12 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
-            Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().createFilm();
-            
-            film.setTitolo("film");
-            film.setDescrizione("prova");
-            film.setImg("prova");
-            film.setLink_ref("prova");
-            film.setDurata("120");
-            
-            Genere genere1 = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().createGenere();
-            genere1.setKey(1);
-            Genere genere2 = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().createGenere();
-            genere2.setKey(2);
-            
-            List<Genere> generi = new ArrayList<Genere>();
-            generi.add(genere1);
-            generi.add(genere2);
-            
-            film.setGeneri(generi);
-                        
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(film);
-            
+            List<Serie> series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+            for(Serie serie : series){
+                System.out.println("titolo: " + serie.getTitolo());
+                System.out.println("stagione: " + serie.getStagione());
+                System.out.println("episodio: " + serie.getEpisodio());
+            }
             
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
