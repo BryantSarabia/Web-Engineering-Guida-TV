@@ -397,6 +397,20 @@ small{
         width: 80%;
         max-height: 140px;
     }
+    
+    #cerca_giorno{
+        max-width: 200px;
+    }
+    
+    input[type=date]{
+        max-width: 350px;
+    }
+    
+    span .palinsesto_programma_img{
+        width: auto;
+        max-height: 140px;
+    }
+    
 
     .dettaglio_series_img{
         min-height: 150px;

@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="col-lg-9 col-md-9">
-                <div class="row header__nav justify-content-center">
+                <div class="row header__nav justify-content-end mr-5">
                     <nav class="header__menu mobile-menu ">
                         <ul>
                             <li><a href="./">Home</a></li>
@@ -25,6 +25,7 @@
 
                             <#if !logged>
                             <li><a href="register">Register</a></li>
+                            <li class="d-md-none"><a href="login?referrer=${request_uri}">Login</a></li>
                             </#if>
                         </ul>
                     </nav>
