@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-xs-6 col-md-3 col-lg-1 no-padding">
                     <div class="panel panel-teal panel-widget border-right">
-                        <form id="delete-form-${programma.key_episodio}"method="POST" action="serie">
+                        <form id="delete-form-${programma.getKeyEpisodio()}"method="POST" action="serie">
                             <em class="fa fa-xl fa-times color-red" style="cursor: pointer;" onclick="deleteFunc${programma.getKeyEpisodio()}()" ></em>
                             <script>
                                 function deleteFunc${programma.getKeyEpisodio()}() {
@@ -101,7 +101,7 @@
                                 }
                             </script>
                             <input name="id" value="${programma.getKeyEpisodio()}" hidden >
-                            <input name="delete" value="delete" hidden >
+                            <input name="e_delete" value="e_delete" hidden >
                         </form>
                     </div>
                 </div>
