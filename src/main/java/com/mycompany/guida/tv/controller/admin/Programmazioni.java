@@ -138,10 +138,9 @@ public class Programmazioni extends BaseController {
             throw new DataException("Invalid Key");
         }
         Programmazione programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
-        List<Programma> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgrammi();
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
-        request.setAttribute("programmi", programmi);
+
         String start_time= programmazione.getDate()+" "+programmazione.getTime()+":00";
         LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("dd-MM-uuuu HH:mm:ss"));
         String d=String.format("%d",start.getDayOfMonth());
@@ -152,9 +151,15 @@ public class Programmazioni extends BaseController {
         TemplateResult results = new TemplateResult(getServletContext());
         request.setAttribute("programmazione", programmazione);
         request.setAttribute("date", date);
-    //    if(programmazione.getProgramma())
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
-        results.activate("/admin/programmazioni/edit.ftl.html", request, response);
+        if(programmazione.getEpisodio()==null){
+            List<Film> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
+            request.setAttribute("programmi", programmi);
+            results.activate("/admin/programmazioni/edit.ftl.html", request, response);}
+        else{
+            List<Serie> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
+            request.setAttribute("programmi", programmi);
+            results.activate("/admin/programmazioni/edit_s.ftl.html", request, response);}
     }
     private void action_s_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException {
         try {
