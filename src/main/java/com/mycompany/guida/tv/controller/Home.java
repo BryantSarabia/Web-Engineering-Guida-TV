@@ -8,6 +8,8 @@ package com.mycompany.guida.tv.controller;
 import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
+import com.mycompany.guida.tv.data.model.Film;
+import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.result.FailureResult;
@@ -16,6 +18,7 @@ import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -74,26 +77,26 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
-            Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(19);
+            Film film = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().createFilm();
             
-            System.out.println("id_episodio " + serie.getKeyEpisodio());
-            System.out.println("episodio " + serie.getEpisodio());
-            System.out.println("stagione " + serie.getStagione());
-            System.out.println("durata " + serie.getDurata());
-            System.out.println("version " + serie.getVersion());
+            film.setTitolo("film");
+            film.setDescrizione("prova");
+            film.setImg("prova");
+            film.setLink_ref("prova");
+            film.setDurata("120");
             
-            serie.setKey(1);
-            serie.setEpisodio(33);
-            serie.setStagione(3);
-            serie.setDurata("120");
+            Genere genere1 = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().createGenere();
+            genere1.setKey(1);
+            Genere genere2 = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().createGenere();
+            genere2.setKey(2);
             
-            System.out.println("id_episodio " + serie.getKeyEpisodio());
-            System.out.println("episodio " + serie.getEpisodio());
-            System.out.println("stagione " + serie.getStagione());
-            System.out.println("durata " + serie.getDurata());
-            System.out.println("version " + serie.getVersion());
+            List<Genere> generi = new ArrayList<Genere>();
+            generi.add(genere1);
+            generi.add(genere2);
             
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(serie);
+            film.setGeneri(generi);
+                        
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().storeFilm(film);
             
             
             TemplateResult results = new TemplateResult(getServletContext());

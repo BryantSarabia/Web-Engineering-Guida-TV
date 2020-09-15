@@ -5,6 +5,7 @@ import com.mycompany.guida.tv.data.DataException;
 import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.OptimisticLockException;
+import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.model.Programma;
 import com.mycompany.guida.tv.data.model.Serie;
 import com.mycompany.guida.tv.data.proxy.SerieProxy;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
 
 public class SerieDAO_MySQL extends DAO implements SerieDAO {
 
-    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodioByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, uProgramma, uSerie, dProgramma, dSerie;
+    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodioByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, iGenere, uProgramma, uSerie, dProgramma, dSerie;
 
     public SerieDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -42,6 +43,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             iSerie = connection.prepareStatement("INSERT INTO serie(id_programma,stagione,episodio, durata) VALUES (?,?,?,?)");
             uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id = ? AND version = ?");
             uSerie = connection.prepareStatement("UPDATE serie SET id_programma=?, stagione=?, episodio=?, durata=?, version=? WHERE id = ? AND version = ?");
+            iGenere = connection.prepareStatement("INSERT INTO programma_ha_generi(id_programma, id_genere) VALUES (?,?)");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
             dSerie = connection.prepareStatement("DELETE FROM serie WHERE id = ?");
 
@@ -361,6 +363,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setInt(6, serie.getKeyEpisodio());
                 uSerie.setLong(7, current_version);
                 uSerie.executeUpdate();
+                
                
             } else { //insert
                 if (false/*getProgramma(key).isNotEmpty()*/) {         //se il programma esiste già e voglio solo aggiungere un episodio
@@ -409,6 +412,14 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                     iSerie.setInt(3, serie.getEpisodio());
                     iSerie.setString(4, serie.getDurata());
                     iSerie.executeUpdate();
+                    
+                    List<Genere> generi = serie.getGeneri();
+                
+                    for(Genere g : generi){
+                        iGenere.setInt(1, serie.getKey());
+                        iGenere.setInt(2, g.getKey());
+                        iGenere.executeUpdate();
+                    }
                 }
 
                 //se abbiamo un proxy, resettiamo il suo attributo dirty

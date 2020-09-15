@@ -6,6 +6,7 @@ import com.mycompany.guida.tv.data.DataItemProxy;
 import com.mycompany.guida.tv.data.DataLayer;
 import com.mycompany.guida.tv.data.OptimisticLockException;
 import com.mycompany.guida.tv.data.model.Film;
+import com.mycompany.guida.tv.data.model.Genere;
 import com.mycompany.guida.tv.data.proxy.FilmProxy;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 
 public class FilmDAO_MySQL extends DAO implements FilmDAO {
 
-    private PreparedStatement getFilms, getFilmByID, getFilmsPaginate, getNumeroFilms, iProgramma, iFilm, uProgramma, uFilm, dProgramma, dFilm;
+    private PreparedStatement getFilms, getFilmByID, getFilmsPaginate, getNumeroFilms, iProgramma, iFilm, iGenere, uProgramma, uFilm, dProgramma, dFilm;
 
     public FilmDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -36,6 +37,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO {
             getNumeroFilms = connection.prepareStatement("SELECT COUNT(*) AS num FROM films");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             iFilm = connection.prepareStatement("INSERT INTO films(id_programma) VALUES (?)");
+            iGenere = connection.prepareStatement("INSERT INTO programma_ha_generi(id_programma, id_genere) VALUES (?,?)");
             uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id = ? AND version = ?");
             uFilm = connection.prepareStatement("UPDATE films SET id_programma=?, version=? WHERE id = ? AND version = ?");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
@@ -270,6 +272,16 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO {
                 //Aggiungo anche la foreign key nella tabella films
                 iFilm.setInt(1, id_programma);
                 iFilm.executeUpdate();
+                
+                List<Genere> generi = new ArrayList<Genere>();
+                
+                generi = film.getGeneri();
+                
+                    for(Genere g : generi){
+                        iGenere.setInt(1, film.getKey());
+                        iGenere.setInt(2, g.getKey());
+                        iGenere.executeUpdate();
+                    }
             }
 
             //se abbiamo un proxy, resettiamo il suo attributo dirty
