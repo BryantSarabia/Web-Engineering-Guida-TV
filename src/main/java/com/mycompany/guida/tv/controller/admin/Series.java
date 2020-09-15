@@ -75,13 +75,13 @@ public class Series extends BaseController {
                     action_e_edit(request, response);
                 }
                 else if (request.getParameter("e_delete") != null) {
-                    action_edit(request, response);
+                    action_e_delete(request, response);
                 }
                 else if (request.getParameter("e_store") != null) {
-                    action_edit(request, response);
+                    action_e_store(request, response);
                 }
                 else if (request.getParameter("e_update") != null) {
-                    action_edit(request, response);
+                    action_e_update(request, response);
                 }
                 else {
                     action_default(request, response);
@@ -160,8 +160,8 @@ public class Series extends BaseController {
         results.activate("/admin/serie/edit.ftl.html", request, response);
     }
     private void action_e_edit(HttpServletRequest request, HttpServletResponse response) throws DataException, TemplateManagerException {
-        int id = SecurityLayer.checkNumeric(request.getParameter("edit"));
-        Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(id);
+        int id = SecurityLayer.checkNumeric(request.getParameter("e_edit"));
+        Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(1);
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
         TemplateResult results = new TemplateResult(getServletContext());
@@ -249,7 +249,81 @@ public class Series extends BaseController {
 
         }
     }
+    private void action_e_store(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        try {
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            String link_ref = request.getParameter("link_ref");
 
+            /**
+             * questa funzione serve per prendere generi
+             */
+            ArrayList<Integer> generi = null;
+            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
+                generi = new ArrayList<>();
+                for (String g : request.getParameterValues("genere")) {
+                    if (g != null) {
+                        generi.add(SecurityLayer.checkNumeric(g));
+                    }
+                }
+            }
+
+            Serie target = new SerieImpl();
+            if (((String) titolo).isBlank()) {
+                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
+            }/*
+            Integer stagione=null;
+            Integer episodio=null;
+            if (((String) stg) != null) {
+                    try{
+                        stagione = SecurityLayer.checkNumeric(stg);
+                    } catch (Exception ex) {
+                        throw new DataException("Invalid parameter: " + stg + " must be a integer value");
+                    }
+                }
+            if (((String) epis) != null) {
+                try{
+                    episodio = SecurityLayer.checkNumeric(stg);
+                } catch (Exception ex) {
+                    throw new DataException("Invalid parameter: " + epis + " must be a integer value");
+                }
+            }
+*/
+            target.setTitolo(titolo);
+            if(descrizione != null) {
+                target.setDescrizione(descrizione);}
+            target.setStagione(1);
+            target.setEpisodio(1);
+
+            target.setLink_ref(link_ref);
+            List<Genere> generi_list = new ArrayList<>();
+            for(int i : generi){
+                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            target.setGeneri(generi_list);
+            target.setImg("null");
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+
+            Part image = request.getPart("immagine");
+            if (image != null) {
+                String name = "prog_" + target.getKey() + ".jpg";
+                String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
+                long size = image.getSize();
+                if (size > 0) {
+                    File new_file = new File(path);
+                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    target.setImg("img_tv/progs/" + name);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+                }
+            }
+            request.setAttribute("success", request.getParameter("serie creata con successo"));
+            action_default(request,response);
+        } catch (IOException | ServletException | DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            action_create(request,response);
+
+        }
+    }
     private void action_create(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         TemplateResult results = new TemplateResult(getServletContext());
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
@@ -317,8 +391,80 @@ public class Series extends BaseController {
                 action_edit(request,response);
 
             }
+        }private void action_e_update(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        int id = SecurityLayer.checkNumeric(request.getParameter("id"));
+
+        try {
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            String link_ref = request.getParameter("link_ref");
+            ArrayList<Integer> generi = null;
+            if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
+                generi = new ArrayList<>();
+                for (String g : request.getParameterValues("genere")) {
+                    if (g != null) {
+                        generi.add(SecurityLayer.checkNumeric(g));
+                    }
+                }
+            }
+            Serie target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getSerie(id);
+            if (((String) titolo).isBlank()) {
+                throw new DataException("Invalid parameter: " + titolo + " must be not empty");
+            }
+
+            target.setTitolo(titolo);
+            target.setDescrizione(descrizione);
+            target.setLink_ref(link_ref);
+            List<Genere> generi_list = new ArrayList<>();
+            for(int i : generi){
+                generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
+            }
+            target.setGeneri(generi_list);
+
+            Part image = request.getPart("immagine");
+            if (image != null) {
+                String name = "prog_" + target.getKey() + ".jpg";
+                String path = getServletContext().getRealPath("img_tv/progs/") + File.separatorChar + name;
+                long size = image.getSize();
+                if (size > 0 ) {
+                    File new_file = new File(path);
+                    Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    target.setImg("img_tv/progs/" + name);
+                }
+            }
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
+
+            request.setAttribute("success", "serie aggiornata con successo!");
+            action_default(request,response);
+        } catch (IOException | ServletException | DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            request.setAttribute("edit", id);
+            action_edit(request,response);
+
         }
+    }
     private void action_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
+        Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
+
+        try {
+            if (key == null) {
+                throw new DataException("Invalid Key");
+            }
+            Programma p = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(key);
+            if (p == null) {
+                throw new DataException("Invalid Key");
+            }
+
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().deleteProgramma(key);
+            request.setAttribute("success", "Serie cancellata con successo!");
+            action_default(request,response);
+        } catch (DataException ex) {
+            request.setAttribute("errors", ex.getMessage());
+            action_default(request,response);
+        }
+
+    }
+    private void action_e_delete(HttpServletRequest request, HttpServletResponse response) throws TemplateManagerException, DataException {
         Integer key = SecurityLayer.checkNumeric(request.getParameter("id"));
 
         try {
