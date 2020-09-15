@@ -18,6 +18,7 @@ import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
 import com.mycompany.guida.tv.security.SecurityLayer;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,12 +78,13 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
-            List<Serie> series = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
-            for(Serie serie : series){
-                System.out.println("titolo: " + serie.getTitolo());
-                System.out.println("stagione: " + serie.getStagione());
-                System.out.println("episodio: " + serie.getEpisodio());
-            }
+            Programmazione prog = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().createProgrammazione();
+            prog.setCanale(((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(1));
+            prog.setDurata(120);
+            prog.setProgramma(((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(1));
+            prog.setEpisodio(((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(1));
+            prog.setStartTime(LocalDateTime.now());
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(prog);
             
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
