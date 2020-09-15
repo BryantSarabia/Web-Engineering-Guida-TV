@@ -78,18 +78,18 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
-            Programmazione prog = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().createProgrammazione();
-            prog.setCanale(((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getCanale(1));
-            prog.setDurata(120);
-            prog.setProgramma(((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammaDAO().getProgramma(1));
-            prog.setEpisodio(((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(1));
-            prog.setStartTime(LocalDateTime.now());
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(prog);
+            Programmazione prog = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(2);
+            prog.setDurata(123); 
+            if(prog.getEpisodio() == null){
+            System.out.println("episode null");
+            }
+            //prog.setEpisodio(((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().createSerie());
+//            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(prog);
             
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
-            Map<Canale, Programmazione> current = new TreeMap();
+            Map<Canale, Programmazione> current = new TreeMap(); 
 
             for (Canale c : canali) {
                 Programmazione programmazione = c.getProgrammazioneCorrente();

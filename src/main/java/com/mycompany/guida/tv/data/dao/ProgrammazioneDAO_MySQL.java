@@ -57,7 +57,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             getProgrammazioniPaginated = connection.prepareStatement("SELECT * FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ? ORDER BY id_canale, start_time DESC LIMIT ? OFFSET ?");
             getNumeroProgrammazioni = connection.prepareStatement("SELECT COUNT(*) AS num FROM programmazioni WHERE DATE(start_time) BETWEEN ? AND ?");
             iProgrammazione = connection.prepareStatement("INSERT INTO programmazioni(id_canale, id_programma, start_time, durata,id_serie) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, id_serie = ? version=? WHERE id = ? AND version = ?");
+            uProgrammazione = connection.prepareStatement("UPDATE programmazioni SET id_canale=?, id_programma=?, start_time=?, durata=?, id_serie=?, version=? WHERE id = ? AND version = ?");
             getLatest = connection.prepareStatement("SELECT * FROM programmazioni ORDER BY id DESC LIMIT ?");
             dProgrammazione = connection.prepareStatement("DELETE FROM programmazioni WHERE id = ?");
 
@@ -115,6 +115,7 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
             p.setCanale_key(rs.getInt("id_canale"));
             p.setProgramma_key(rs.getInt("id_programma"));
             p.setSerie_key(rs.getInt("id_serie"));
+            p.setVersion(rs.getInt("version"));
         } catch(SQLException ex) {
             throw new DataException("Unable to create programmazione object form ResultSet", ex);
         }
@@ -431,10 +432,10 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
                 uProgrammazione.setString(3, programmazione.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 uProgrammazione.setInt(4, programmazione.getDurata());
                 
-                if(programmazione.getEpisodio().getKeyEpisodio() == 0 ){
-                  uProgrammazione.setNull(5, Types.INTEGER);
+                if(programmazione.getEpisodio().getKeyEpisodio() > 0 ){
+                  uProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
                 } else {
-                    uProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
+                    uProgrammazione.setNull(5, Types.INTEGER);
                 };
                 
                 long current_version = programmazione.getVersion();
