@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 public class FilmDAO_MySQL extends DAO implements FilmDAO {
 
-    private PreparedStatement getFilms, getFilmByID, getFilmsPaginate, getNumeroFilms, iProgramma, iFilm, iGenere, uProgramma, uFilm, dProgramma, dFilm;
+    private PreparedStatement getFilms, getFilmByID, getFilmsPaginate, getNumeroFilms, iProgramma, iFilm, iGenere, uProgramma, uFilm, dGenere, dProgramma, dFilm;
 
     public FilmDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -40,6 +40,7 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO {
             iGenere = connection.prepareStatement("INSERT INTO programma_ha_generi(id_programma, id_genere) VALUES (?,?)");
             uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id = ? AND version = ?");
             uFilm = connection.prepareStatement("UPDATE films SET id_programma=?, version=? WHERE id = ? AND version = ?");
+            dGenere = connection.prepareStatement("DELETE FROM programma_ha_generi WHERE id_programma = ?");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
             dFilm = connection.prepareStatement("DELETE FROM films WHERE id_programma = ?");
 
@@ -233,6 +234,20 @@ public class FilmDAO_MySQL extends DAO implements FilmDAO {
                     throw new OptimisticLockException(film);
                 }
                 film.setVersion(next_version);
+                
+                //Per la update dei generi cancello tutti i generi già collegati al programma
+                dGenere.setInt(1, film.getKey());
+                dGenere.executeUpdate();
+                
+                //E li aggiungo da capo
+                List<Genere> generi = film.getGeneri();
+                
+                    for(Genere g : generi){
+                        iGenere.setInt(1, film.getKey());
+                        iGenere.setInt(2, g.getKey());
+                        iGenere.executeUpdate();
+                    }
+                
             } else { //insert
                 iProgramma.setString(1, film.getTitolo());
                 iProgramma.setString(5, film.getDurata());

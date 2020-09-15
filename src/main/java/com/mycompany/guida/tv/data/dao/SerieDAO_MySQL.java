@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class SerieDAO_MySQL extends DAO implements SerieDAO {
 
-    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodioByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, iGenere, uProgramma, uSerie, dProgramma, dSerie;
+    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodioByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, iGenere, dGenere, uProgramma, uSerie, dProgramma, dSerie;
 
     public SerieDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -44,6 +44,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             uProgramma = connection.prepareStatement("UPDATE programmi SET titolo=?, descrizione=?, img=?, link_ref=?, durata=?, version=? WHERE id = ? AND version = ?");
             uSerie = connection.prepareStatement("UPDATE serie SET id_programma=?, stagione=?, episodio=?, durata=?, version=? WHERE id = ? AND version = ?");
             iGenere = connection.prepareStatement("INSERT INTO programma_ha_generi(id_programma, id_genere) VALUES (?,?)");
+            dGenere = connection.prepareStatement("DELETE FROM programma_ha_generi WHERE id_programma = ?");
             dProgramma = connection.prepareStatement("DELETE FROM programmi WHERE id = ?");
             dSerie = connection.prepareStatement("DELETE FROM serie WHERE id = ?");
 
@@ -363,6 +364,19 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setInt(6, serie.getKeyEpisodio());
                 uSerie.setLong(7, current_version);
                 uSerie.executeUpdate();
+                
+                //Per la update cancello tutti i generi già collegati al programma
+                dGenere.setInt(1, serie.getKey());
+                dGenere.executeUpdate();
+                
+                //E li aggiungo da capo
+                List<Genere> generi = serie.getGeneri();
+                
+                    for(Genere g : generi){
+                        iGenere.setInt(1, serie.getKey());
+                        iGenere.setInt(2, g.getKey());
+                        iGenere.executeUpdate();
+                    }
                 
                
             } else { //insert
