@@ -13,5 +13,9 @@ public interface Serie extends Programma {
     public int getEpisodio();
 
     public void setEpisodio(int episodio);
+    
+    //public int getDurataEpisodio();
+    
+    //public void setDurataEpisodio(int durata_episodio);
 
 }

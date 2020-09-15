@@ -45,6 +45,12 @@ public class SerieProxy extends SerieImpl implements DataItemProxy {
         this.modified = true;
         super.setVersion(version);
     }
+    
+//    @Override
+//    public void setDurataEpisodio(int durata_episodio){
+//        this.modified = true;
+//        super.setDurataEpisodio(durata_episodio);
+//    }
 
     @Override
     public void setKey(Integer key) {

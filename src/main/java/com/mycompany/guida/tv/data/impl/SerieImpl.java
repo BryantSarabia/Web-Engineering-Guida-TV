@@ -7,12 +7,15 @@ public class SerieImpl extends ProgrammaImpl implements Serie {
     private int stagione;
     private int episodio;
     private int key_episodio;
+    private int durata_episodio;
 
     public SerieImpl() {
         super();
         this.stagione = 0;
         this.episodio = 0;
         this.key_episodio = 0;
+        //this.durata_episodio = 0;
+        
     }
     
     @Override 
@@ -44,5 +47,14 @@ public class SerieImpl extends ProgrammaImpl implements Serie {
     public void setEpisodio(int episodio) {
         this.episodio = episodio;
     }
+    
+//    @Override
+//    public int getDurataEpisodio(){
+//        return durata_episodio;
+//    }
+    
+//    public void setDurataEpisodio(int durata_episodio){
+//        this.durata_episodio = durata_episodio;
+//    }
 
 }
