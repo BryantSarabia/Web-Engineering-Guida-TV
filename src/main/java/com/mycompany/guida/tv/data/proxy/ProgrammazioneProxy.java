@@ -53,12 +53,13 @@ public class ProgrammazioneProxy extends ProgrammazioneImpl implements DataItemP
         return serie_key;
     }
 
-    public void setSerie_key(int serie_key) {
+    public void setSerie_key(int serie_key) throws DataException {
+        super.setEpisodio(((SerieDAO) dataLayer.getDAO(Serie.class)).getEpisodio(serie_key));
         this.serie_key = serie_key;
     }
 
     @Override
-    public boolean isModified() {
+    public boolean isModified() { 
         return this.modified;
     }
 

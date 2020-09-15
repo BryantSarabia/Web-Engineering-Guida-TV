@@ -138,6 +138,7 @@ public class Programmazioni extends BaseController {
             throw new DataException("Invalid Key");
         }
         Programmazione programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
+        System.out.println("episodio: " + programmazione.getEpisodio());
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
 
@@ -153,10 +154,12 @@ public class Programmazioni extends BaseController {
         request.setAttribute("date", date);
         request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
         if(programmazione.getEpisodio()==null){
+            System.out.println("episode null");
             List<Film> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getListaFilm();
             request.setAttribute("programmi", programmi);
             results.activate("/admin/programmazioni/edit.ftl.html", request, response);}
         else{
+            System.out.println("episode not null");
             List<Serie> programmi = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getListaSerie();
             request.setAttribute("programmi", programmi);
             results.activate("/admin/programmazioni/edit_s.ftl.html", request, response);}

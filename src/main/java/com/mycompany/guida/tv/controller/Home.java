@@ -80,9 +80,9 @@ public class Home extends BaseController {
         try {
             Programmazione prog = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(2);
             prog.setDurata(123); 
-            if(prog.getEpisodio() == null){
-            System.out.println("episode null");
-            }
+//            if(prog.getEpisodio() == null){
+//            System.out.println("episode null");
+//            }
             //prog.setEpisodio(((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().createSerie());
 //            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().storeProgrammazione(prog);
             

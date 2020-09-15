@@ -139,9 +139,6 @@ public class Films extends BaseController {
             String link_ref = request.getParameter("link_ref");
             String durata = request.getParameter("durata");
             Film target = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getFilmDAO().getFilm(id);
-/*
-            generi da il problema
-
 
             ArrayList<Integer> generi = null;
             if (request.getParameterValues("genere") != null && !request.getParameter("genere").isEmpty()) {
@@ -159,7 +156,8 @@ public class Films extends BaseController {
                 generi_list.add(((GuidaTVDataLayer) request.getAttribute("datalayer")).getGenereDAO().getGenere(i));
             }
 
-            target.setGeneri(generi_list);*/
+            target.setGeneri(generi_list);
+            
             if (((String) titolo).isBlank()) {
                 throw new DataException("Invalid parameter: " + titolo + " must be not empty");
             }
