@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 public class SerieDAO_MySQL extends DAO implements SerieDAO {
 
-    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, uProgramma, uSerie, dProgramma, dSerie;
+    private PreparedStatement getSeries, getSerieByProgrammazione, getSerieByID, getEpisodioByID, getEpisodi, getSeriesPaginate, getNumeroSerie, iProgramma, iSerie, uProgramma, uSerie, dProgramma, dSerie;
 
     public SerieDAO_MySQL(DataLayer dl) {
         super(dl);
@@ -35,6 +35,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             getSeriesPaginate = connection.prepareStatement("SELECT * FROM programmi JOIN (SELECT DISTINCT id_programma from serie) serie ON programmi.id = serie.id_programma ORDER BY titolo ASC LIMIT ? OFFSET ?");
             getSerieByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=?");
             getEpisodi = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE programmi.id=? ORDER BY titolo ASC, stagione ASC, episodio ASC");
+            getEpisodioByID = connection.prepareStatement("SELECT programmi.*, serie.id as id_episodio, serie.durata as serie_durata, serie.stagione, serie.episodio FROM programmi JOIN serie ON programmi.id = serie.id_programma WHERE serie.id=?");
             getSerieByProgrammazione = connection.prepareStatement("SELECT programmi.*, serie.id, serie.id_programma, serie.stagione, serie.episodio, serie.durata as serie_durata FROM programmi JOIN serie ON programmi.id = serie.id_programma JOIN programmazioni ON programmazioni.id_serie = serie.id WHERE programmi.id=? AND serie.id = ?");
             getNumeroSerie = connection.prepareStatement("SELECT COUNT(*) AS num FROM serie");
             iProgramma = connection.prepareStatement("INSERT INTO programmi(titolo, descrizione, img, link_ref, durata) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -135,6 +136,23 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
             }
         
         return episodi;
+    }
+    
+    @Override
+    public Serie getEpisodio(int id_episodio) throws DataException {
+        Serie serie = null;
+        try {
+                getEpisodioByID.setInt(1, id_episodio);
+                try (ResultSet rs = getSerieByID.executeQuery()) {
+                    if (rs.next()) {
+                        serie = createSerie(rs);
+                        dataLayer.getCache().add(Serie.class, serie);
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new DataException("Unable to load episode by ID", ex);
+            }
+        return serie;
     }
 
     @Override
