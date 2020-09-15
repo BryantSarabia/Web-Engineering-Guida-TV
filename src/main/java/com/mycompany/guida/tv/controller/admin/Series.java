@@ -241,7 +241,7 @@ public class Series extends BaseController {
                 target.setDescrizione(descrizione);}
             target.setStagione(1);
             target.setEpisodio(1);
-
+            target.setDurata("60");
             target.setLink_ref(link_ref);
             List<Genere> generi_list = new ArrayList<>();
             for(int i : generi){
