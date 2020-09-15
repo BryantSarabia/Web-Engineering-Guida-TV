@@ -10,6 +10,7 @@ import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import com.mycompany.guida.tv.data.model.Canale;
 import com.mycompany.guida.tv.data.model.Programmazione;
 import com.mycompany.guida.tv.data.model.Serie;
+import com.mycompany.guida.tv.result.FailureResult;
 import com.mycompany.guida.tv.result.JSONResult;
 import com.mycompany.guida.tv.result.TemplateManagerException;
 import com.mycompany.guida.tv.result.TemplateResult;
@@ -73,6 +74,14 @@ public class Home extends BaseController {
         int canali_per_pagina = 6;
 
         try {
+            Serie serie = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().getEpisodio(19);
+            serie.setKey(1);
+            serie.setEpisodio(66);
+            serie.setStagione(6);
+            serie.setDurata("120");
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(serie);
+            
+            
             TemplateResult results = new TemplateResult(getServletContext());
             List<Canale> canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getListaCanali(page, canali_per_pagina);
             numero_canali = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getCanaleDAO().getNumeroCanali();
@@ -130,7 +139,12 @@ public class Home extends BaseController {
     }
 
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (request.getAttribute("exception") != null) {
+            (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
+        } else {
+            (new FailureResult(getServletContext())).activate((String) request.getAttribute("message"), request, response);
+        }
+        return;
     }
 
 }

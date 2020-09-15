@@ -258,12 +258,12 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
     @Override
     public void storeSerie(Serie serie) throws DataException {
         try {
-            if (serie.getKey() != null && serie.getKey() > 0) { //update
+            
+            if (serie.getKeyEpisodio() != 0 && serie.getKeyEpisodio() > 0) { //update
                 // Se proxy non modificato non facciamo nulla
                 if (serie instanceof DataItemProxy && !((DataItemProxy) serie).isModified()) {
                     return;
                 }
-
                 // Altrimenti
 //                uProgramma.setString(1, serie.getTitolo());
 //                uProgramma.setString(5, serie.getDurata());
@@ -309,9 +309,11 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setLong(5, next_version);
                 uSerie.setInt(6, serie.getKeyEpisodio());
                 uSerie.setLong(7, current_version);
+                uSerie.executeUpdate();
                 
+                System.out.println("Updating episodio");
             } else { //insert
-                
+                System.out.println("Inserting episodio");
                 Programma prog = ((GuidaTVDataLayer) getDataLayer()).getProgrammaDAO().getProgramma(serie.getKey());
                 
                 if (prog != null) {         //Controllo che il programma esista già
