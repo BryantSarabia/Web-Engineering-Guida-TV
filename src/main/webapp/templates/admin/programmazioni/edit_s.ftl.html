@@ -23,8 +23,8 @@
                     <label>Programma</label>
                     <select class="form-control form-control-sm" name="programma" id="programma">
                         <#list programmi as programma>
-                        <option class="text-uppercase" value="${programma.key}"  <#if  (programmazione.programma.key == programma.key)>selected="selected"</#if> >
-                            ${programma.titolo}
+                        <option class="text-uppercase" value="${programma.getKeyEpisodio()}"  <#if  (programmazione.programma.getKeyEpisodio() == programma.getKeyEpisodio())>selected="selected"</#if> >
+                    ${programma.titolo}, stg: ${programma.stagione}, ep: ${programma.episodio}
                         </option>
                     </#list>
                     </select>
