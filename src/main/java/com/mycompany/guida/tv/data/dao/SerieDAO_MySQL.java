@@ -143,7 +143,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
         Serie serie = null;
         try {
                 getEpisodioByID.setInt(1, id_episodio);
-                try (ResultSet rs = getSerieByID.executeQuery()) {
+                try (ResultSet rs = getEpisodioByID.executeQuery()) {
                     if (rs.next()) {
                         serie = createSerie(rs);
                         serie.setKeyEpisodio(rs.getInt("id_episodio"));
