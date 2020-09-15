@@ -249,7 +249,7 @@ public class Series extends BaseController {
             }
             target.setGeneri(generi_list);
             target.setImg("null");
-            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
+            ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
 
             Part image = request.getPart("immagine");
             if (image != null) {
@@ -260,7 +260,7 @@ public class Series extends BaseController {
                     File new_file = new File(path);
                     Files.copy(image.getInputStream(), new_file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     target.setImg("img_tv/progs/" + name);
-                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeEpisodio(target);
+                    ((GuidaTVDataLayer) request.getAttribute("datalayer")).getSerieDAO().storeSerie(target);
                 }
             }
             request.setAttribute("success", request.getParameter("serie creata con successo"));
