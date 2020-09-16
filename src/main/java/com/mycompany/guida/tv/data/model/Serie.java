@@ -2,7 +2,7 @@ package com.mycompany.guida.tv.data.model;
 
 public interface Serie extends Programma {
     
-    public int getKeyEpisodio();
+    public int getKey_episodio();
     
     public void setKeyEpisodio(int key_episodio);
     

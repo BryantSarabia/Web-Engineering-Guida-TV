@@ -263,7 +263,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
     public void storeEpisodio(Serie serie) throws DataException {
         try {
             
-            if (serie.getKeyEpisodio() != 0 && serie.getKeyEpisodio() > 0) { //update
+            if (serie.getKey_episodio() != 0 && serie.getKey_episodio() > 0) { //update
                 // Se proxy non modificato non facciamo nulla
                 
                 if (serie instanceof DataItemProxy && !((DataItemProxy) serie).isModified()) {
@@ -279,7 +279,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setInt(3, serie.getEpisodio());
                 uSerie.setString(4, serie.getDurata());
                 uSerie.setLong(5, next_version);
-                uSerie.setInt(6, serie.getKeyEpisodio());
+                uSerie.setInt(6, serie.getKey_episodio());
                 uSerie.setLong(7, current_version);
                 if(uSerie.executeUpdate() != 1){
                     throw new SQLException();
@@ -361,7 +361,7 @@ public class SerieDAO_MySQL extends DAO implements SerieDAO {
                 uSerie.setInt(3, serie.getEpisodio());
                 uSerie.setString(4, serie.getDurata());
                 uSerie.setLong(5, next_version);
-                uSerie.setInt(6, serie.getKeyEpisodio());
+                uSerie.setInt(6, serie.getKey_episodio());
                 uSerie.setLong(7, current_version);
                 uSerie.executeUpdate();
                 

@@ -432,8 +432,8 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
                 uProgrammazione.setString(3, programmazione.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 uProgrammazione.setInt(4, programmazione.getDurata());
                 
-                if(programmazione.getEpisodio().getKeyEpisodio() > 0 ){
-                  uProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
+                if(programmazione.getEpisodio().getKey_episodio() > 0 ){
+                  uProgrammazione.setInt(5, programmazione.getEpisodio().getKey_episodio());
                 } else {
                     uProgrammazione.setNull(5, Types.INTEGER);
                 };
@@ -456,10 +456,10 @@ public class ProgrammazioneDAO_MySQL extends DAO implements ProgrammazioneDAO {
                 iProgrammazione.setInt(2, programmazione.getProgramma().getKey());
                 iProgrammazione.setString(3, programmazione.getStartTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 iProgrammazione.setInt(4, programmazione.getDurata());
-                if(programmazione.getEpisodio().getKeyEpisodio() == 0 ){
+                if(programmazione.getEpisodio().getKey_episodio() == 0 ){
                   iProgrammazione.setNull(5, Types.INTEGER);
                 } else {
-                    iProgrammazione.setInt(5, programmazione.getEpisodio().getKeyEpisodio());
+                    iProgrammazione.setInt(5, programmazione.getEpisodio().getKey_episodio());
                 };
                 
                 if (iProgrammazione.executeUpdate() == 1) {

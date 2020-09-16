@@ -22,10 +22,15 @@
                 <div class="form-group">
                     <label>Programma</label>
                     <select class="form-control form-control-sm" name="programma" id="programma">
+                        <#list films as film>
+                                <option class="text-uppercase" value="${film.key}-film"  <#if  (programmazione.programma.key == film.key)>selected="selected"</#if> >
+                                    ${film.titolo}
+                                </option>
+                        </#list>
                         <#list programmi as programma>
-                        <option class="text-uppercase" value="${programma.key}"  <#if  (programmazione.programma.key == programma.key)>selected="selected"</#if> >
-                            ${programma.titolo}
-                        </option>
+                                <option class="text-uppercase" value="${programma.key_episodio}-serie"  <#if (programmazione.episodio.key_episodio == programma.key_episodio)>selected="selected"</#if> >
+                                    ${programma.titolo}, stg: ${programma.stagione}, ep: ${programma.episodio}
+                                </option>
                     </#list>
                     </select>
                 </div>

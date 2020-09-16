@@ -19,7 +19,7 @@ public class SerieImpl extends ProgrammaImpl implements Serie {
     }
     
     @Override 
-    public int getKeyEpisodio() {
+    public int getKey_episodio() {
         return key_episodio;
     }
     
