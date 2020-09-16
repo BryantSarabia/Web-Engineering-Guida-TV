@@ -15,6 +15,7 @@ import com.mycompany.guida.tv.controller.BaseController;
 import com.mycompany.guida.tv.data.dao.GuidaTVDataLayer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -146,7 +147,8 @@ public class Programmazioni extends BaseController {
         Programmazione programmazione = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getProgrammazione(key);
         UtenteProxy me = (UtenteProxy) Methods.getMe(request);
         request.setAttribute("me", me);
-
+        
+        
         String start_time= programmazione.getDate()+" "+programmazione.getTime()+":00";
         LocalDateTime start = LocalDateTime.parse(start_time, DateTimeFormatter.ofPattern("dd-MM-uuuu HH:mm:ss"));
         String d=String.format("%d",start.getDayOfMonth());

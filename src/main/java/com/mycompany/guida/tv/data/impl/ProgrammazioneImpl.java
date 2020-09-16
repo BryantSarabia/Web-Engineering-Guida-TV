@@ -69,7 +69,7 @@ public class ProgrammazioneImpl extends DataItemImpl<Integer> implements Program
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formatDateTime = startTime.format(formatter);
         String nowDate = LocalDateTime.now().format(formatter);
-        if(formatDateTime.equals(nowDate)) return "Oggi";
+        //if(formatDateTime.equals(nowDate)) return "Oggi";
         return formatDateTime;
     }
 
