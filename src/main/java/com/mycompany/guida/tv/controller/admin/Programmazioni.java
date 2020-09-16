@@ -206,7 +206,7 @@ public class Programmazioni extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", start_time);
+            request.setAttribute("success", "programmazione creata con successo!");
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             results.activate("/admin/programmazioni/index.ftl.html", request, response);
@@ -265,7 +265,7 @@ public class Programmazioni extends BaseController {
             int numero_pagine = ((GuidaTVDataLayer) request.getAttribute("datalayer")).getProgrammazioneDAO().getNumeroProgrammazioni()/10;
             request.setAttribute("programmazioni", programmazioni);
             request.setAttribute("numero_pagine", numero_pagine);
-            request.setAttribute("success", start_time);
+            request.setAttribute("success", "programmazione creata con successo!");
             TemplateResult results = new TemplateResult(getServletContext());
             request.setAttribute("outline_tpl", request.getServletContext().getInitParameter("view.outline_admin"));
             results.activate("/admin/programmazioni/index.ftl.html", request, response);
